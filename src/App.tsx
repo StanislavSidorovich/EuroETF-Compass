@@ -9,10 +9,12 @@ import {
 } from './services/marketService';
 import type {
   ETFInstrument,
-  FontFamilyOption,
+  FontSizeOption,
+  LanguageMode,
   LiveQuoteData,
   ThemeMode,
 } from './types';
+import { AppPreferencesContext, tr } from './utils/i18n';
 import { Header, type AppTab } from './components/layout/Header';
 import { LiveTickerBar } from './components/layout/LiveTickerBar';
 import { InvestorWisdomBanner } from './components/layout/InvestorWisdomBanner';
@@ -32,7 +34,8 @@ function buildInitialQuotes(etfs: ETFInstrument[]): Record<string, LiveQuoteData
 }
 
 const THEME_STORAGE_KEY = 'euroetf_theme_v1';
-const FONT_STORAGE_KEY = 'euroetf_font_v1';
+const FONT_SIZE_STORAGE_KEY = 'euroetf_fontsize_v1';
+const LANG_STORAGE_KEY = 'euroetf_lang_v1';
 
 export function App() {
   const [theme, setTheme] = useState<ThemeMode>(() => {
@@ -45,14 +48,24 @@ export function App() {
     return 'light';
   });
 
-  const [fontFamily, setFontFamily] = useState<FontFamilyOption>(() => {
+  const [lang, setLang] = useState<LanguageMode>(() => {
     try {
-      const saved = localStorage.getItem(FONT_STORAGE_KEY);
-      if (saved === 'inter' || saved === 'jakarta' || saved === 'serif') return saved;
+      const saved = localStorage.getItem(LANG_STORAGE_KEY);
+      if (saved === 'en' || saved === 'ru') return saved;
     } catch {
       // ignore storage errors
     }
-    return 'inter';
+    return 'ru';
+  });
+
+  const [fontSize, setFontSize] = useState<FontSizeOption>(() => {
+    try {
+      const saved = localStorage.getItem(FONT_SIZE_STORAGE_KEY);
+      if (saved === 'normal' || saved === 'large' || saved === 'xl') return saved;
+    } catch {
+      // ignore storage errors
+    }
+    return 'normal';
   });
 
   const [etfs, setEtfs] = useState<ETFInstrument[]>(CURATED_ETFS);
@@ -85,11 +98,23 @@ export function App() {
 
   useEffect(() => {
     try {
-      localStorage.setItem(FONT_STORAGE_KEY, fontFamily);
+      localStorage.setItem(FONT_SIZE_STORAGE_KEY, fontSize);
     } catch {
       // ignore storage errors
     }
-  }, [fontFamily]);
+    const root = document.documentElement;
+    root.classList.remove('font-size-normal', 'font-size-large', 'font-size-xl');
+    root.classList.add(`font-size-${fontSize}`);
+  }, [fontSize]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(LANG_STORAGE_KEY, lang);
+    } catch {
+      // ignore storage errors
+    }
+    document.documentElement.lang = lang;
+  }, [lang]);
 
   const handleToggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -159,25 +184,26 @@ export function App() {
   );
 
   return (
-    <div
-      data-theme={theme}
-      className={`min-h-screen bg-[#090d16] fintech-grid-bg text-slate-100 flex flex-col font-theme-${fontFamily}`}
+    <AppPreferencesContext.Provider
+      value={{ lang, setLang, fontSize, setFontSize, theme, setTheme }}
     >
-      <Header
-        activeTab={activeTab}
-        onSelectTab={setActiveTab}
-        countries={EUROPEAN_COUNTRY_TAXES}
-        selectedCountryCode={selectedCountryCode}
-        onSelectCountry={setSelectedCountryCode}
-        quotesByEtfId={quotesByEtfId}
-        totalEtfCount={etfs.length}
-        onRefreshPrices={handleRefreshPrices}
-        isRefreshing={isRefreshing}
-        theme={theme}
-        onToggleTheme={handleToggleTheme}
-        fontFamily={fontFamily}
-        onChangeFont={setFontFamily}
-      />
+      <div
+        data-theme={theme}
+        className="min-h-screen bg-[#090d16] fintech-grid-bg text-slate-100 flex flex-col font-theme-inter"
+      >
+        <Header
+          activeTab={activeTab}
+          onSelectTab={setActiveTab}
+          countries={EUROPEAN_COUNTRY_TAXES}
+          selectedCountryCode={selectedCountryCode}
+          onSelectCountry={setSelectedCountryCode}
+          quotesByEtfId={quotesByEtfId}
+          totalEtfCount={etfs.length}
+          onRefreshPrices={handleRefreshPrices}
+          isRefreshing={isRefreshing}
+          theme={theme}
+          onToggleTheme={handleToggleTheme}
+        />
 
       <LiveTickerBar
         etfs={etfs}
@@ -233,11 +259,18 @@ export function App() {
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
             <p className="font-semibold text-slate-200">
-              EuroETF Compass — Careful UCITS ETF Investing &amp; European Tax Intelligence
+              {tr(
+                lang,
+                'EuroETF Compass — Careful UCITS ETF Investing & European Tax Intelligence',
+                'EuroETF Compass — Разумные инвестиции в UCITS ETF и Налоговый гид по Европе'
+              )}
             </p>
             <p className="mt-0.5 text-[11px] text-slate-500">
-              Educational platform only. Historical performance and backtests do not guarantee
-              future returns. Verify ISIN KIDs and national tax filings with licensed advisors.
+              {tr(
+                lang,
+                'Educational platform only. Historical performance and backtests do not guarantee future returns. Verify ISIN KIDs and national tax filings with licensed advisors.',
+                'Только для образовательных целей. Прошлая доходность и бэктесты не гарантируют будущих результатов. Проверяйте KID по ISIN и налоговые декларации со специалистами.'
+              )}
             </p>
           </div>
           <div className="flex flex-wrap gap-3 text-[11px]">
@@ -246,33 +279,34 @@ export function App() {
               onClick={() => setActiveTab('calculator')}
               className="hover:text-emerald-300"
             >
-              3Y/5Y Backtest
+              {tr(lang, '3Y/5Y Backtest', 'Бэктест 3Y/5Y')}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('taxes')}
               className="hover:text-emerald-300"
             >
-              EU Tax Matrix
+              {tr(lang, 'EU Tax Matrix', 'Налоги ЕС')}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('ecosystem')}
               className="hover:text-emerald-300"
             >
-              Brokers &amp; Portals
+              {tr(lang, 'Brokers & Portals', 'Брокеры и Порталы')}
             </button>
             <button
               type="button"
               onClick={() => setActiveTab('academy')}
               className="hover:text-emerald-300"
             >
-              ETF Academy
+              {tr(lang, 'ETF Academy', 'Академия ETF')}
             </button>
           </div>
         </div>
       </footer>
-    </div>
+      </div>
+    </AppPreferencesContext.Provider>
   );
 }
 

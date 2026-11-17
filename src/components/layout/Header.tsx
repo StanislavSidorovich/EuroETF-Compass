@@ -7,22 +7,23 @@ import {
   Copy,
   FileCode2,
   GitBranch,
+  Globe,
   Globe2,
   Landmark,
   Moon,
   RefreshCw,
   Sun,
-  Type,
   Wifi,
   WifiOff,
   X,
 } from 'lucide-react';
 import type {
   CountryTaxRule,
-  FontFamilyOption,
+  FontSizeOption,
   LiveQuoteData,
   ThemeMode,
 } from '../../types';
+import { tr, useAppPreferences } from '../../utils/i18n';
 
 export type AppTab = 'calculator' | 'taxes' | 'ecosystem' | 'academy';
 
@@ -38,21 +39,25 @@ interface HeaderProps {
   isRefreshing: boolean;
   theme: ThemeMode;
   onToggleTheme: () => void;
-  fontFamily: FontFamilyOption;
-  onChangeFont: (font: FontFamilyOption) => void;
 }
 
 const FEATURED_CODES = ['PT', 'NL', 'DE'] as const;
 
-const FONT_OPTIONS: Array<{ id: FontFamilyOption; label: string; title: string }> = [
-  { id: 'inter', label: 'Inter', title: 'Modern Sans (Inter)' },
-  { id: 'jakarta', label: 'Jakarta', title: 'Geometric Sans (Plus Jakarta Sans)' },
-  { id: 'serif', label: 'Serif', title: 'Editorial Serif (Merriweather)' },
+const FONT_SIZE_OPTIONS: Array<{
+  id: FontSizeOption;
+  label: string;
+  pct: string;
+  enTitle: string;
+  ruTitle: string;
+}> = [
+  { id: 'normal', label: 'A', pct: '100%', enTitle: 'Standard (100%)', ruTitle: 'Обычный (100%)' },
+  { id: 'large', label: 'A+', pct: '112%', enTitle: 'Larger (112%)', ruTitle: 'Крупнее (112%)' },
+  { id: 'xl', label: 'A++', pct: '125%', enTitle: 'Extra Large (125%)', ruTitle: 'Крупный (125%)' },
 ];
 
 const GIT_PUSH_SNIPPET = `git init
 git add .
-git commit -m "feat: EuroETF Compass v2.0 - UCITS ETFs, Stocks, EU Map, Anexo J & Live News"
+git commit -m "feat: EuroETF Compass v3.0 - Bilingual EN/RU, 3-Level Zoom, EU Tax Map, Anexo J & Live News"
 git branch -M main
 git remote add origin https://github.com/<your-username>/euro-etf-compass.git
 git push -u origin main`;
@@ -69,12 +74,12 @@ export const Header: React.FC<HeaderProps> = ({
   isRefreshing,
   theme,
   onToggleTheme,
-  fontFamily,
-  onChangeFont,
 }) => {
+  const { lang, setLang, fontSize, setFontSize } = useAppPreferences();
   const [showGithubModal, setShowGithubModal] = useState(false);
   const [copiedGit, setCopiedGit] = useState(false);
 
+  const isLight = theme === 'light';
   const quotes = Object.values(quotesByEtfId);
   const liveProxyCount = quotes.filter((q) => q.source === 'live-yahoo-proxy').length;
   const liveCorsCount = quotes.filter((q) => q.source === 'live-cors-fallback').length;
@@ -83,32 +88,53 @@ export const Header: React.FC<HeaderProps> = ({
 
   const tabs: Array<{
     id: AppTab;
-    label: string;
-    shortLabel: string;
+    num: string;
+    title: string;
+    subtitle: string;
     icon: React.ReactNode;
   }> = [
     {
       id: 'calculator',
-      label: 'Budget, 3Y/5Y Backtest & Forecast',
-      shortLabel: 'Backtest & Forecast',
+      num: '1',
+      title: tr(lang, 'Portfolio & Calculator', 'Калькулятор и Портфель'),
+      subtitle: tr(
+        lang,
+        'Budget, ETFs & Stocks, 3Y/5Y Returns',
+        'Бюджет, выбор ETF/Акций, доход за 3 и 5 лет'
+      ),
       icon: <Calculator className="h-4 w-4" />,
     },
     {
       id: 'taxes',
-      label: `EU Tax Map, Laws & Anexo J (${countries.length})`,
-      shortLabel: `EU Taxes & Map (${countries.length})`,
+      num: '2',
+      title: tr(lang, 'EU Taxes, Map & Forms', `Налоги ${countries.length} стран и Карта`),
+      subtitle: tr(
+        lang,
+        'Tax Rates, EU Map & Anexo J Form',
+        'Ставки, карта Европы, образец IRS Anexo J'
+      ),
       icon: <Landmark className="h-4 w-4" />,
     },
     {
       id: 'ecosystem',
-      label: 'Brokers, Portals & Market News',
-      shortLabel: 'Brokers & News',
+      num: '3',
+      title: tr(lang, 'Brokers, Portals & News', 'Брокеры, Сайты и Новости'),
+      subtitle: tr(
+        lang,
+        'Broker Matrix, justETF & Live News',
+        'Сравнение брокеров, justETF, новости'
+      ),
       icon: <Globe2 className="h-4 w-4" />,
     },
     {
       id: 'academy',
-      label: 'Careful Investing Academy (Acc vs Dist)',
-      shortLabel: 'ETF Academy',
+      num: '4',
+      title: tr(lang, 'Careful ETF Academy', 'Академия для новичков'),
+      subtitle: tr(
+        lang,
+        '5 Lessons on Acc vs Dist & Checklist',
+        '5 простых уроков Acc vs Dist и чек-лист'
+      ),
       icon: <BookOpen className="h-4 w-4" />,
     },
   ];
@@ -125,11 +151,11 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#090d16]/90 backdrop-blur-xl">
+      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#090d16]/95 backdrop-blur-xl">
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {/* Top Brand + Controls Row */}
-          <div className="flex flex-wrap items-center justify-between gap-3 py-3">
-            {/* Brand Identity with Custom Mariner's Compass & Compounding Crest Logo */}
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/70 py-3">
+            {/* Brand Identity */}
             <div className="flex items-center gap-3 group">
               <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-md transition-transform duration-300 group-hover:scale-105">
                 <svg
@@ -211,75 +237,103 @@ export const Header: React.FC<HeaderProps> = ({
                     EuroETF Compass
                   </h1>
                   <span className="hidden rounded-full border border-[#c89128]/40 bg-[#c89128]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#e2b049] sm:inline-block">
-                    Wealth &amp; Tax Club
+                    {tr(lang, 'Wealth & Tax Club', 'Клуб ETF и Налогов')}
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400 sm:text-xs">
-                  Разумные инвестиции в ETF и Акции • Налоги ЕС • История 3Y/5Y и Прогноз
+                  {tr(
+                    lang,
+                    'Careful ETF & Stock Investing • EU Taxes • 3Y/5Y History & Forecast',
+                    'Разумные инвестиции в ETF и Акции • Налоги ЕС • История 3Y/5Y и Прогноз'
+                  )}
                 </p>
               </div>
             </div>
 
-            {/* Right Utility Controls: Theme, 3-Font Switcher, Country Switcher, Live Status */}
+            {/* Right Utility Controls: EN/RU, A/A+/A++, Light/Dark, Country, Live, Refresh, GitHub */}
             <div className="flex flex-wrap items-center gap-2">
-              {/* Light / Dark Mode Toggle */}
-              <button
-                type="button"
-                onClick={onToggleTheme}
-                aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
-                title={
-                  theme === 'light'
-                    ? 'Сейчас светлая тема — переключить на тёмную'
-                    : 'Сейчас тёмная тема — переключить на светлую'
-                }
-                className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
-                  theme === 'light'
-                    ? 'border-amber-400/60 bg-amber-50 text-amber-900 shadow-sm hover:bg-amber-100'
-                    : 'border-slate-700 bg-slate-900 text-amber-200 hover:border-slate-500 hover:bg-slate-800'
-                }`}
-              >
-                {theme === 'light' ? (
-                  <>
-                    <Sun className="h-3.5 w-3.5 text-amber-600" />
-                    <span>☀️ Светлая</span>
-                  </>
-                ) : (
-                  <>
-                    <Moon className="h-3.5 w-3.5 text-cyan-300" />
-                    <span>🌙 Тёмная</span>
-                  </>
-                )}
-              </button>
-
-              {/* 3-Font Switcher Pill Group */}
+              {/* Language Switcher: 🌐 EN | RU */}
               <div
-                className="flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
+                className="inline-flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
                 role="group"
-                aria-label="Выбор шрифта интерфейса"
+                aria-label={tr(lang, 'Language switcher', 'Переключатель языка')}
               >
-                <span className="hidden items-center gap-1 px-1.5 text-[11px] font-medium text-slate-400 md:inline-flex">
-                  <Type className="h-3 w-3" />
-                  <span>Шрифт:</span>
+                <span className="inline-flex items-center px-1.5 text-slate-400" title="Language / Язык">
+                  <Globe className="h-3.5 w-3.5" />
                 </span>
-                {FONT_OPTIONS.map((font) => {
-                  const isActive = fontFamily === font.id;
+                {(['en', 'ru'] as const).map((code) => {
+                  const isActive = lang === code;
                   return (
                     <button
-                      key={font.id}
+                      key={code}
                       type="button"
-                      onClick={() => onChangeFont(font.id)}
-                      title={font.title}
-                      className={`rounded-lg px-2 py-1 text-[11px] font-semibold transition ${
+                      onClick={() => setLang(code)}
+                      className={`rounded-lg px-2 py-1 text-[11px] font-bold uppercase transition ${
+                        isActive
+                          ? 'bg-emerald-500 text-white shadow-xs'
+                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                      }`}
+                    >
+                      {code.toUpperCase()}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {/* 3-Level Font Size Switcher: A | A+ | A++ */}
+              <div
+                className="inline-flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
+                role="group"
+                aria-label={tr(lang, 'Text size zoom', 'Размер текста')}
+              >
+                {FONT_SIZE_OPTIONS.map((opt) => {
+                  const isActive = fontSize === opt.id;
+                  return (
+                    <button
+                      key={opt.id}
+                      type="button"
+                      onClick={() => setFontSize(opt.id)}
+                      title={`${tr(lang, opt.enTitle, opt.ruTitle)} (${opt.pct})`}
+                      className={`rounded-lg px-2 py-1 text-[11px] font-bold transition ${
                         isActive
                           ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/50'
                           : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
                       }`}
                     >
-                      {font.label}
+                      {opt.label}
                     </button>
                   );
                 })}
               </div>
+
+              {/* Light / Dark Mode Toggle */}
+              <button
+                type="button"
+                onClick={onToggleTheme}
+                aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                title={tr(
+                  lang,
+                  theme === 'light' ? 'Light theme active — switch to dark' : 'Dark theme active — switch to light',
+                  theme === 'light' ? 'Сейчас светлая тема — переключить на тёмную' : 'Сейчас тёмная тема — переключить на светлую'
+                )}
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+                  isLight
+                    ? 'border-amber-400/60 bg-amber-50 text-amber-900 shadow-sm hover:bg-amber-100'
+                    : 'border-slate-700 bg-slate-900 text-amber-200 hover:border-slate-500 hover:bg-slate-800'
+                }`}
+              >
+                {isLight ? (
+                  <>
+                    <Sun className="h-3.5 w-3.5 text-amber-600" />
+                    <span>{tr(lang, '☀️ Light', '☀️ Светлая')}</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-3.5 w-3.5 text-cyan-300" />
+                    <span>{tr(lang, '🌙 Dark', '🌙 Тёмная')}</span>
+                  </>
+                )}
+              </button>
 
               {/* Quick Country Switcher */}
               <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
@@ -292,7 +346,11 @@ export const Header: React.FC<HeaderProps> = ({
                       key={code}
                       type="button"
                       onClick={() => onSelectCountry(code)}
-                      title={`Switch tax jurisdiction to ${country.name}`}
+                      title={tr(
+                        lang,
+                        `Switch tax jurisdiction to ${country.name}`,
+                        `Выбрать налоговую страну: ${country.name}`
+                      )}
                       className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold transition ${
                         active
                           ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/50'
@@ -306,7 +364,7 @@ export const Header: React.FC<HeaderProps> = ({
                 })}
 
                 <select
-                  aria-label="Select European tax residency country"
+                  aria-label={tr(lang, 'Select European tax residency country', 'Выбор страны налогового резидентства')}
                   value={selectedCountryCode}
                   onChange={(e) => onSelectCountry(e.target.value)}
                   className="ml-0.5 max-w-[135px] cursor-pointer rounded-lg border border-slate-700/70 bg-slate-950 px-2 py-1 text-xs font-medium text-slate-200 outline-none transition hover:border-slate-600 focus:border-emerald-500"
@@ -343,7 +401,7 @@ export const Header: React.FC<HeaderProps> = ({
                   <>
                     <WifiOff className="h-3.5 w-3.5 text-slate-400" />
                     <span className="tabular-nums">
-                      {baselineCount}/{totalEtfCount} Baseline
+                      {baselineCount}/{totalEtfCount} {tr(lang, 'Baseline', 'База')}
                     </span>
                   </>
                 )}
@@ -358,7 +416,9 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">
-                  {isRefreshing ? 'Refreshing...' : 'Refresh'}
+                  {isRefreshing
+                    ? tr(lang, 'Refreshing...', 'Обновление...')
+                    : tr(lang, 'Refresh', 'Обновить')}
                 </span>
               </button>
 
@@ -374,10 +434,10 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
           </div>
 
-          {/* Primary Navigation Tabs */}
+          {/* 4 Distinct Beginner-Friendly Navigation Feature Cards */}
           <nav
-            aria-label="Primary sections"
-            className="-mb-px flex gap-1.5 overflow-x-auto pb-0 no-scrollbar"
+            aria-label={tr(lang, 'Primary sections', 'Основные разделы')}
+            className="grid grid-cols-2 gap-2.5 py-2.5 lg:grid-cols-4"
           >
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -386,15 +446,55 @@ export const Header: React.FC<HeaderProps> = ({
                   key={tab.id}
                   type="button"
                   onClick={() => onSelectTab(tab.id)}
-                  className={`inline-flex shrink-0 items-center gap-2 border-b-2 px-3.5 py-2.5 text-xs font-semibold transition sm:text-sm ${
+                  aria-current={isActive ? 'page' : undefined}
+                  className={`group relative flex flex-col justify-between rounded-xl border p-2.5 text-left transition-all sm:p-3 ${
                     isActive
-                      ? 'border-emerald-400 bg-emerald-500/5 text-emerald-300'
-                      : 'border-transparent text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                      ? 'border-emerald-500 bg-emerald-500/10 shadow-sm ring-1 ring-emerald-500/35'
+                      : 'border-slate-800 bg-slate-900/75 hover:border-emerald-500/45 hover:bg-slate-800/80'
                   }`}
                 >
-                  {tab.icon}
-                  <span className="hidden lg:inline">{tab.label}</span>
-                  <span className="lg:hidden">{tab.shortLabel}</span>
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span
+                        className={`inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold transition ${
+                          isActive
+                            ? 'bg-emerald-500 text-white'
+                            : 'bg-slate-800 text-slate-300 group-hover:bg-emerald-500/20 group-hover:text-emerald-300'
+                        }`}
+                      >
+                        {tab.num}
+                      </span>
+                      <span
+                        className={`shrink-0 ${
+                          isActive
+                            ? 'text-emerald-300'
+                            : 'text-slate-400 group-hover:text-emerald-300'
+                        }`}
+                      >
+                        {tab.icon}
+                      </span>
+                      <span
+                        className={`truncate text-xs font-bold sm:text-sm ${
+                          isActive ? 'text-emerald-300' : 'text-white'
+                        }`}
+                      >
+                        {tab.title}
+                      </span>
+                    </div>
+
+                    {isActive && (
+                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                        <span className="hidden sm:inline">
+                          {tr(lang, 'Active', 'Открыто')}
+                        </span>
+                      </span>
+                    )}
+                  </div>
+
+                  <p className="mt-1 line-clamp-1 pl-8 text-[11px] text-slate-400">
+                    {tab.subtitle}
+                  </p>
                 </button>
               );
             })}
@@ -418,7 +518,11 @@ export const Header: React.FC<HeaderProps> = ({
                 </div>
                 <div>
                   <h2 id="github-ready-title" className="text-base font-bold text-white">
-                    GitHub-Ready Repository &amp; Architecture Docs
+                    {tr(
+                      lang,
+                      'GitHub-Ready Repository & Architecture Docs',
+                      'Репозиторий для GitHub и Архитектура проекта'
+                    )}
                   </h2>
                   <p className="text-xs text-slate-400">
                     Vite + React 18 + TypeScript + Tailwind CSS (Static &amp; Vercel/Pages ready)
@@ -428,7 +532,7 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => setShowGithubModal(false)}
-                aria-label="Close modal"
+                aria-label={tr(lang, 'Close modal', 'Закрыть окно')}
                 className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white"
               >
                 <X className="h-4 w-4" />
@@ -439,28 +543,47 @@ export const Header: React.FC<HeaderProps> = ({
               <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
                 <div className="mb-2 flex items-center gap-1.5 font-semibold text-emerald-300">
                   <FileCode2 className="h-4 w-4" />
-                  <span>Included Project Memory &amp; Roadmap Files</span>
+                  <span>
+                    {tr(
+                      lang,
+                      'Included Project Memory & Roadmap Files',
+                      'Файлы памяти проекта и дорожной карты'
+                    )}
+                  </span>
                 </div>
                 <ul className="space-y-1.5 text-slate-300">
                   <li>
                     <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-emerald-300">
                       GEMINI.md
                     </code>{' '}
-                    — Persistent AI &amp; developer architecture memory, ADRs, and multi-agent
-                    plan.
+                    —{' '}
+                    {tr(
+                      lang,
+                      'Persistent AI & developer architecture memory, ADRs, and multi-agent plan.',
+                      'Архитектурная память для разработчиков и AI, список решений ADR.'
+                    )}
                   </li>
                   <li>
                     <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-cyan-300">
                       MEMORY.md
                     </code>{' '}
-                    — Extended context &amp; user-editable custom tax/ETF notes.
+                    —{' '}
+                    {tr(
+                      lang,
+                      'Extended context & user-editable custom tax/ETF notes.',
+                      'Расширенный контекст и пользовательские заметки.'
+                    )}
                   </li>
                   <li>
                     <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-purple-300">
                       ROADMAP.md
                     </code>{' '}
-                    — Phased product milestones, live Yahoo proxy architecture &amp; deployment
-                    targets.
+                    —{' '}
+                    {tr(
+                      lang,
+                      'Phased product milestones, live Yahoo proxy architecture & deployment targets.',
+                      'Этапы развития, архитектура прокси Yahoo и деплой.'
+                    )}
                   </li>
                 </ul>
               </div>
@@ -469,7 +592,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <div className="mb-1.5 flex items-center justify-between">
                   <span className="flex items-center gap-1.5 font-semibold text-slate-200">
                     <Activity className="h-3.5 w-3.5 text-cyan-400" />
-                    Push to Your GitHub Repository
+                    {tr(lang, 'Push to Your GitHub Repository', 'Отправка в ваш GitHub репозиторий')}
                   </span>
                   <button
                     type="button"
@@ -478,11 +601,12 @@ export const Header: React.FC<HeaderProps> = ({
                   >
                     {copiedGit ? (
                       <>
-                        <Check className="h-3 w-3 text-emerald-400" /> Copied
+                        <Check className="h-3 w-3 text-emerald-400" />{' '}
+                        {tr(lang, 'Copied', 'Скопировано')}
                       </>
                     ) : (
                       <>
-                        <Copy className="h-3 w-3" /> Copy Commands
+                        <Copy className="h-3 w-3" /> {tr(lang, 'Copy Commands', 'Копировать')}
                       </>
                     )}
                   </button>
@@ -493,10 +617,11 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
 
               <p className="text-[11px] leading-relaxed text-slate-400">
-                Live Yahoo Finance ETF feeds work automatically via{' '}
-                <code className="text-slate-200">/api/yahoo</code> in Vite dev mode and fall back
-                gracefully to CORS / verified 5-year baseline series on static GitHub Pages or
-                Vercel deployments.
+                {tr(
+                  lang,
+                  'Live Yahoo Finance ETF feeds work automatically via /api/yahoo in Vite dev mode and fall back gracefully to CORS / verified 5-year baseline series on static GitHub Pages or Vercel deployments.',
+                  'Живые котировки Yahoo Finance работают через /api/yahoo в dev-режиме Vite и автоматически переключаются на CORS-шлюзы / проверенную 5-летнюю базу на GitHub Pages или Vercel.'
+                )}
               </p>
             </div>
           </div>

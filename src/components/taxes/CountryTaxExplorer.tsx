@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   Sparkles,
 } from 'lucide-react';
-import type { AccVsDistVerdict, CountryTaxRule } from '../../types';
+import type { AccVsDistVerdict, CountryTaxRule, LanguageMode } from '../../types';
+import { tr, useAppPreferences } from '../../utils/i18n';
 import { AccVsDistComparison } from './AccVsDistComparison';
 import { EuropeTaxMap } from './EuropeTaxMap';
 import { TaxFilingToolkit } from './TaxFilingToolkit';
@@ -31,44 +32,47 @@ type RegionFilter =
   | 'Central & Eastern Europe'
   | 'Nordics & UK';
 
-const REGION_FILTERS: Array<{ id: RegionFilter; label: string }> = [
-  { id: 'All', label: 'All 15 Countries' },
-  { id: 'Featured Core', label: 'Featured Core' },
-  { id: 'Western Europe', label: 'Western Europe' },
-  { id: 'DACH', label: 'DACH' },
-  { id: 'Southern Europe', label: 'Southern Europe' },
-  { id: 'Central & Eastern Europe', label: 'Central & Eastern Europe' },
-  { id: 'Nordics & UK', label: 'Nordics & UK' },
+const REGION_FILTERS: Array<{ id: RegionFilter; enLabel: string; ruLabel: string }> = [
+  { id: 'All', enLabel: 'All 15 Countries', ruLabel: 'Все 15 стран' },
+  { id: 'Featured Core', enLabel: 'Featured Core', ruLabel: 'Приоритетные (PT/NL/DE)' },
+  { id: 'Western Europe', enLabel: 'Western Europe', ruLabel: 'Западная Европа' },
+  { id: 'DACH', enLabel: 'DACH', ruLabel: 'DACH (DE/AT/CH)' },
+  { id: 'Southern Europe', enLabel: 'Southern Europe', ruLabel: 'Южная Европа' },
+  { id: 'Central & Eastern Europe', enLabel: 'Central & Eastern Europe', ruLabel: 'Центр. и Вост. Европа' },
+  { id: 'Nordics & UK', enLabel: 'Nordics & UK', ruLabel: 'Север и UK' },
 ];
 
-function getVerdictBadgeStyle(verdict: AccVsDistVerdict): {
+function getVerdictBadgeStyle(
+  verdict: AccVsDistVerdict,
+  lang: LanguageMode
+): {
   label: string;
   className: string;
 } {
   switch (verdict) {
     case 'ACC_PREFERRED_WITH_HOLDING_DISCOUNT':
       return {
-        label: 'Acc Wins + Holding Discount',
+        label: tr(lang, 'Acc Wins + Holding Discount', 'Acc выгоднее + льгота за срок'),
         className: 'border-emerald-400/40 bg-emerald-500/15 text-emerald-300',
       };
     case 'ACC_STRONGLY_PREFERRED':
       return {
-        label: 'Acc Strongly Preferred',
+        label: tr(lang, 'Acc Strongly Preferred', 'Acc однозначно выгоднее'),
         className: 'border-emerald-500/40 bg-emerald-500/15 text-emerald-300',
       };
     case 'DIST_UP_TO_ALLOWANCE_THEN_ACC':
       return {
-        label: 'Dist Up to Allowance, Then Acc',
+        label: tr(lang, 'Dist Up to Allowance, Then Acc', 'Dist в рамках лимита, затем Acc'),
         className: 'border-amber-400/40 bg-amber-500/15 text-amber-300',
       };
     case 'ACC_PREFERRED_WITH_REPORTING_CHECK':
       return {
-        label: 'Acc Preferred (Check Registry)',
+        label: tr(lang, 'Acc Preferred (Check Registry)', 'Acc выгоднее (проверить реестр)'),
         className: 'border-cyan-400/40 bg-cyan-500/15 text-cyan-300',
       };
     case 'NEUTRAL_WEALTH_TAX_ACC_CONVENIENT':
       return {
-        label: 'Tax Parity (Acc Convenience)',
+        label: tr(lang, 'Tax Parity (Acc Convenience)', 'Налоговый паритет (Acc удобнее)'),
         className: 'border-indigo-400/40 bg-indigo-500/15 text-indigo-300',
       };
   }
@@ -79,6 +83,7 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
   selectedCountryCode,
   onSelectCountry,
 }) => {
+  const { lang } = useAppPreferences();
   const [regionFilter, setRegionFilter] = useState<RegionFilter>('All');
   const [searchQuery, setSearchQuery] = useState('');
 
@@ -109,7 +114,7 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
     [countries, selectedCountryCode]
   );
 
-  const verdictBadge = getVerdictBadgeStyle(selectedCountry.verdict);
+  const verdictBadge = getVerdictBadgeStyle(selectedCountry.verdict, lang);
 
   return (
     <div className="space-y-6">
@@ -121,23 +126,31 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
       />
 
       {/* Top Featured Priority Cards (PT, NL, DE) */}
-      <section aria-label="Featured priority European countries">
+      <section aria-label={tr(lang, 'Featured priority European countries', 'Приоритетные страны Европы')}>
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <Sparkles className="h-4 w-4 text-emerald-400" />
             <h2 className="text-sm font-bold uppercase tracking-wider text-slate-200">
-              Featured Priority Jurisdictions (Portugal, Netherlands &amp; Germany)
+              {tr(
+                lang,
+                'Featured Priority Jurisdictions (Portugal, Netherlands & Germany)',
+                'Приоритетные юрисдикции (Португалия, Нидерланды и Германия)'
+              )}
             </h2>
           </div>
           <span className="text-xs text-slate-400">
-            Click any card to inspect legal filings &amp; Acc vs Dist tax math
+            {tr(
+              lang,
+              'Click any card to inspect legal filings & Acc vs Dist tax math',
+              'Нажмите на карточку, чтобы увидеть декларации и сравнение Acc vs Dist'
+            )}
           </span>
         </div>
 
         <div className="grid gap-3 md:grid-cols-3">
           {featuredCountries.map((country) => {
             const isSelected = country.code === selectedCountry.code;
-            const badge = getVerdictBadgeStyle(country.verdict);
+            const badge = getVerdictBadgeStyle(country.verdict, lang);
             return (
               <button
                 key={country.code}
@@ -162,7 +175,7 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
                     </div>
                     {isSelected && (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
-                        <CheckCircle2 className="h-3 w-3" /> Active
+                        <CheckCircle2 className="h-3 w-3" /> {tr(lang, 'Active', 'Активна')}
                       </span>
                     )}
                   </div>
@@ -177,7 +190,7 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
                     {badge.label}
                   </span>
                   <span className="font-mono font-bold tabular-nums text-cyan-300">
-                    Eff. {country.effectiveEquityEtfTaxRatePct}%
+                    {tr(lang, 'Eff.', 'Эфф.')} {country.effectiveEquityEtfTaxRatePct}%
                   </span>
                 </div>
               </button>
@@ -203,7 +216,7 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
                       : 'border border-slate-800 bg-slate-900/90 text-slate-300 hover:border-slate-700 hover:text-white'
                   }`}
                 >
-                  {region.label}
+                  {tr(lang, region.enLabel, region.ruLabel)}
                 </button>
               );
             })}
@@ -215,7 +228,11 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search country, Box 3, Anexo J, PEA..."
+              placeholder={tr(
+                lang,
+                'Search country, Box 3, Anexo J, PEA...',
+                'Поиск страны, Box 3, Anexo J, PEA...'
+              )}
               className="w-full rounded-xl border border-slate-700 bg-slate-950 py-1.5 pr-3 pl-8 text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500"
             />
           </div>
@@ -224,7 +241,11 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
         <div className="mt-3 flex flex-wrap gap-2">
           {filteredCountries.length === 0 ? (
             <p className="py-2 text-xs text-slate-400">
-              No European jurisdictions match &ldquo;{searchQuery}&rdquo;.
+              {tr(
+                lang,
+                `No European jurisdictions match "${searchQuery}".`,
+                `Юрисдикции по запросу «${searchQuery}» не найдены.`
+              )}
             </p>
           ) : (
             filteredCountries.map((country) => {
@@ -296,39 +317,43 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
           <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
             <div className="rounded-xl border border-slate-800 bg-slate-950/75 p-3.5">
               <span className="text-[11px] font-medium text-slate-400">
-                Headline Capital Gains Tax
+                {tr(lang, 'Headline Capital Gains Tax', 'Базовый налог на прирост (CGT)')}
               </span>
               <p className="mt-1 font-mono text-2xl font-extrabold tabular-nums text-white">
                 {selectedCountry.capitalGainsTaxRatePct}%
               </p>
-              <span className="text-[11px] text-slate-400">Statutory rate on realized gains</span>
+              <span className="text-[11px] text-slate-400">
+                {tr(lang, 'Statutory rate on realized gains', 'Стандартная ставка при продаже')}
+              </span>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-950/75 p-3.5">
               <span className="text-[11px] font-medium text-slate-400">
-                Headline Dividend Tax
+                {tr(lang, 'Headline Dividend Tax', 'Налог на дивиденды')}
               </span>
               <p className="mt-1 font-mono text-2xl font-extrabold tabular-nums text-amber-300">
                 {selectedCountry.dividendTaxRatePct}%
               </p>
-              <span className="text-[11px] text-slate-400">Applies to Distributing cash payouts</span>
+              <span className="text-[11px] text-slate-400">
+                {tr(lang, 'Applies to Distributing cash payouts', 'Применяется к выплатам Dist ETF')}
+              </span>
             </div>
 
             <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/20 p-3.5">
               <span className="text-[11px] font-medium text-emerald-300">
-                Effective Equity ETF Rate
+                {tr(lang, 'Effective Equity ETF Rate', 'Эффективная ставка ETF')}
               </span>
               <p className="mt-1 font-mono text-2xl font-extrabold tabular-nums text-emerald-300">
                 {selectedCountry.effectiveEquityEtfTaxRatePct}%
               </p>
               <span className="text-[11px] text-emerald-200/75">
-                After local exemptions / holding tiers
+                {tr(lang, 'After local exemptions / holding tiers', 'После льгот и скидок за срок')}
               </span>
             </div>
 
             <div className="rounded-xl border border-slate-800 bg-slate-950/75 p-3.5">
               <span className="text-[11px] font-medium text-slate-400">
-                Annual Tax-Free Allowance
+                {tr(lang, 'Annual Tax-Free Allowance', 'Ежегодный необлагаемый лимит')}
               </span>
               <p className="mt-1 font-mono text-2xl font-extrabold tabular-nums text-cyan-300">
                 {selectedCountry.annualTaxFreeAllowanceEur > 0
@@ -337,8 +362,8 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
               </p>
               <span className="text-[11px] text-slate-400">
                 {selectedCountry.annualTaxFreeAllowanceEur > 0
-                  ? 'Annual tax-exempt base / wrapper'
-                  : 'See special wrappers or holding tiers'}
+                  ? tr(lang, 'Annual tax-exempt base / wrapper', 'Ежегодная льготная база')
+                  : tr(lang, 'See special wrappers or holding tiers', 'См. спецсчета или льготы за срок')}
               </span>
             </div>
           </div>
@@ -350,7 +375,11 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
                 <div className="mb-3 flex items-center gap-2">
                   <Clock className="h-4 w-4 text-emerald-400" />
                   <h3 className="text-sm font-bold text-white">
-                    Holding-Period Tax Reduction Timeline ({selectedCountry.name})
+                    {tr(
+                      lang,
+                      `Holding-Period Tax Reduction Timeline (${selectedCountry.name})`,
+                      `Шкала снижения налога за срок владения (${selectedCountry.name})`
+                    )}
                   </h3>
                 </div>
                 <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
@@ -369,12 +398,12 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
                         <div className="flex items-center justify-between">
                           <span className="font-mono text-[11px] font-bold text-slate-400">
                             {tier.yearsMax === null
-                              ? `≥ ${tier.yearsMin} Years`
-                              : `${tier.yearsMin}–${tier.yearsMax} Years`}
+                              ? `≥ ${tier.yearsMin} ${tr(lang, 'Years', 'лет')}`
+                              : `${tier.yearsMin}–${tier.yearsMax} ${tr(lang, 'Years', 'лет')}`}
                           </span>
                           <span className="inline-flex items-center gap-1 rounded-full bg-slate-800 px-2 py-0.5 text-[10px] font-bold text-cyan-300">
                             <BadgePercent className="h-3 w-3" />
-                            {tier.exemptionPct}% off
+                            {tier.exemptionPct}% {tr(lang, 'off', 'скидка')}
                           </span>
                         </div>
                         <p
@@ -399,19 +428,23 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
             <div className="space-y-3 rounded-xl border border-slate-800 bg-slate-950/60 p-4">
               <div className="flex items-center gap-2 text-sm font-bold text-white">
                 <FileText className="h-4 w-4 text-cyan-400" />
-                <span>Tax Filing &amp; Allowance Rules</span>
+                <span>{tr(lang, 'Tax Filing & Allowance Rules', 'Правила декларирования и льготы')}</span>
               </div>
 
               <div className="space-y-2.5 text-xs">
                 <div>
-                  <span className="font-semibold text-slate-400">Official Tax Declaration:</span>
+                  <span className="font-semibold text-slate-400">
+                    {tr(lang, 'Official Tax Declaration:', 'Официальная декларация:')}
+                  </span>
                   <p className="mt-0.5 font-medium text-slate-100">
                     {selectedCountry.taxDeclarationForm}
                   </p>
                 </div>
 
                 <div>
-                  <span className="font-semibold text-slate-400">Tax-Free Allowance Details:</span>
+                  <span className="font-semibold text-slate-400">
+                    {tr(lang, 'Tax-Free Allowance Details:', 'Детали налоговых вычетов:')}
+                  </span>
                   <p className="mt-0.5 leading-relaxed text-slate-300">
                     {selectedCountry.allowanceDescription}
                   </p>
@@ -434,7 +467,9 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
             <div className="space-y-3 rounded-xl border border-amber-500/25 bg-amber-950/10 p-4">
               <div className="flex items-center gap-2 text-sm font-bold text-amber-300">
                 <AlertOctagon className="h-4 w-4" />
-                <span>Key Legal &amp; Compliance Warnings</span>
+                <span>
+                  {tr(lang, 'Key Legal & Compliance Warnings', 'Важные юридические и налоговые нюансы')}
+                </span>
               </div>
               <ul className="space-y-2 text-xs text-slate-200">
                 {selectedCountry.keyLegalWarnings.map((warn) => (
@@ -451,7 +486,11 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
               {/* Recommended Local Portals */}
               <div className="pt-1">
                 <p className="mb-2 text-xs font-semibold text-slate-300">
-                  Recommended {selectedCountry.name} Authorities &amp; Guides
+                  {tr(
+                    lang,
+                    `Recommended ${selectedCountry.name} Authorities & Guides`,
+                    `Официальные порталы и гиды (${selectedCountry.name})`
+                  )}
                 </p>
                 <div className="flex flex-wrap gap-2">
                   {selectedCountry.recommendedPortals.map((portal) => (

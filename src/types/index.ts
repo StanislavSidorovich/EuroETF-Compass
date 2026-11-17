@@ -33,6 +33,10 @@ export type ThemeMode = 'dark' | 'light';
 
 export type FontFamilyOption = 'inter' | 'jakarta' | 'serif';
 
+export type FontSizeOption = 'normal' | 'large' | 'xl';
+
+export type LanguageMode = 'en' | 'ru';
+
 export interface HistoricalPricePoint {
   date: string;       // YYYY-MM-DD
   timestamp: number;  // Unix ms

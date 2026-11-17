@@ -13,10 +13,12 @@ import {
   ShieldAlert,
   TrendingUp,
 } from 'lucide-react';
+import { tr, useAppPreferences } from '../../utils/i18n';
 import type {
   BacktestPeriodMetrics,
   CountryTaxRule,
   ETFInstrument,
+  LanguageMode,
   LiveQuoteData,
   PortfolioAllocationItem,
   ThemeMode,
@@ -40,6 +42,15 @@ export interface InvestmentCalculatorProps {
 const BUDGET_PRESETS_EUR = [1000, 5000, 10000, 25000, 50000];
 const MONTHLY_PRESETS_EUR = [0, 100, 250, 500, 1000];
 const FEATURED_COUNTRY_CODES = ['PT', 'NL', 'DE'];
+
+const REGION_LABELS_RU: Record<CountryTaxRule['regionGroup'], string> = {
+  'Featured Core': 'Приоритетные (PT / NL / DE)',
+  'Western Europe': 'Западная Европа',
+  DACH: 'DACH (DE / AT / CH)',
+  'Southern Europe': 'Южная Европа',
+  'Central & Eastern Europe': 'Центр. и Вост. Европа',
+  'Nordics & UK': 'Сев. Европа и UK',
+};
 
 function formatEur(value: number, decimals = 0): string {
   return `€${value.toLocaleString('en-IE', {
@@ -77,7 +88,23 @@ function getVerdictBadgeClasses(
   }
 }
 
-function getAssetShortCategoryLabel(etf: ETFInstrument): string {
+function getLocalizedVerdictTitle(country: CountryTaxRule, lang: LanguageMode): string {
+  if (lang === 'en') return country.verdictTitle;
+  switch (country.verdict) {
+    case 'ACC_PREFERRED_WITH_HOLDING_DISCOUNT':
+      return 'Acc ETF имеет двойное преимущество: отсрочка + скидка до 30% за срок владения';
+    case 'ACC_STRONGLY_PREFERRED':
+      return 'Acc ETF намного выгоднее Dist: полная отсрочка налога на дивиденды';
+    case 'DIST_UP_TO_ALLOWANCE_THEN_ACC':
+      return 'Dist в пределах годовой льготы, далее Acc выгоднее и проще';
+    case 'ACC_PREFERRED_WITH_REPORTING_CHECK':
+      return 'Acc выгоднее, но важен статус отчётности фонда (Meldefonds / ERI)';
+    case 'NEUTRAL_WEALTH_TAX_ACC_CONVENIENT':
+      return 'Налог на капитал одинаковый — Acc удобнее за счёт авто-реинвестирования';
+  }
+}
+
+function getAssetShortCategoryLabel(etf: ETFInstrument, lang: LanguageMode): string {
   const isStock =
     etf.instrumentType === 'Stock' ||
     etf.assetClass === 'Individual Stock (US)' ||
@@ -86,26 +113,24 @@ function getAssetShortCategoryLabel(etf: ETFInstrument): string {
     etf.provider === 'European Corporation';
 
   if (isStock) {
-    const clean = (etf.shortName || etf.name)
-      .replace(/\s*\([^)]*\)\s*$/g, '')
-      .trim();
+    const clean = (etf.shortName || etf.name).replace(/\s*\([^)]*\)\s*$/g, '').trim();
     return clean || etf.ticker;
   }
 
   switch (etf.assetClass) {
     case 'Global Equities':
     case 'Developed World Equities':
-      return 'Мировой ETF';
+      return tr(lang, 'Global ETF', 'Мировой ETF');
     case 'US Equities':
-      return 'ETF США (S&P 500)';
+      return tr(lang, 'US ETF (S&P 500)', 'ETF США (S&P 500)');
     case 'Tech / Nasdaq Equities':
-      return 'ETF Nasdaq-100';
+      return tr(lang, 'Nasdaq-100 ETF', 'ETF Nasdaq-100');
     case 'Emerging Markets':
-      return 'ETF EM';
+      return tr(lang, 'EM ETF', 'ETF EM');
     case 'European Equities':
-      return 'Европейский ETF';
+      return tr(lang, 'Europe ETF', 'Европейский ETF');
     case 'EUR Money Market / Bonds':
-      return 'Кэш-ETF €STR';
+      return tr(lang, '€STR Cash ETF', 'Кэш-ETF €STR');
     default:
       return etf.shortName || 'ETF';
   }
@@ -120,8 +145,11 @@ export function InvestmentCalculator({
   onAddCustomTicker,
   isFetchingCustomTicker = false,
   customTickerError = null,
-  theme = 'dark',
+  theme,
 }: InvestmentCalculatorProps) {
+  const { lang, theme: ctxTheme } = useAppPreferences();
+  const isLight = (theme ?? ctxTheme) === 'light';
+
   const [initialBudgetEur, setInitialBudgetEur] = useState<number>(10000);
   const [monthlyContributionEur, setMonthlyContributionEur] = useState<number>(250);
   const [allocations, setAllocations] = useState<PortfolioAllocationItem[]>([
@@ -129,10 +157,7 @@ export function InvestmentCalculator({
   ]);
   const [selectedHorizonYears, setSelectedHorizonYears] = useState<ForecastHorizonOption>(10);
 
-  const isLight = theme === 'light';
-  const cardSurface = isLight
-    ? 'border border-slate-200 bg-white shadow-sm'
-    : 'fintech-card';
+  const cardSurface = isLight ? 'border border-slate-200 bg-white shadow-sm' : 'fintech-card';
   const subSurface = isLight
     ? 'border border-slate-200 bg-slate-50/90'
     : 'border border-slate-800 bg-slate-900/65';
@@ -188,26 +213,20 @@ export function InvestmentCalculator({
       id: x.etf.id,
       ticker: x.etf.ticker,
       pct: Math.round((x.rawWeight / sum) * 100),
-      label: getAssetShortCategoryLabel(x.etf),
+      label: getAssetShortCategoryLabel(x.etf, lang),
       policy: x.etf.distributionPolicy,
-      isStock:
-        x.etf.instrumentType === 'Stock' ||
-        x.etf.assetClass === 'Individual Stock (US)' ||
-        x.etf.assetClass === 'Individual Stock (Europe)',
     }));
-  }, [allocations, etfById]);
+  }, [allocations, etfById, lang]);
 
   if (!selectedCountry || !calculation) {
     return null;
   }
 
-  // Quick Acc <-> Dist twin toggle if single paired ETF is selected
   const singleActiveEtf =
-    activeCompositionPills.length === 1
-      ? etfById.get(activeCompositionPills[0].id)
-      : undefined;
-  const singlePairedEtf =
-    singleActiveEtf?.pairedEtfId ? etfById.get(singleActiveEtf.pairedEtfId) : undefined;
+    activeCompositionPills.length === 1 ? etfById.get(activeCompositionPills[0].id) : undefined;
+  const singlePairedEtf = singleActiveEtf?.pairedEtfId
+    ? etfById.get(singleActiveEtf.pairedEtfId)
+    : undefined;
 
   const backtestCards: Array<{
     key: '3Y' | '5Y';
@@ -218,15 +237,23 @@ export function InvestmentCalculator({
   }> = [
     {
       key: '3Y',
-      title: 'Если бы вы вложили 3 года назад (3Y Backtest)',
-      subtitle: 'Симуляция за последние 36 месяцев с учётом налогов страны',
+      title: tr(lang, 'If You Invested 3 Years Ago (3Y Backtest)', 'Если бы вы вложили 3 года назад (3Y Backtest)'),
+      subtitle: tr(
+        lang,
+        'Last 36 months simulated with your country’s local tax rules',
+        'Последние 36 месяцев с учётом налогов выбранной страны'
+      ),
       accentBorder: isLight ? 'border-sky-200' : 'border-sky-500/35',
       metrics: calculation.backtest3Y,
     },
     {
       key: '5Y',
-      title: 'Если бы вы вложили 5 лет назад (5Y Backtest)',
-      subtitle: 'Полный 60-месячный цикл (просадка 2022 + восстановление 2023–2026)',
+      title: tr(lang, 'If You Invested 5 Years Ago (5Y Backtest)', 'Если бы вы вложили 5 лет назад (5Y Backtest)'),
+      subtitle: tr(
+        lang,
+        'Full 60-month cycle (2022 dip + 2023–2026 recovery)',
+        'Полный 60-месячный цикл (просадка 2022 + рост 2023–2026)'
+      ),
       accentBorder: isLight ? 'border-[#2d8a61]/40' : 'border-[#3b9b72]/40',
       metrics: calculation.backtest5Y,
     },
@@ -246,7 +273,7 @@ export function InvestmentCalculator({
   const renderCompositionPills = (compact = false) => (
     <div
       className={`flex flex-wrap items-center gap-1.5 ${
-        compact ? 'mt-3 rounded-xl border p-2.5' : ''
+        compact ? 'mt-2.5 rounded-xl border p-2' : ''
       } ${
         compact
           ? isLight
@@ -260,10 +287,8 @@ export function InvestmentCalculator({
           isLight ? 'text-slate-600' : 'text-slate-400'
         }`}
       >
-        <Briefcase
-          className={`h-3 w-3 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
-        />
-        Состав портфеля в расчёте:
+        <Briefcase className={`h-3 w-3 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`} />
+        {tr(lang, 'Active Mix:', 'В расчёте:')}
       </span>
       {activeCompositionPills.map((pill) => (
         <span
@@ -282,93 +307,168 @@ export function InvestmentCalculator({
             {pill.pct}%
           </span>
           <span className="font-mono font-bold">{pill.ticker}</span>
-          <span className={isLight ? 'text-slate-500' : 'text-slate-400'}>
-            ({pill.label})
-          </span>
+          <span className={isLight ? 'text-slate-500' : 'text-slate-400'}>({pill.label})</span>
         </span>
       ))}
     </div>
   );
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-5">
       {/* ===================================================================
-          STEP 1: БЮДЖЕТ, ЕЖЕМЕСЯЧНЫЙ ПЛАН И НАЛОГОВАЯ РЕЗИДЕНЦИЯ
+          BEGINNER 3-STEP QUICK NAVIGATION BAR
       =================================================================== */}
-      <section className={`${cardSurface} rounded-2xl p-4 sm:p-6`}>
+      <nav
+        aria-label={tr(lang, '3-Step Investment Flow', '3 шага расчёта')}
+        className={`${cardSurface} flex flex-wrap items-center justify-between gap-2 rounded-2xl px-3.5 py-2.5 text-xs`}
+      >
+        <div className="flex flex-wrap items-center gap-2">
+          <a
+            href="#step-1-budget"
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
+              isLight
+                ? 'border-slate-200 bg-slate-50 text-slate-800 hover:border-[#2d8a61]'
+                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]'
+            }`}
+          >
+            <span
+              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
+                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
+              }`}
+            >
+              1
+            </span>
+            <span>{tr(lang, 'Budget & Country', 'Бюджет и Страна')}</span>
+            <span className={`hidden font-mono text-[11px] sm:inline ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              ({formatEur(initialBudgetEur)} · {selectedCountry.flag} {selectedCountry.code})
+            </span>
+          </a>
+
+          <span className="text-slate-400">→</span>
+
+          <a
+            href="#step-2-portfolio"
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
+              isLight
+                ? 'border-slate-200 bg-slate-50 text-slate-800 hover:border-[#2d8a61]'
+                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]'
+            }`}
+          >
+            <span
+              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
+                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
+              }`}
+            >
+              2
+            </span>
+            <span>{tr(lang, 'Choose ETF / Stocks', 'Выбор ETF и Акций')}</span>
+            <span className={`hidden font-mono text-[11px] md:inline ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+              ({activeCompositionPills.map((p) => `${p.pct}% ${p.ticker}`).join(' + ')})
+            </span>
+          </a>
+
+          <span className="text-slate-400">→</span>
+
+          <a
+            href="#step-3-results"
+            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
+              isLight
+                ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b] hover:bg-[#2d8a61]/15'
+                : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0] hover:bg-[#2d8a61]/25'
+            }`}
+          >
+            <span
+              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
+                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
+              }`}
+            >
+              3
+            </span>
+            <span>{tr(lang, '3Y / 5Y Returns & Forecast', 'Доход 3Y / 5Y и Прогноз')}</span>
+          </a>
+        </div>
+      </nav>
+
+      {/* ===================================================================
+          STEP 1: BUDGET, MONTHLY PLAN & TAX RESIDENCE (COMPACT)
+      =================================================================== */}
+      <section id="step-1-budget" className={`${cardSurface} scroll-mt-6 rounded-2xl p-4 sm:p-5`}>
         <div
-          className="flex flex-col gap-2 border-b pb-4 sm:flex-row sm:items-center sm:justify-between"
+          className="flex flex-col gap-2 border-b pb-3 sm:flex-row sm:items-center sm:justify-between"
           style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
         >
-          <div className="flex items-start gap-3 sm:items-center">
+          <div className="flex items-center gap-2.5">
             <div
-              className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
                 isLight
                   ? 'bg-[#2d8a61]/12 text-[#2d8a61]'
                   : 'bg-[#3b9b72]/15 text-[#6ec9a0]'
               }`}
             >
-              <Calculator className="h-5 w-5" />
+              <Calculator className="h-4 w-4" />
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
                 <span
-                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
-                    isLight
-                      ? 'bg-[#2d8a61] text-white'
-                      : 'bg-[#3b9b72] text-slate-950'
+                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                    isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
                   }`}
                 >
-                  Шаг 1
+                  {tr(lang, 'Step 1', 'Шаг 1')}
                 </span>
                 <h2
-                  className={`text-lg font-bold tracking-tight sm:text-xl ${
+                  className={`text-base font-bold tracking-tight sm:text-lg ${
                     isLight ? 'text-slate-900' : 'text-slate-100'
                   }`}
                 >
-                  Шаг 1: Бюджет, Ежемесячный план и Налоговая резиденция
+                  {tr(
+                    lang,
+                    'Budget, Monthly Plan & Tax Residence',
+                    'Бюджет, Ежемесячный план и Налоговая резиденция'
+                  )}
                 </h2>
               </div>
-              <p className={`mt-0.5 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
-                Укажите стартовый капитал (€), регулярный план накоплений (DCA / Sparplan) и вашу
-                страну налогового резидентства в Европе.
+              <p className={`text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+                {tr(
+                  lang,
+                  'Set your starting capital (€), regular monthly savings (DCA / Sparplan), and European tax country.',
+                  'Укажите стартовый капитал (€), регулярный план накоплений (DCA / Sparplan) и страну налогового резидентства.'
+                )}
               </p>
             </div>
           </div>
 
           <a
             href="#step-2-portfolio"
-            className={`inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border px-3 py-1.5 text-xs font-semibold transition sm:self-auto ${
+            className={`inline-flex shrink-0 items-center gap-1 self-start rounded-xl border px-2.5 py-1 text-xs font-semibold transition sm:self-auto ${
               isLight
                 ? 'border-slate-300 bg-slate-50 text-slate-700 hover:border-[#2d8a61] hover:text-[#1f6e4b]'
                 : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]/70 hover:text-[#86d6b0]'
             }`}
           >
-            Выбрать ETF / Акции
+            {tr(lang, 'Step 2: Portfolio', 'Шаг 2: Портфель')}
             <ArrowDown className="h-3.5 w-3.5" />
           </a>
         </div>
 
         {/* Inputs Grid */}
-        <div className="mt-5 grid grid-cols-1 gap-5 lg:grid-cols-12">
+        <div className="mt-3.5 grid grid-cols-1 gap-3.5 lg:grid-cols-12">
           {/* Initial Lump-Sum Budget */}
-          <div className={`${subSurface} rounded-xl p-4 lg:col-span-4`}>
+          <div className={`${subSurface} rounded-xl p-3 lg:col-span-4`}>
             <label
               htmlFor="initial-budget-input"
-              className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${
+              className={`flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider ${
                 isLight ? 'text-slate-700' : 'text-slate-300'
               }`}
             >
-              <Coins
-                className={`h-3.5 w-3.5 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
-              />
-              Стартовый капитал (€)
+              <Coins className={`h-3.5 w-3.5 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`} />
+              {tr(lang, 'Initial Capital (€)', 'Стартовый капитал (€)')}
             </label>
             <div
-              className={`${inputSurface} mt-2 flex items-center rounded-xl px-3 py-2 focus-within:border-[#2d8a61]`}
+              className={`${inputSurface} mt-1.5 flex items-center rounded-xl px-3 py-1.5 focus-within:border-[#2d8a61]`}
             >
               <span
-                className={`mr-2 font-mono text-base font-bold ${
+                className={`mr-1.5 font-mono text-sm font-bold ${
                   isLight ? 'text-slate-500' : 'text-slate-400'
                 }`}
               >
@@ -382,12 +482,12 @@ export function InvestmentCalculator({
                 step={500}
                 value={initialBudgetEur}
                 onChange={(e) => handleNumericBudgetChange(e.target.value, setInitialBudgetEur)}
-                className={`w-full bg-transparent font-mono text-lg font-bold tabular-nums focus:outline-none ${
+                className={`w-full bg-transparent font-mono text-base font-bold tabular-nums focus:outline-none ${
                   isLight ? 'text-slate-900' : 'text-slate-100'
                 }`}
               />
             </div>
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap gap-1">
               {BUDGET_PRESETS_EUR.map((amt) => {
                 const active = initialBudgetEur === amt;
                 return (
@@ -395,7 +495,7 @@ export function InvestmentCalculator({
                     key={amt}
                     type="button"
                     onClick={() => setInitialBudgetEur(amt)}
-                    className={`rounded-lg px-2.5 py-1 font-mono text-xs font-semibold transition ${
+                    className={`rounded-lg px-2 py-0.5 font-mono text-[11px] font-semibold transition ${
                       active
                         ? isLight
                           ? 'bg-[#2d8a61] text-white'
@@ -412,22 +512,22 @@ export function InvestmentCalculator({
             </div>
           </div>
 
-          {/* Monthly Savings Plan (Sparplan) */}
-          <div className={`${subSurface} rounded-xl p-4 lg:col-span-4`}>
+          {/* Monthly Savings Plan */}
+          <div className={`${subSurface} rounded-xl p-3 lg:col-span-4`}>
             <label
               htmlFor="monthly-sparplan-input"
-              className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${
+              className={`flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider ${
                 isLight ? 'text-slate-700' : 'text-slate-300'
               }`}
             >
               <Calendar className={`h-3.5 w-3.5 ${isLight ? 'text-sky-600' : 'text-sky-400'}`} />
-              Ежемесячный план / Sparplan (€/мес)
+              {tr(lang, 'Monthly Plan / Sparplan (€/mo)', 'Ежемесячный план (€/мес)')}
             </label>
             <div
-              className={`${inputSurface} mt-2 flex items-center rounded-xl px-3 py-2 focus-within:border-sky-500`}
+              className={`${inputSurface} mt-1.5 flex items-center rounded-xl px-3 py-1.5 focus-within:border-sky-500`}
             >
               <span
-                className={`mr-2 font-mono text-base font-bold ${
+                className={`mr-1.5 font-mono text-sm font-bold ${
                   isLight ? 'text-slate-500' : 'text-slate-400'
                 }`}
               >
@@ -443,19 +543,19 @@ export function InvestmentCalculator({
                 onChange={(e) =>
                   handleNumericBudgetChange(e.target.value, setMonthlyContributionEur)
                 }
-                className={`w-full bg-transparent font-mono text-lg font-bold tabular-nums focus:outline-none ${
+                className={`w-full bg-transparent font-mono text-base font-bold tabular-nums focus:outline-none ${
                   isLight ? 'text-slate-900' : 'text-slate-100'
                 }`}
               />
               <span
-                className={`ml-1.5 shrink-0 font-mono text-xs ${
+                className={`ml-1 shrink-0 font-mono text-xs ${
                   isLight ? 'text-slate-500' : 'text-slate-400'
                 }`}
               >
-                / мес
+                {tr(lang, '/ mo', '/ мес')}
               </span>
             </div>
-            <div className="mt-2.5 flex flex-wrap gap-1.5">
+            <div className="mt-2 flex flex-wrap gap-1">
               {MONTHLY_PRESETS_EUR.map((amt) => {
                 const active = monthlyContributionEur === amt;
                 return (
@@ -463,7 +563,7 @@ export function InvestmentCalculator({
                     key={amt}
                     type="button"
                     onClick={() => setMonthlyContributionEur(amt)}
-                    className={`rounded-lg px-2.5 py-1 font-mono text-xs font-semibold transition ${
+                    className={`rounded-lg px-2 py-0.5 font-mono text-[11px] font-semibold transition ${
                       active
                         ? isLight
                           ? 'bg-sky-600 text-white'
@@ -481,18 +581,18 @@ export function InvestmentCalculator({
           </div>
 
           {/* Tax Residence Country Selector */}
-          <div className={`${subSurface} rounded-xl p-4 lg:col-span-4`}>
+          <div className={`${subSurface} rounded-xl p-3 lg:col-span-4`}>
             <div className="flex items-center justify-between gap-2">
               <label
                 htmlFor="country-tax-select"
-                className={`flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${
+                className={`flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider ${
                   isLight ? 'text-slate-700' : 'text-slate-300'
                 }`}
               >
                 <Globe2
                   className={`h-3.5 w-3.5 ${isLight ? 'text-violet-600' : 'text-violet-400'}`}
                 />
-                Налоговая резиденция
+                {tr(lang, 'Tax Residence', 'Налоговая резиденция')}
               </label>
               <div className="flex items-center gap-1">
                 {featuredCountries.map((fc) => {
@@ -502,8 +602,8 @@ export function InvestmentCalculator({
                       key={fc.code}
                       type="button"
                       onClick={() => onSelectCountry(fc.code)}
-                      title={`Выбрать ${fc.name}`}
-                      className={`inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs font-semibold transition ${
+                      title={tr(lang, `Select ${fc.name}`, `Выбрать ${fc.name}`)}
+                      className={`inline-flex items-center gap-1 rounded-md px-1.5 py-0.5 text-[11px] font-semibold transition ${
                         active
                           ? isLight
                             ? 'bg-violet-600 text-white'
@@ -525,23 +625,24 @@ export function InvestmentCalculator({
               id="country-tax-select"
               value={selectedCountry.code}
               onChange={(e) => onSelectCountry(e.target.value)}
-              className={`${inputSurface} mt-2 w-full rounded-xl px-3 py-2.5 text-sm font-semibold focus:border-violet-500 focus:outline-none`}
+              className={`${inputSurface} mt-1.5 w-full rounded-xl px-2.5 py-2 text-xs font-semibold focus:border-violet-500 focus:outline-none`}
             >
               {countries.map((c) => (
                 <option key={c.code} value={c.code}>
-                  {c.flag} {c.name} ({c.code}) — {c.regionGroup}
+                  {c.flag} {c.name} ({c.code}) —{' '}
+                  {lang === 'en' ? c.regionGroup : REGION_LABELS_RU[c.regionGroup]}
                 </option>
               ))}
             </select>
 
-            <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
+            <div className="mt-2">
               <span
-                className={`inline-flex items-center rounded-lg border px-2.5 py-1 text-[11px] font-semibold leading-tight ${getVerdictBadgeClasses(
+                className={`inline-flex items-center rounded-lg border px-2 py-0.5 text-[11px] font-semibold leading-snug ${getVerdictBadgeClasses(
                   selectedCountry.verdict,
                   isLight
                 )}`}
               >
-                {selectedCountry.flag} {selectedCountry.verdictTitle}
+                {selectedCountry.flag} {getLocalizedVerdictTitle(selectedCountry, lang)}
               </span>
             </div>
           </div>
@@ -549,51 +650,40 @@ export function InvestmentCalculator({
       </section>
 
       {/* ===================================================================
-          STEP 2: НА ЧЁМ ЗАРАБАТЫВАЕМ? — PORTFOLIO BUILDER BEFORE RESULTS
+          STEP 2: PORTFOLIO BUILDER (ULTRA-COMPACT BY DEFAULT)
       =================================================================== */}
-      <section id="step-2-portfolio" className="scroll-mt-6 space-y-4">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span
-                className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
-                  isLight
-                    ? 'bg-[#2d8a61] text-white'
-                    : 'bg-[#3b9b72] text-slate-950'
-                }`}
-              >
-                Шаг 2
-              </span>
-              <span
-                className={`text-xs font-semibold uppercase tracking-wider ${
-                  isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'
-                }`}
-              >
-                Выбор активов и пропорций
-              </span>
-            </div>
+      <section id="step-2-portfolio" className="scroll-mt-6 space-y-2.5">
+        <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-wrap items-center gap-2">
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
+              }`}
+            >
+              {tr(lang, 'Step 2', 'Шаг 2')}
+            </span>
             <h3
-              className={`mt-1 text-xl font-bold tracking-tight ${
+              className={`text-base font-bold tracking-tight sm:text-lg ${
                 isLight ? 'text-slate-900' : 'text-slate-100'
               }`}
             >
-              Шаг 2: На чём зарабатываем? — Соберите свой портфель (ETF и Топ-20 Акций)
+              {tr(
+                lang,
+                'What Are You Investing In? — Choose ETFs & Top Stocks',
+                'На чём зарабатываем? — Выберите ETF и Топ-20 Акций'
+              )}
             </h3>
-            <p className={`mt-0.5 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
-              Выберите готовый пресет, добавьте надёжные UCITS ETF или популярные акции США и
-              Европы, либо найдите любой тикер с биржи.
-            </p>
           </div>
 
           <a
             href="#step-3-results"
-            className={`inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border px-3 py-1.5 text-xs font-semibold transition sm:self-auto ${
+            className={`inline-flex shrink-0 items-center gap-1 self-start rounded-xl border px-2.5 py-1 text-xs font-semibold transition sm:self-auto ${
               isLight
                 ? 'border-[#2d8a61]/40 bg-[#2d8a61]/10 text-[#1f6e4b] hover:bg-[#2d8a61]/15'
                 : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0] hover:bg-[#2d8a61]/25'
             }`}
           >
-            Смотреть доходность 3Y / 5Y и Прогноз
+            {tr(lang, 'Step 3: 3Y / 5Y Returns', 'Шаг 3: Доходность 3Y / 5Y')}
             <ArrowDown className="h-3.5 w-3.5" />
           </a>
         </div>
@@ -611,60 +701,55 @@ export function InvestmentCalculator({
       </section>
 
       {/* ===================================================================
-          STEP 3: ИСТОРИЧЕСКАЯ ДОХОДНОСТЬ (3 И 5 ЛЕТ НАЗАД) + ПРОГНОЗ
+          STEP 3: 3Y / 5Y HISTORICAL BACKTEST & FUTURE FORECAST
       =================================================================== */}
-      <section id="step-3-results" className="scroll-mt-6 space-y-6">
-        {/* Step 3 Header + Explicit Portfolio Composition Strip */}
-        <div className={`${cardSurface} rounded-2xl p-4 sm:p-5`}>
-          <div className="flex flex-col gap-2.5 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider ${
-                    isLight
-                      ? 'bg-[#2d8a61] text-white'
-                      : 'bg-[#3b9b72] text-slate-950'
-                  }`}
-                >
-                  Шаг 3
-                </span>
-                <div
-                  className={`inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider ${
-                    isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'
-                  }`}
-                >
-                  <TrendingUp className="h-3.5 w-3.5" />
-                  Исторический бэктест и прогноз
-                </div>
-              </div>
+      <section id="step-3-results" className="scroll-mt-6 space-y-5">
+        {/* Step 3 Header + Portfolio Summary Strip */}
+        <div className={`${cardSurface} rounded-2xl p-4`}>
+          <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-2">
+              <span
+                className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
+                  isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
+                }`}
+              >
+                {tr(lang, 'Step 3', 'Шаг 3')}
+              </span>
               <h3
-                className={`mt-1 text-xl font-bold tracking-tight ${
+                className={`inline-flex items-center gap-1.5 text-base font-bold tracking-tight sm:text-lg ${
                   isLight ? 'text-slate-900' : 'text-slate-100'
                 }`}
               >
-                Шаг 3: Сколько можно было бы заработать исторически (3 и 5 лет назад) и Прогноз
+                <TrendingUp
+                  className={`h-4 w-4 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
+                />
+                {tr(
+                  lang,
+                  'Historical Earnings (3Y & 5Y Ago) & Future Forecast',
+                  'Историческая доходность (3 и 5 лет назад) и Прогноз'
+                )}
               </h3>
             </div>
 
             <p className={`text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
-              Бюджет:{' '}
+              {tr(lang, 'Budget:', 'Бюджет:')}{' '}
               <strong className={isLight ? 'text-slate-900' : 'text-slate-100'}>
                 {formatEur(initialBudgetEur)}
               </strong>{' '}
               +{' '}
               <strong className={isLight ? 'text-slate-900' : 'text-slate-100'}>
-                {formatEur(monthlyContributionEur)}/мес
+                {formatEur(monthlyContributionEur)}
+                {tr(lang, '/mo', '/мес')}
               </strong>{' '}
-              · Налоги:{' '}
+              · {tr(lang, 'Taxes:', 'Налоги:')}{' '}
               <strong className={isLight ? 'text-slate-900' : 'text-slate-100'}>
                 {selectedCountry.flag} {selectedCountry.name}
               </strong>
             </p>
           </div>
 
-          {/* Explicit "Состав портфеля в расчёте:" Strip inside Step 3 Header */}
           <div
-            className="mt-3.5 flex flex-col gap-3 border-t pt-3.5 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
+            className="mt-3 flex flex-col gap-2.5 border-t pt-3 sm:flex-row sm:flex-wrap sm:items-center sm:justify-between"
             style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
           >
             {renderCompositionPills(false)}
@@ -677,9 +762,7 @@ export function InvestmentCalculator({
               >
                 <Percent className={`h-3.5 w-3.5 ${isLight ? 'text-sky-600' : 'text-sky-400'}`} />
                 TER:{' '}
-                <strong
-                  className={`font-mono ${isLight ? 'text-sky-700' : 'text-sky-300'}`}
-                >
+                <strong className={`font-mono ${isLight ? 'text-sky-700' : 'text-sky-300'}`}>
                   {calculation.blendedTerPct.toFixed(2)}%
                 </strong>
               </span>
@@ -702,9 +785,7 @@ export function InvestmentCalculator({
               {singlePairedEtf && singleActiveEtf && (
                 <button
                   type="button"
-                  onClick={() =>
-                    setAllocations([{ etfId: singlePairedEtf.id, weightPct: 100 }])
-                  }
+                  onClick={() => setAllocations([{ etfId: singlePairedEtf.id, weightPct: 100 }])}
                   className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-xs font-semibold transition ${
                     isLight
                       ? 'border-amber-300 bg-amber-50 text-amber-800 hover:bg-amber-100'
@@ -712,7 +793,11 @@ export function InvestmentCalculator({
                   }`}
                 >
                   <ArrowLeftRight className="h-3 w-3" />
-                  Сравнить с {singlePairedEtf.ticker} ({singlePairedEtf.distributionPolicy})
+                  {tr(
+                    lang,
+                    `Compare with ${singlePairedEtf.ticker} (${singlePairedEtf.distributionPolicy})`,
+                    `Сравнить с ${singlePairedEtf.ticker} (${singlePairedEtf.distributionPolicy})`
+                  )}
                 </button>
               )}
             </div>
@@ -720,7 +805,7 @@ export function InvestmentCalculator({
         </div>
 
         {/* 3Y & 5Y Historical Backtest Cards Side by Side */}
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {backtestCards.map((card) => {
             const bt = card.metrics;
             const profitPositive = bt.grossProfitEur >= 0;
@@ -731,15 +816,15 @@ export function InvestmentCalculator({
             return (
               <div
                 key={card.key}
-                className={`${cardSurface} rounded-2xl border ${card.accentBorder} p-5`}
+                className={`${cardSurface} rounded-2xl border ${card.accentBorder} p-4 sm:p-5`}
               >
                 <div
-                  className="flex flex-wrap items-start justify-between gap-2 border-b pb-3.5"
+                  className="flex flex-wrap items-start justify-between gap-2 border-b pb-3"
                   style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
                 >
                   <div>
                     <h4
-                      className={`text-base font-bold ${
+                      className={`text-sm font-bold sm:text-base ${
                         isLight ? 'text-slate-900' : 'text-slate-100'
                       }`}
                     >
@@ -754,7 +839,7 @@ export function InvestmentCalculator({
                     </p>
                   </div>
                   <span
-                    className={`rounded-lg border px-2.5 py-1 font-mono text-[11px] font-medium ${
+                    className={`rounded-lg border px-2 py-0.5 font-mono text-[11px] font-medium ${
                       isLight
                         ? 'border-slate-200 bg-slate-100 text-slate-700'
                         : 'border-slate-700 bg-slate-900 text-slate-300'
@@ -764,62 +849,53 @@ export function InvestmentCalculator({
                   </span>
                 </div>
 
-                {/* Explicit Portfolio Composition Inside Each Backtest Card */}
                 {renderCompositionPills(true)}
 
                 {/* Primary KPI Grid */}
-                <div className="mt-3.5 grid grid-cols-2 gap-3 sm:grid-cols-3">
-                  <div className={`${subSurface} rounded-xl p-3`}>
+                <div className="mt-3 grid grid-cols-2 gap-2.5 sm:grid-cols-3">
+                  <div className={`${subSurface} rounded-xl p-2.5`}>
                     <span
                       className={`block text-[11px] ${
                         isLight ? 'text-slate-600' : 'text-slate-400'
                       }`}
                     >
-                      Вложено всего
+                      {tr(lang, 'Total Invested', 'Вложено всего')}
                     </span>
                     <span
-                      className={`mt-1 block font-mono text-base font-bold tabular-nums ${
+                      className={`mt-0.5 block font-mono text-sm font-bold tabular-nums sm:text-base ${
                         isLight ? 'text-slate-900' : 'text-slate-100'
                       }`}
                     >
                       {formatEurDetailed(bt.totalInvestedEur)}
                     </span>
-                    <span
-                      className={`mt-0.5 block text-[10px] ${
-                        isLight ? 'text-slate-500' : 'text-slate-500'
-                      }`}
-                    >
+                    <span className="mt-0.5 block text-[10px] text-slate-500">
                       {formatEur(bt.initialBudgetEur)} + {monthsCount}×
                       {formatEur(bt.monthlyContributionEur)}
                     </span>
                   </div>
 
-                  <div className={`${subSurface} rounded-xl p-3`}>
+                  <div className={`${subSurface} rounded-xl p-2.5`}>
                     <span
                       className={`block text-[11px] ${
                         isLight ? 'text-slate-600' : 'text-slate-400'
                       }`}
                     >
-                      Итого до налогов
+                      {tr(lang, 'Gross Final Value', 'Итого до налогов')}
                     </span>
                     <span
-                      className={`mt-1 block font-mono text-base font-bold tabular-nums ${
+                      className={`mt-0.5 block font-mono text-sm font-bold tabular-nums sm:text-base ${
                         isLight ? 'text-sky-700' : 'text-sky-300'
                       }`}
                     >
                       {formatEurDetailed(bt.grossFinalValueEur)}
                     </span>
-                    <span
-                      className={`mt-0.5 block text-[10px] ${
-                        isLight ? 'text-slate-500' : 'text-slate-500'
-                      }`}
-                    >
-                      Gross стоимость портфеля
+                    <span className="mt-0.5 block text-[10px] text-slate-500">
+                      {tr(lang, 'Pre-tax portfolio', 'Gross стоимость')}
                     </span>
                   </div>
 
                   <div
-                    className={`col-span-2 rounded-xl border p-3 sm:col-span-1 ${
+                    className={`col-span-2 rounded-xl border p-2.5 sm:col-span-1 ${
                       isLight
                         ? 'border-[#2d8a61]/30 bg-[#2d8a61]/10'
                         : 'border-[#3b9b72]/35 bg-[#2d8a61]/15'
@@ -830,10 +906,10 @@ export function InvestmentCalculator({
                         isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
                       }`}
                     >
-                      Исторический доход
+                      {tr(lang, 'Historical Profit', 'Исторический доход')}
                     </span>
                     <span
-                      className={`mt-1 block font-mono text-base font-bold tabular-nums ${
+                      className={`mt-0.5 block font-mono text-sm font-bold tabular-nums sm:text-base ${
                         profitPositive
                           ? isLight
                             ? 'text-[#1f6e4b]'
@@ -858,22 +934,23 @@ export function InvestmentCalculator({
                       }`}
                     >
                       {profitPositive ? '+' : ''}
-                      {bt.grossTotalReturnPct.toFixed(2)}% к вложениям
+                      {bt.grossTotalReturnPct.toFixed(2)}%{' '}
+                      {tr(lang, 'total return', 'к вложениям')}
                     </span>
                   </div>
                 </div>
 
                 {/* CAGR & Drawdown Row */}
-                <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="mt-2.5 grid grid-cols-2 gap-2.5">
                   <div
-                    className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs ${
+                    className={`flex items-center justify-between rounded-xl border px-3 py-1.5 text-xs ${
                       isLight
                         ? 'border-slate-200 bg-slate-50'
                         : 'border-slate-800/80 bg-slate-950/60'
                     }`}
                   >
                     <span className={isLight ? 'text-slate-600' : 'text-slate-400'}>
-                      Среднегодовая (CAGR)
+                      {tr(lang, 'Annualized (CAGR)', 'Среднегодовая (CAGR)')}
                     </span>
                     <span
                       className={`font-mono font-bold tabular-nums ${
@@ -887,18 +964,19 @@ export function InvestmentCalculator({
                       }`}
                     >
                       {bt.annualizedCagrPct >= 0 ? '+' : ''}
-                      {bt.annualizedCagrPct.toFixed(2)}% / год
+                      {bt.annualizedCagrPct.toFixed(2)}%
+                      {tr(lang, '/yr', '/год')}
                     </span>
                   </div>
                   <div
-                    className={`flex items-center justify-between rounded-xl border px-3 py-2 text-xs ${
+                    className={`flex items-center justify-between rounded-xl border px-3 py-1.5 text-xs ${
                       isLight
                         ? 'border-slate-200 bg-slate-50'
                         : 'border-slate-800/80 bg-slate-950/60'
                     }`}
                   >
                     <span className={isLight ? 'text-slate-600' : 'text-slate-400'}>
-                      Макс. просадка
+                      {tr(lang, 'Max Drawdown', 'Макс. просадка')}
                     </span>
                     <span
                       className={`font-mono font-bold tabular-nums ${
@@ -912,7 +990,7 @@ export function InvestmentCalculator({
 
                 {/* Country Tax & Acc vs Dist Net Breakdown */}
                 <div
-                  className={`mt-4 rounded-xl border p-3.5 ${
+                  className={`mt-3 rounded-xl border p-3 ${
                     isLight
                       ? 'border-slate-200 bg-slate-50/80'
                       : 'border-slate-800 bg-slate-950/80'
@@ -924,21 +1002,21 @@ export function InvestmentCalculator({
                     }`}
                   >
                     <span>
-                      {selectedCountry.flag} {selectedCountry.name}: Чистыми после налога (Acc vs
-                      Dist)
+                      {selectedCountry.flag} {selectedCountry.name}:{' '}
+                      {tr(lang, 'Net After Tax (Acc vs Dist)', 'Чистыми после налога (Acc vs Dist)')}
                     </span>
                     <span
                       className={`text-[11px] font-normal ${
                         isLight ? 'text-slate-500' : 'text-slate-400'
                       }`}
                     >
-                      Продажа через {bt.years}Y
+                      {tr(lang, `Sold after ${bt.years}Y`, `Продажа через ${bt.years}Y`)}
                     </span>
                   </div>
 
-                  <div className="mt-2.5 grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+                  <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
                     <div
-                      className={`rounded-lg border p-2.5 ${
+                      className={`rounded-lg border p-2 ${
                         isLight
                           ? 'border-[#2d8a61]/30 bg-[#2d8a61]/10'
                           : 'border-[#3b9b72]/35 bg-[#2d8a61]/12'
@@ -950,18 +1028,19 @@ export function InvestmentCalculator({
                             isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
                           }`}
                         >
-                          Accumulating (Acc) чистыми
+                          {tr(lang, 'Accumulating (Acc) Net', 'Accumulating (Acc) чистыми')}
                         </span>
                         <span
                           className={`font-mono ${
                             isLight ? 'text-rose-600' : 'text-rose-300/90'
                           }`}
                         >
-                          -{formatEurDetailed(bt.estimatedTaxDragAccEur)} налог
+                          -{formatEurDetailed(bt.estimatedTaxDragAccEur)}{' '}
+                          {tr(lang, 'tax', 'налог')}
                         </span>
                       </div>
                       <div
-                        className={`mt-1 font-mono text-sm font-bold tabular-nums ${
+                        className={`mt-0.5 font-mono text-sm font-bold tabular-nums ${
                           isLight ? 'text-slate-900' : 'text-white'
                         }`}
                       >
@@ -970,7 +1049,7 @@ export function InvestmentCalculator({
                     </div>
 
                     <div
-                      className={`rounded-lg border p-2.5 ${
+                      className={`rounded-lg border p-2 ${
                         isLight
                           ? 'border-amber-200 bg-amber-50'
                           : 'border-amber-500/30 bg-amber-500/10'
@@ -982,18 +1061,19 @@ export function InvestmentCalculator({
                             isLight ? 'text-amber-800' : 'text-amber-300'
                           }`}
                         >
-                          Distributing (Dist) чистыми
+                          {tr(lang, 'Distributing (Dist) Net', 'Distributing (Dist) чистыми')}
                         </span>
                         <span
                           className={`font-mono ${
                             isLight ? 'text-rose-600' : 'text-rose-300/90'
                           }`}
                         >
-                          -{formatEurDetailed(bt.estimatedTaxDragDistEur)} налог
+                          -{formatEurDetailed(bt.estimatedTaxDragDistEur)}{' '}
+                          {tr(lang, 'tax', 'налог')}
                         </span>
                       </div>
                       <div
-                        className={`mt-1 font-mono text-sm font-bold tabular-nums ${
+                        className={`mt-0.5 font-mono text-sm font-bold tabular-nums ${
                           isLight ? 'text-slate-900' : 'text-white'
                         }`}
                       >
@@ -1003,7 +1083,7 @@ export function InvestmentCalculator({
                   </div>
 
                   <div
-                    className={`mt-2.5 flex items-center justify-between rounded-lg border px-3 py-2 text-xs font-semibold ${
+                    className={`mt-2 flex items-center justify-between rounded-lg border px-2.5 py-1.5 text-xs font-semibold ${
                       accWins
                         ? isLight
                           ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
@@ -1019,17 +1099,41 @@ export function InvestmentCalculator({
                   >
                     <span>
                       {accWins
-                        ? `Преимущество Acc в ${selectedCountry.name}:`
+                        ? tr(
+                            lang,
+                            `Acc Advantage in ${selectedCountry.name}:`,
+                            `Преимущество Acc в ${selectedCountry.name}:`
+                          )
                         : distWins
-                          ? `Выгода льготы Dist в ${selectedCountry.name}:`
-                          : `Налоговый паритет в ${selectedCountry.name}:`}
+                          ? tr(
+                              lang,
+                              `Dist Allowance Benefit in ${selectedCountry.name}:`,
+                              `Выгода льготы Dist в ${selectedCountry.name}:`
+                            )
+                          : tr(
+                              lang,
+                              `Tax Parity in ${selectedCountry.name}:`,
+                              `Налоговый паритет в ${selectedCountry.name}:`
+                            )}
                     </span>
                     <span className="font-mono font-bold tabular-nums">
                       {accWins
-                        ? `+${formatEurDetailed(bt.accTaxAdvantageEur)} сохранено`
+                        ? tr(
+                            lang,
+                            `+${formatEurDetailed(bt.accTaxAdvantageEur)} kept`,
+                            `+${formatEurDetailed(bt.accTaxAdvantageEur)} сохранено`
+                          )
                         : distWins
-                          ? `+${formatEurDetailed(Math.abs(bt.accTaxAdvantageEur))} за счёт льготы`
-                          : '€0.00 разницы (Acc удобнее)'}
+                          ? tr(
+                              lang,
+                              `+${formatEurDetailed(Math.abs(bt.accTaxAdvantageEur))} allowance saved`,
+                              `+${formatEurDetailed(Math.abs(bt.accTaxAdvantageEur))} экономия по льготе`
+                            )
+                          : tr(
+                              lang,
+                              '€0.00 diff (Acc simpler)',
+                              '€0.00 разницы (Acc удобнее)'
+                            )}
                     </span>
                   </div>
                 </div>
@@ -1054,15 +1158,22 @@ export function InvestmentCalculator({
         <div className="space-y-3">
           <div className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
             <h3
-              className={`text-lg font-bold ${
+              className={`text-base font-bold sm:text-lg ${
                 isLight ? 'text-slate-900' : 'text-slate-100'
               }`}
             >
-              Прогноз сложного процента на будущее ({selectedCountry.flag} {selectedCountry.name} —
-              после налогов)
+              {tr(
+                lang,
+                `Future Compounding Forecast (${selectedCountry.flag} ${selectedCountry.name} — After Tax)`,
+                `Прогноз сложного процента на будущее (${selectedCountry.flag} ${selectedCountry.name} — после налогов)`
+              )}
             </h3>
             <span className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-              Нажмите на любой горизонт (3Y–20Y), чтобы приблизить график выше
+              {tr(
+                lang,
+                'Click any horizon (3Y–20Y) to zoom the chart above',
+                'Нажмите на любой горизонт (3Y–20Y), чтобы приблизить график выше'
+              )}
             </span>
           </div>
 
@@ -1074,7 +1185,7 @@ export function InvestmentCalculator({
                   key={f.horizonYears}
                   type="button"
                   onClick={() => setSelectedHorizonYears(f.horizonYears)}
-                  className={`${cardSurface} flex flex-col justify-between rounded-2xl p-4 text-left transition-all ${
+                  className={`${cardSurface} flex flex-col justify-between rounded-2xl p-3.5 text-left transition-all ${
                     isActive
                       ? isLight
                         ? 'border-sky-500 ring-1 ring-sky-500/35'
@@ -1104,17 +1215,17 @@ export function InvestmentCalculator({
                           isLight ? 'text-slate-500' : 'text-slate-400'
                         }`}
                       >
-                        Налог: {f.effectiveTaxRateAppliedPct.toFixed(1)}%
+                        {tr(lang, 'Tax:', 'Налог:')} {f.effectiveTaxRateAppliedPct.toFixed(1)}%
                       </span>
                     </div>
 
-                    <div className="mt-3">
+                    <div className="mt-2.5">
                       <span
                         className={`block text-[11px] ${
                           isLight ? 'text-slate-500' : 'text-slate-400'
                         }`}
                       >
-                        База Gross (Hist. CAGR)
+                        {tr(lang, 'Base Gross (Hist. CAGR)', 'База Gross (Hist. CAGR)')}
                       </span>
                       <span
                         className={`font-mono text-lg font-bold tabular-nums ${
@@ -1128,12 +1239,12 @@ export function InvestmentCalculator({
                           isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'
                         }`}
                       >
-                        +{formatEur(f.baseGrossProfitEur)} доход
+                        +{formatEur(f.baseGrossProfitEur)} {tr(lang, 'gain', 'доход')}
                       </span>
                     </div>
 
                     <div
-                      className="mt-2.5 border-t pt-2"
+                      className="mt-2 border-t pt-2"
                       style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
                     >
                       <span
@@ -1141,7 +1252,11 @@ export function InvestmentCalculator({
                           isLight ? 'text-violet-700' : 'text-violet-300'
                         }`}
                       >
-                        Чистыми после налога ({selectedCountry.code})
+                        {tr(
+                          lang,
+                          `Net After Tax (${selectedCountry.code})`,
+                          `Чистыми после налога (${selectedCountry.code})`
+                        )}
                       </span>
                       <span
                         className={`font-mono text-base font-bold tabular-nums ${
@@ -1154,14 +1269,18 @@ export function InvestmentCalculator({
                   </div>
 
                   <div
-                    className={`mt-2.5 flex items-center justify-between border-t pt-2 font-mono text-[10px] tabular-nums ${
+                    className={`mt-2 flex items-center justify-between border-t pt-2 font-mono text-[10px] tabular-nums ${
                       isLight
                         ? 'border-slate-200 text-slate-500'
                         : 'border-slate-800/80 text-slate-400'
                     }`}
                   >
-                    <span>Мин: {formatEur(f.conservativeGrossEur)}</span>
-                    <span>Макс: {formatEur(f.optimisticGrossEur)}</span>
+                    <span>
+                      {tr(lang, 'Low:', 'Мин:')} {formatEur(f.conservativeGrossEur)}
+                    </span>
+                    <span>
+                      {tr(lang, 'High:', 'Макс:')} {formatEur(f.optimisticGrossEur)}
+                    </span>
                   </div>
                 </button>
               );
@@ -1172,7 +1291,7 @@ export function InvestmentCalculator({
         {/* Detailed Forecast Horizon & Tax Breakdown Table */}
         <div className={`${cardSurface} overflow-hidden rounded-2xl`}>
           <div
-            className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3.5 sm:px-5"
+            className="flex flex-wrap items-center justify-between gap-2 border-b px-4 py-3 sm:px-5"
             style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
           >
             <div
@@ -1181,11 +1300,18 @@ export function InvestmentCalculator({
               }`}
             >
               <Info className={`h-4 w-4 ${isLight ? 'text-sky-600' : 'text-sky-400'}`} />
-              Полная таблица прогноза (3Y–20Y) и налогообложение в {selectedCountry.name}
+              {tr(
+                lang,
+                `Full Forecast Matrix (3Y–20Y) & ${selectedCountry.name} Taxation`,
+                `Полная таблица прогноза (3Y–20Y) и налогообложение в ${selectedCountry.name}`
+              )}
             </div>
             <span className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-              На базе 5Y CAGR {calculation.blendedHistoricalCagr5YPct.toFixed(2)}% и волатильности ±
-              {calculation.blendedVolatilityPct.toFixed(1)}%
+              {tr(
+                lang,
+                `Based on 5Y CAGR ${calculation.blendedHistoricalCagr5YPct.toFixed(2)}% & volatility ±${calculation.blendedVolatilityPct.toFixed(1)}%`,
+                `На базе 5Y CAGR ${calculation.blendedHistoricalCagr5YPct.toFixed(2)}% и волатильности ±${calculation.blendedVolatilityPct.toFixed(1)}%`
+              )}
             </span>
           </div>
 
@@ -1199,32 +1325,38 @@ export function InvestmentCalculator({
                 }`}
               >
                 <tr>
-                  <th className="px-4 py-3 font-semibold">Горизонт</th>
-                  <th className="px-4 py-3 font-semibold">Вложено</th>
-                  <th className="px-4 py-3 font-semibold">Консерват. (-σ)</th>
+                  <th className="px-4 py-3 font-semibold">{tr(lang, 'Horizon', 'Горизонт')}</th>
+                  <th className="px-4 py-3 font-semibold">{tr(lang, 'Invested', 'Вложено')}</th>
+                  <th className="px-4 py-3 font-semibold">
+                    {tr(lang, 'Conservative (-σ)', 'Консерват. (-σ)')}
+                  </th>
                   <th
                     className={`px-4 py-3 font-semibold ${
                       isLight ? 'text-sky-700' : 'text-sky-300'
                     }`}
                   >
-                    База (Hist. CAGR)
+                    {tr(lang, 'Base (Hist. CAGR)', 'База (Hist. CAGR)')}
                   </th>
-                  <th className="px-4 py-3 font-semibold">Оптимист. (+σ)</th>
+                  <th className="px-4 py-3 font-semibold">
+                    {tr(lang, 'Optimistic (+σ)', 'Оптимист. (+σ)')}
+                  </th>
                   <th
                     className={`px-4 py-3 font-semibold ${
                       isLight ? 'text-rose-700' : 'text-rose-300'
                     }`}
                   >
-                    Оценка налога
+                    {tr(lang, 'Est. Tax', 'Оценка налога')}
                   </th>
                   <th
                     className={`px-4 py-3 font-semibold ${
                       isLight ? 'text-violet-700' : 'text-violet-300'
                     }`}
                   >
-                    Чистыми ({selectedCountry.code})
+                    {tr(lang, `Net (${selectedCountry.code})`, `Чистыми (${selectedCountry.code})`)}
                   </th>
-                  <th className="px-4 py-3 font-semibold">Применённое налоговое правило</th>
+                  <th className="px-4 py-3 font-semibold">
+                    {tr(lang, 'Applied Tax Rule', 'Применённое налоговое правило')}
+                  </th>
                 </tr>
               </thead>
               <tbody
@@ -1338,11 +1470,11 @@ export function InvestmentCalculator({
               }`}
             />
             <span>
-              Исторические оценки доходности и прошлые результаты не гарантируют будущей прибыли.
-              Налоговые расчёты (например, скидка за срок владения в Португалии Lei n.º 31/2024,
-              нидерландский Box 3, немецкий Vorabpauschale, ирландский 8-Year Deemed Disposal)
-              являются упрощённой образовательной моделью — перед подачей декларации сверьтесь с
-              сертифицированным налоговым консультантом.
+              {tr(
+                lang,
+                'Historical investment ratings and past performance are not a promise or reliable indicator of future results. Tax estimates (e.g., Portugal Lei n.º 31/2024 holding discounts, Dutch Box 3, German Vorabpauschale, Irish 8-Year Deemed Disposal) are simplified educational models—consult a licensed tax advisor before filing.',
+                'Исторические оценки доходности и прошлые результаты не гарантируют будущей прибыли. Налоговые расчёты (например, скидка за срок владения в Португалии Lei n.º 31/2024, нидерландский Box 3, немецкий Vorabpauschale, ирландский 8-Year Deemed Disposal) являются упрощённой образовательной моделью — перед подачей декларации сверьтесь с сертифицированным налоговым консультантом.'
+              )}
             </span>
           </div>
         </div>

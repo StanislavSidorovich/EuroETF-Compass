@@ -45,6 +45,22 @@
 }
 
 /* ============================================================================
+   3-Level Root Font Size Scaling (A / A+ / A++)
+   Tailwind uses rem units, so scaling html font-size zooms the entire UI cleanly.
+   ============================================================================ */
+html.font-size-normal {
+  font-size: 16px;
+}
+
+html.font-size-large {
+  font-size: 18px;
+}
+
+html.font-size-xl {
+  font-size: 20px;
+}
+
+/* ============================================================================
    3 Selectable Font Themes
    ============================================================================ */
 .font-theme-inter {

@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Compass, Info, MapPin, ShieldCheck } from 'lucide-react';
-import type { CountryTaxRule, TaxArchetype } from '../../types';
+import type { CountryTaxRule, LanguageMode, TaxArchetype } from '../../types';
+import { tr, useAppPreferences } from '../../utils/i18n';
 
 interface EuropeTaxMapProps {
   countries: CountryTaxRule[];
@@ -130,7 +131,7 @@ const EUROPE_COUNTRY_LAYOUT: MapNodeCoords[] = [
   },
 ];
 
-function getRegimeColors(archetype: TaxArchetype): {
+function getRegimeColors(archetype: TaxArchetype, lang: LanguageMode): {
   fill: string;
   fillSelected: string;
   stroke: string;
@@ -147,7 +148,11 @@ function getRegimeColors(archetype: TaxArchetype): {
         stroke: '#3b9b72',
         badgeBg: 'border-emerald-500/40 bg-emerald-500/15',
         badgeText: 'text-emerald-300',
-        label: 'Отложенный налог: Acc ETF лидируют',
+        label: tr(
+          lang,
+          'Tax Deferral: Acc ETFs Win',
+          'Отложенный налог: Acc ETF лидируют'
+        ),
         dotColor: '#2d8a61',
       };
     case 'IMPUTED_ANNUAL_TAX_HYBRID':
@@ -157,7 +162,11 @@ function getRegimeColors(archetype: TaxArchetype): {
         stroke: '#3b82f6',
         badgeBg: 'border-blue-500/40 bg-blue-500/15',
         badgeText: 'text-blue-300',
-        label: 'Ежегодный учёт / гибрид (DE, AT, CH, GB)',
+        label: tr(
+          lang,
+          'Annual Imputed / Hybrid (DE, AT, CH, GB)',
+          'Ежегодный учёт / гибрид (DE, AT, CH, GB)'
+        ),
         dotColor: '#3b82f6',
       };
     case 'WEALTH_OR_DEEMED_DISPOSAL':
@@ -167,7 +176,11 @@ function getRegimeColors(archetype: TaxArchetype): {
         stroke: '#d97706',
         badgeBg: 'border-amber-500/40 bg-amber-500/15',
         badgeText: 'text-amber-300',
-        label: 'Налог на капитал / 8-летний цикл (NL, IE, SE)',
+        label: tr(
+          lang,
+          'Wealth Tax / 8-Yr Deemed Disposal (NL, IE, SE)',
+          'Налог на капитал / 8-летний цикл (NL, IE, SE)'
+        ),
         dotColor: '#d97706',
       };
   }
@@ -178,6 +191,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
   selectedCountryCode,
   onSelectCountry,
 }) => {
+  const { lang } = useAppPreferences();
   const [hoveredCode, setHoveredCode] = useState<string | null>(null);
 
   const countryByCode = useMemo(() => {
@@ -194,11 +208,11 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
     countryByCode.get(selectedCountryCode) ??
     countries[0];
 
-  const inspectedColors = getRegimeColors(inspectedCountry.archetype);
+  const inspectedColors = getRegimeColors(inspectedCountry.archetype, lang);
 
   return (
     <section
-      aria-label="Interactive European ETF Tax Map"
+      aria-label={tr(lang, 'Interactive European ETF Tax Map', 'Интерактивная карта налоговых режимов ETF в Европе')}
       className="fintech-card rounded-2xl p-5 sm:p-6"
     >
       <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 lg:flex-row lg:items-center lg:justify-between">
@@ -206,12 +220,19 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
           <div className="flex items-center gap-2">
             <MapPin className="h-5 w-5 text-emerald-400" />
             <h2 className="text-lg font-bold text-white">
-              Интерактивная карта налоговых режимов ETF в Европе (15 стран)
+              {tr(
+                lang,
+                `Interactive European ETF Tax Map (${countries.length} Countries)`,
+                `Интерактивная карта налоговых режимов ETF в Европе (${countries.length} стран)`
+              )}
             </h2>
           </div>
           <p className="mt-1 text-xs text-slate-400">
-            Наведите или нажмите на любую страну на карте, чтобы посмотреть эффективную ставку
-            налога на UCITS ETF и переключить весь калькулятор на эту юрисдикцию.
+            {tr(
+              lang,
+              'Hover or click any country on the map to inspect its effective UCITS ETF tax rate and switch the entire calculator to that jurisdiction.',
+              'Наведите или нажмите на любую страну на карте, чтобы посмотреть эффективную ставку налога на UCITS ETF и переключить весь калькулятор на эту юрисдикцию.'
+            )}
           </p>
         </div>
 
@@ -219,11 +240,11 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
         <div className="flex flex-wrap items-center gap-2 text-[11px]">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2.5 py-1 font-semibold text-emerald-300">
             <span className="h-2.5 w-2.5 rounded-full bg-[#2d8a61]" />
-            Отложенный налог (Acc wins)
+            {tr(lang, 'Tax Deferral (Acc wins)', 'Отложенный налог (Acc wins)')}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/35 bg-blue-500/10 px-2.5 py-1 font-semibold text-blue-300">
             <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
-            Годовой расчёт / ISA
+            {tr(lang, 'Annual Tax / ISA', 'Годовой расчёт / ISA')}
           </span>
           <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 py-1 font-semibold text-amber-300">
             <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
@@ -302,7 +323,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
 
               const isSelected = country.code === selectedCountryCode;
               const isHovered = country.code === hoveredCode;
-              const colors = getRegimeColors(country.archetype);
+              const colors = getRegimeColors(country.archetype, lang);
 
               return (
                 <g
@@ -387,11 +408,13 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
             <div className="flex items-center justify-between gap-2">
               <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
                 <Compass className="h-3.5 w-3.5 text-emerald-400" />
-                {hoveredCode ? 'Предпросмотр страны' : 'Выбранная юрисдикция'}
+                {hoveredCode
+                  ? tr(lang, 'Country Preview', 'Предпросмотр страны')
+                  : tr(lang, 'Selected Jurisdiction', 'Выбранная юрисдикция')}
               </span>
               {inspectedCountry.code === selectedCountryCode && (
                 <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
-                  <ShieldCheck className="h-3 w-3" /> Active
+                  <ShieldCheck className="h-3 w-3" /> {tr(lang, 'Active', 'Активна')}
                 </span>
               )}
             </div>
@@ -412,13 +435,17 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
 
             <div className="grid grid-cols-2 gap-2.5">
               <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
-                <span className="text-[11px] text-slate-400">Эфф. ставка ETF</span>
+                <span className="text-[11px] text-slate-400">
+                  {tr(lang, 'Effective ETF Rate', 'Эфф. ставка ETF')}
+                </span>
                 <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums text-emerald-300">
                   {inspectedCountry.effectiveEquityEtfTaxRatePct}%
                 </p>
               </div>
               <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
-                <span className="text-[11px] text-slate-400">Налог на дивиденды</span>
+                <span className="text-[11px] text-slate-400">
+                  {tr(lang, 'Dividend Tax', 'Налог на дивиденды')}
+                </span>
                 <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums text-amber-300">
                   {inspectedCountry.dividendTaxRatePct}%
                 </p>
@@ -437,7 +464,8 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
             <div className="flex items-start gap-2 text-[11px] text-slate-400">
               <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" />
               <span>
-                Декларация: <strong className="text-slate-200">{inspectedCountry.taxDeclarationForm}</strong>
+                {tr(lang, 'Tax Form:', 'Декларация:')}{' '}
+                <strong className="text-slate-200">{inspectedCountry.taxDeclarationForm}</strong>
               </span>
             </div>
             {inspectedCountry.code !== selectedCountryCode && (
@@ -446,7 +474,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
                 onClick={() => onSelectCountry(inspectedCountry.code)}
                 className="w-full rounded-xl bg-emerald-500 px-3 py-2 text-xs font-bold text-white transition hover:bg-emerald-600"
               >
-                Выбрать {inspectedCountry.flag} {inspectedCountry.name}
+                {tr(lang, 'Select', 'Выбрать')} {inspectedCountry.flag} {inspectedCountry.name}
               </button>
             )}
           </div>
