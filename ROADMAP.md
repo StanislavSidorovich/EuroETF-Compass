@@ -65,3 +65,13 @@
   - [x] Build `src/components/taxes/TaxFilingToolkit.tsx`: Interactive **Portuguese `IRS Modelo 3 — Anexo J` Filled Sample Template** (Quadro 9.2A & Quadro 8A with fictitious investor *João Silva* + downloadable/printable guide), filing deadlines (`1 April – 30 June`), and **`.ics` Calendar & In-App Tax Reminder Generator**.
   - [x] Build `src/components/taxes/EuropeTaxMap.tsx`: Interactive **SVG Map of Europe** showing all 15 countries color-coded by ETF tax favorability, integrated into the Taxes & Map view.
   - [x] Build `src/components/ecosystem/MarketNewsFeed.tsx`: Live Financial News & Market Insights (RSS-to-JSON live feed + curated European ETF, ECB, and Tech stock news channels).
+
+---
+
+## Phase 6 (V3 Upgrade — Tagged `v3.0.0`): Readability, Light Header, `EN/RU`, 3 Font Sizes & Compact Portfolio UX (Completed)
+- [x] **Light Airy Header & Ticker Bar:** Replaced pitch-dark header with soft `#f7faf8` light-mode header and softer `#162231` dark-mode header.
+- [x] **Global `🌐 EN | RU` Language Switcher:** Full bilingual support across all tabs (`src/utils/i18n.ts`).
+- [x] **3 Text Size Presets (`A` 100% / `A+` 112% / `A++` 125%):** Root `rem` scaling (`16px` / `18px` / `20px`) for effortless reading.
+- [x] **Compact Beginner-Friendly Portfolio Builder:** Grouped `<select>` category dropdown + active holding chips + collapsible 35-asset showcase drawer (closed by default) so 3Y/5Y earnings cards appear on the first screen without scrolling.
+- [x] **4 Distinct Numbered Feature-Card Navigation Tabs (`1`–`4`)**, custom SVG Favicon (`public/favicon.svg`), Header Mariner's Crest, and collapsible `InvestorWisdomBanner`.
+- [x] **Windows Non-Hanging Build Rule (`ADR-013`):** Documented `$null | node ...` pattern in `GEMINI.md` and `MEMORY.md`.

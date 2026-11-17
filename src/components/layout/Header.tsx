@@ -151,13 +151,23 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <>
-      <header className="sticky top-0 z-40 border-b border-slate-800/80 bg-[#090d16]/95 backdrop-blur-xl">
+      <header
+        className={`sticky top-0 z-40 border-b backdrop-blur-xl transition-colors ${
+          isLight
+            ? 'border-slate-200/90 bg-[#f7faf8]/95 text-slate-900 shadow-xs'
+            : 'border-slate-700/80 bg-[#162231]/95 text-slate-100'
+        }`}
+      >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {/* Top Brand + Controls Row */}
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/70 py-3">
+          <div
+            className={`flex flex-wrap items-center justify-between gap-3 border-b py-2.5 ${
+              isLight ? 'border-slate-200/80' : 'border-slate-700/70'
+            }`}
+          >
             {/* Brand Identity */}
             <div className="flex items-center gap-3 group">
-              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-md transition-transform duration-300 group-hover:scale-105">
+              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105">
                 <svg
                   viewBox="0 0 64 64"
                   className="h-11 w-11"
@@ -166,9 +176,9 @@ export const Header: React.FC<HeaderProps> = ({
                 >
                   <defs>
                     <linearGradient id="hdrBgGrad" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#143829" />
-                      <stop offset="55%" stopColor="#1f5c42" />
-                      <stop offset="100%" stopColor="#0f291e" />
+                      <stop offset="0%" stopColor="#1e4d38" />
+                      <stop offset="55%" stopColor="#286a4d" />
+                      <stop offset="100%" stopColor="#173d2c" />
                     </linearGradient>
                     <linearGradient id="hdrGoldGrad" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
                       <stop offset="0%" stopColor="#f6d365" />
@@ -176,8 +186,8 @@ export const Header: React.FC<HeaderProps> = ({
                       <stop offset="100%" stopColor="#c89128" />
                     </linearGradient>
                     <linearGradient id="hdrSageGrad" x1="16" y1="44" x2="48" y2="16" gradientUnits="userSpaceOnUse">
-                      <stop offset="0%" stopColor="#5ec294" />
-                      <stop offset="100%" stopColor="#a7f3d0" />
+                      <stop offset="0%" stopColor="#6ed3a5" />
+                      <stop offset="100%" stopColor="#bbf7d0" />
                     </linearGradient>
                   </defs>
                   <rect
@@ -194,8 +204,8 @@ export const Header: React.FC<HeaderProps> = ({
                     cx="32"
                     cy="32"
                     r="21"
-                    stroke="#5ec294"
-                    strokeOpacity="0.3"
+                    stroke="#6ed3a5"
+                    strokeOpacity="0.35"
                     strokeWidth="1.4"
                     strokeDasharray="3 3"
                   />
@@ -227,20 +237,30 @@ export const Header: React.FC<HeaderProps> = ({
                     strokeLinejoin="round"
                   />
                   <polygon points="32,15 36.5,32 32,29 27.5,32" fill="url(#hdrGoldGrad)" />
-                  <polygon points="32,49 36.5,32 32,35 27.5,32" fill="#5ec294" fillOpacity="0.65" />
-                  <circle cx="32" cy="32" r="3" fill="#0f291e" stroke="url(#hdrGoldGrad)" strokeWidth="2" />
+                  <polygon points="32,49 36.5,32 32,35 27.5,32" fill="#6ed3a5" fillOpacity="0.7" />
+                  <circle cx="32" cy="32" r="3" fill="#173d2c" stroke="url(#hdrGoldGrad)" strokeWidth="2" />
                 </svg>
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1 className="text-base font-bold tracking-tight text-white sm:text-lg">
+                  <h1
+                    className={`text-base font-bold tracking-tight sm:text-lg ${
+                      isLight ? 'text-slate-900' : 'text-white'
+                    }`}
+                  >
                     EuroETF Compass
                   </h1>
-                  <span className="hidden rounded-full border border-[#c89128]/40 bg-[#c89128]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#e2b049] sm:inline-block">
+                  <span
+                    className={`hidden rounded-full border px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider sm:inline-block ${
+                      isLight
+                        ? 'border-amber-300 bg-amber-50 text-amber-800'
+                        : 'border-[#c89128]/40 bg-[#c89128]/15 text-[#e2b049]'
+                    }`}
+                  >
                     {tr(lang, 'Wealth & Tax Club', 'Клуб ETF и Налогов')}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-400 sm:text-xs">
+                <p className={`text-[11px] sm:text-xs ${isLight ? 'text-slate-600' : 'text-slate-300'}`}>
                   {tr(
                     lang,
                     'Careful ETF & Stock Investing • EU Taxes • 3Y/5Y History & Forecast',
@@ -254,11 +274,20 @@ export const Header: React.FC<HeaderProps> = ({
             <div className="flex flex-wrap items-center gap-2">
               {/* Language Switcher: 🌐 EN | RU */}
               <div
-                className="inline-flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
+                className={`inline-flex items-center gap-0.5 rounded-xl border p-1 ${
+                  isLight
+                    ? 'border-slate-200 bg-white shadow-2xs'
+                    : 'border-slate-700 bg-slate-800/90'
+                }`}
                 role="group"
                 aria-label={tr(lang, 'Language switcher', 'Переключатель языка')}
               >
-                <span className="inline-flex items-center px-1.5 text-slate-400" title="Language / Язык">
+                <span
+                  className={`inline-flex items-center px-1.5 ${
+                    isLight ? 'text-slate-500' : 'text-slate-400'
+                  }`}
+                  title="Language / Язык"
+                >
                   <Globe className="h-3.5 w-3.5" />
                 </span>
                 {(['en', 'ru'] as const).map((code) => {
@@ -270,8 +299,10 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => setLang(code)}
                       className={`rounded-lg px-2 py-1 text-[11px] font-bold uppercase transition ${
                         isActive
-                          ? 'bg-emerald-500 text-white shadow-xs'
-                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                          ? 'bg-[#2d8a61] text-white shadow-xs'
+                          : isLight
+                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                       }`}
                     >
                       {code.toUpperCase()}
@@ -282,7 +313,11 @@ export const Header: React.FC<HeaderProps> = ({
 
               {/* 3-Level Font Size Switcher: A | A+ | A++ */}
               <div
-                className="inline-flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
+                className={`inline-flex items-center gap-0.5 rounded-xl border p-1 ${
+                  isLight
+                    ? 'border-slate-200 bg-white shadow-2xs'
+                    : 'border-slate-700 bg-slate-800/90'
+                }`}
                 role="group"
                 aria-label={tr(lang, 'Text size zoom', 'Размер текста')}
               >
@@ -296,8 +331,12 @@ export const Header: React.FC<HeaderProps> = ({
                       title={`${tr(lang, opt.enTitle, opt.ruTitle)} (${opt.pct})`}
                       className={`rounded-lg px-2 py-1 text-[11px] font-bold transition ${
                         isActive
-                          ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/50'
-                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                          ? isLight
+                            ? 'bg-[#e3f2eb] text-[#1b5e3f] ring-1 ring-[#2d8a61]/40'
+                            : 'bg-emerald-500/25 text-emerald-200 ring-1 ring-emerald-500/50'
+                          : isLight
+                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
                       }`}
                     >
                       {opt.label}
@@ -318,8 +357,8 @@ export const Header: React.FC<HeaderProps> = ({
                 )}
                 className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
                   isLight
-                    ? 'border-amber-400/60 bg-amber-50 text-amber-900 shadow-sm hover:bg-amber-100'
-                    : 'border-slate-700 bg-slate-900 text-amber-200 hover:border-slate-500 hover:bg-slate-800'
+                    ? 'border-amber-300 bg-amber-50/90 text-amber-900 shadow-2xs hover:bg-amber-100'
+                    : 'border-slate-600 bg-slate-800 text-amber-200 hover:border-slate-500 hover:bg-slate-700'
                 }`}
               >
                 {isLight ? (
@@ -336,7 +375,13 @@ export const Header: React.FC<HeaderProps> = ({
               </button>
 
               {/* Quick Country Switcher */}
-              <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
+              <div
+                className={`flex items-center gap-1 rounded-xl border p-1 ${
+                  isLight
+                    ? 'border-slate-200 bg-white shadow-2xs'
+                    : 'border-slate-700 bg-slate-800/90'
+                }`}
+              >
                 {FEATURED_CODES.map((code) => {
                   const country = countries.find((c) => c.code === code);
                   if (!country) return null;
@@ -353,8 +398,12 @@ export const Header: React.FC<HeaderProps> = ({
                       )}
                       className={`inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-semibold transition ${
                         active
-                          ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/50'
-                          : 'text-slate-300 hover:bg-slate-800 hover:text-white'
+                          ? isLight
+                            ? 'bg-[#e3f2eb] text-[#1b5e3f] ring-1 ring-[#2d8a61]/40'
+                            : 'bg-emerald-500/25 text-emerald-200 ring-1 ring-emerald-500/50'
+                          : isLight
+                            ? 'text-slate-700 hover:bg-slate-100'
+                            : 'text-slate-200 hover:bg-slate-700'
                       }`}
                     >
                       <span>{country.flag}</span>
@@ -367,7 +416,11 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-label={tr(lang, 'Select European tax residency country', 'Выбор страны налогового резидентства')}
                   value={selectedCountryCode}
                   onChange={(e) => onSelectCountry(e.target.value)}
-                  className="ml-0.5 max-w-[135px] cursor-pointer rounded-lg border border-slate-700/70 bg-slate-950 px-2 py-1 text-xs font-medium text-slate-200 outline-none transition hover:border-slate-600 focus:border-emerald-500"
+                  className={`ml-0.5 max-w-[135px] cursor-pointer rounded-lg border px-2 py-1 text-xs font-medium outline-none transition ${
+                    isLight
+                      ? 'border-slate-200 bg-slate-50 text-slate-800 hover:border-slate-300 focus:border-[#2d8a61]'
+                      : 'border-slate-600 bg-slate-900 text-slate-100 hover:border-slate-500 focus:border-emerald-500'
+                  }`}
                 >
                   {countries.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -382,15 +435,19 @@ export const Header: React.FC<HeaderProps> = ({
                 title={`Live proxy: ${liveProxyCount} | CORS fallback: ${liveCorsCount} | Verified baseline: ${baselineCount}`}
                 className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-medium ${
                   liveCount > 0
-                    ? 'border-emerald-500/35 bg-emerald-500/10 text-emerald-300'
-                    : 'border-slate-700 bg-slate-900 text-slate-300'
+                    ? isLight
+                      ? 'border-[#b7dfd0] bg-[#eaf5ef] text-[#1b5e3f]'
+                      : 'border-emerald-500/35 bg-emerald-500/15 text-emerald-200'
+                    : isLight
+                      ? 'border-slate-200 bg-white text-slate-600'
+                      : 'border-slate-600 bg-slate-800 text-slate-300'
                 }`}
               >
                 {liveCount > 0 ? (
                   <>
                     <span className="relative flex h-2 w-2">
-                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-                      <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-400" />
+                      <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2d8a61] opacity-75" />
+                      <span className="relative inline-flex h-2 w-2 rounded-full bg-[#2d8a61]" />
                     </span>
                     <Wifi className="h-3.5 w-3.5" />
                     <span className="tabular-nums">
@@ -412,7 +469,11 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={onRefreshPrices}
                 disabled={isRefreshing}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-cyan-500/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20 disabled:cursor-not-allowed disabled:opacity-60"
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition disabled:cursor-not-allowed disabled:opacity-60 ${
+                  isLight
+                    ? 'border-sky-200 bg-sky-50 text-sky-800 hover:bg-sky-100'
+                    : 'border-cyan-500/35 bg-cyan-500/15 text-cyan-200 hover:bg-cyan-500/25'
+                }`}
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">
@@ -426,9 +487,13 @@ export const Header: React.FC<HeaderProps> = ({
               <button
                 type="button"
                 onClick={() => setShowGithubModal(true)}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-medium transition ${
+                  isLight
+                    ? 'border-slate-200 bg-white text-slate-700 hover:bg-slate-100'
+                    : 'border-slate-600 bg-slate-800 text-slate-200 hover:bg-slate-700'
+                }`}
               >
-                <GitBranch className="h-3.5 w-3.5 text-purple-400" />
+                <GitBranch className="h-3.5 w-3.5 text-purple-500" />
                 <span className="hidden xl:inline">GitHub</span>
               </button>
             </div>
@@ -449,8 +514,12 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-current={isActive ? 'page' : undefined}
                   className={`group relative flex flex-col justify-between rounded-xl border p-2.5 text-left transition-all sm:p-3 ${
                     isActive
-                      ? 'border-emerald-500 bg-emerald-500/10 shadow-sm ring-1 ring-emerald-500/35'
-                      : 'border-slate-800 bg-slate-900/75 hover:border-emerald-500/45 hover:bg-slate-800/80'
+                      ? isLight
+                        ? 'border-[#2d8a61] bg-[#eaf5ef] shadow-xs ring-1 ring-[#2d8a61]/30'
+                        : 'border-emerald-500 bg-emerald-500/15 shadow-sm ring-1 ring-emerald-500/35'
+                      : isLight
+                        ? 'border-slate-200/90 bg-white hover:border-[#2d8a61]/50 hover:bg-[#f3f8f5] shadow-2xs'
+                        : 'border-slate-700 bg-slate-800/80 hover:border-emerald-500/45 hover:bg-slate-700/80'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -458,8 +527,10 @@ export const Header: React.FC<HeaderProps> = ({
                       <span
                         className={`inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold transition ${
                           isActive
-                            ? 'bg-emerald-500 text-white'
-                            : 'bg-slate-800 text-slate-300 group-hover:bg-emerald-500/20 group-hover:text-emerald-300'
+                            ? 'bg-[#2d8a61] text-white'
+                            : isLight
+                              ? 'bg-slate-100 text-slate-700 group-hover:bg-[#e3f2eb] group-hover:text-[#1b5e3f]'
+                              : 'bg-slate-700 text-slate-200 group-hover:bg-emerald-500/20 group-hover:text-emerald-200'
                         }`}
                       >
                         {tab.num}
@@ -467,15 +538,25 @@ export const Header: React.FC<HeaderProps> = ({
                       <span
                         className={`shrink-0 ${
                           isActive
-                            ? 'text-emerald-300'
-                            : 'text-slate-400 group-hover:text-emerald-300'
+                            ? isLight
+                              ? 'text-[#1b5e3f]'
+                              : 'text-emerald-300'
+                            : isLight
+                              ? 'text-slate-500 group-hover:text-[#2d8a61]'
+                              : 'text-slate-400 group-hover:text-emerald-300'
                         }`}
                       >
                         {tab.icon}
                       </span>
                       <span
                         className={`truncate text-xs font-bold sm:text-sm ${
-                          isActive ? 'text-emerald-300' : 'text-white'
+                          isActive
+                            ? isLight
+                              ? 'text-[#164e35]'
+                              : 'text-emerald-200'
+                            : isLight
+                              ? 'text-slate-800'
+                              : 'text-white'
                         }`}
                       >
                         {tab.title}
@@ -483,8 +564,14 @@ export const Header: React.FC<HeaderProps> = ({
                     </div>
 
                     {isActive && (
-                      <span className="inline-flex shrink-0 items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
-                        <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                      <span
+                        className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
+                          isLight
+                            ? 'bg-[#2d8a61]/15 text-[#1b5e3f]'
+                            : 'bg-emerald-500/20 text-emerald-200'
+                        }`}
+                      >
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#2d8a61]" />
                         <span className="hidden sm:inline">
                           {tr(lang, 'Active', 'Открыто')}
                         </span>
@@ -492,7 +579,11 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </div>
 
-                  <p className="mt-1 line-clamp-1 pl-8 text-[11px] text-slate-400">
+                  <p
+                    className={`mt-1 line-clamp-1 pl-8 text-[11px] ${
+                      isLight ? 'text-slate-500' : 'text-slate-300'
+                    }`}
+                  >
                     {tab.subtitle}
                   </p>
                 </button>

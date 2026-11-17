@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import type { ETFInstrument, LiveQuoteData } from '../../types';
 import { getEtfExternalLinks } from '../../data/europeanPortals';
+import { tr, useAppPreferences } from '../../utils/i18n';
 
 interface LiveTickerBarProps {
   etfs: ETFInstrument[];
@@ -32,6 +33,8 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
   isFetchingCustomTicker,
   customTickerError,
 }) => {
+  const { theme, lang } = useAppPreferences();
+  const isLight = theme === 'light';
   const [inspectedEtf, setInspectedEtf] = useState<ETFInstrument | null>(null);
   const [showCustomInput, setShowCustomInput] = useState(false);
   const [tickerInput, setTickerInput] = useState('');
@@ -50,8 +53,14 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
     : null;
 
   return (
-    <div className="border-b border-slate-800/80 bg-slate-950/85">
-      <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-2 sm:px-6">
+    <div
+      className={`border-b transition-colors ${
+        isLight
+          ? 'border-slate-200/90 bg-[#f0f5f2]'
+          : 'border-slate-700/80 bg-[#1a2636]'
+      }`}
+    >
+      <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-1.5 sm:px-6">
         {/* Scrollable Ticker Strip */}
         <div className="flex flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
           {etfs.map((etf) => {
@@ -69,37 +78,57 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
                 type="button"
                 onClick={() => setInspectedEtf(etf)}
                 title={`${etf.name} — Click to inspect ISIN & European portal links`}
-                className="group flex shrink-0 items-center gap-2.5 rounded-xl border border-slate-800/90 bg-slate-900/75 px-3 py-1.5 text-left transition hover:border-slate-600 hover:bg-slate-800/90"
+                className={`group flex shrink-0 items-center gap-2 rounded-xl border px-2.5 py-1 text-left transition ${
+                  isLight
+                    ? 'border-slate-200/90 bg-white hover:border-[#2d8a61]/50 hover:bg-[#f6faf8] shadow-2xs'
+                    : 'border-slate-700/90 bg-slate-800/85 hover:border-slate-500 hover:bg-slate-700/90'
+                }`}
               >
                 <div className="flex items-center gap-1.5">
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${
-                      isLive ? 'bg-emerald-400' : 'bg-slate-500'
+                      isLive ? 'bg-[#2d8a61]' : 'bg-slate-400'
                     }`}
                     title={isLive ? `Live (${quote?.source})` : 'Verified 5Y Baseline'}
                   />
-                  <span className="font-mono text-xs font-bold text-white group-hover:text-emerald-300">
+                  <span
+                    className={`font-mono text-xs font-bold ${
+                      isLight
+                        ? 'text-slate-800 group-hover:text-[#1b5e3f]'
+                        : 'text-white group-hover:text-emerald-300'
+                    }`}
+                  >
                     {etf.ticker}
                   </span>
                   <span
                     className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
                       etf.distributionPolicy === 'Acc'
-                        ? 'bg-emerald-500/15 text-emerald-300 ring-1 ring-emerald-500/30'
-                        : 'bg-amber-500/15 text-amber-300 ring-1 ring-amber-500/30'
+                        ? isLight
+                          ? 'bg-[#e3f2eb] text-[#1b5e3f]'
+                          : 'bg-emerald-500/20 text-emerald-200'
+                        : isLight
+                          ? 'bg-amber-100 text-amber-800'
+                          : 'bg-amber-500/20 text-amber-200'
                     }`}
                   >
                     {etf.distributionPolicy}
                   </span>
                 </div>
 
-                <div className="flex items-center gap-2 font-mono text-xs tabular-nums">
-                  <span className="font-semibold text-slate-100">
+                <div className="flex items-center gap-1.5 font-mono text-xs tabular-nums">
+                  <span className={`font-semibold ${isLight ? 'text-slate-900' : 'text-slate-100'}`}>
                     {currSym}
                     {price.toFixed(2)}
                   </span>
                   <span
                     className={`inline-flex items-center gap-0.5 text-[11px] font-medium ${
-                      isUp ? 'text-emerald-400' : 'text-rose-400'
+                      isUp
+                        ? isLight
+                          ? 'text-[#1b6e49]'
+                          : 'text-emerald-300'
+                        : isLight
+                          ? 'text-rose-600'
+                          : 'text-rose-400'
                     }`}
                   >
                     {isUp ? (
@@ -122,10 +151,14 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
         <button
           type="button"
           onClick={() => setShowCustomInput((prev) => !prev)}
-          className="inline-flex shrink-0 items-center gap-1 rounded-xl border border-emerald-500/35 bg-emerald-500/10 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-500/20"
+          className={`inline-flex shrink-0 items-center gap-1 rounded-xl border px-2.5 py-1 text-xs font-semibold transition ${
+            isLight
+              ? 'border-[#b7dfd0] bg-[#eaf5ef] text-[#1b5e3f] hover:bg-[#daf0e4]'
+              : 'border-emerald-500/35 bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25'
+          }`}
         >
           <Plus className="h-3.5 w-3.5" />
-          <span className="hidden sm:inline">Custom Ticker</span>
+          <span className="hidden sm:inline">{tr(lang, '+ Ticker', '+ Тикер')}</span>
         </button>
       </div>
 

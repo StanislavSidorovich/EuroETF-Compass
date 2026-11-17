@@ -2,6 +2,9 @@
 
 > **Project Name:** EuroETF Compass (Careful ETF & Tax-Smart Investing App for Europe)  
 > **Repository Root:** `d:\docs\2. study\Claude\00. Gemini\Japp`  
+> **GitHub Repository:** `https://github.com/StanislavSidorovich/EuroETF-Compass`  
+> **Live GitHub Pages:** `https://stanislavsidorovich.github.io/EuroETF-Compass/`  
+> **Current Release Tag:** `v3.0.0`  
 > **Last Updated:** 2026-11-17  
 > **Purpose:** This file serves as the persistent project memory (`GEMINI.md` / `MEMORY.md`) for both human developers and AI agents. Always read this file before making architectural changes, and **append new decisions** to the Decision Log below.
 
@@ -119,6 +122,7 @@ Following the Global Hub & Subagent Rules (`Argon` vs `Hydrogen`):
 | **ADR-010** | 2026-11-17 | Accepted | **Interactive Europe Tax Map & Live Financial News** | Add an **Interactive SVG Map of Europe** color-coded by ETF tax regime/rates, plus a **Live Market News & European Insights Feed** (live RSS-to-JSON feeds + curated financial news channels). | User requested a visual map tab/view and live accessible market news links/feeds. |
 | **ADR-011** | 2026-11-17 | Accepted | **Portugal IRS Anexo J Sample Form, Filing Calendar & `.ics` Reminders** | Add a realistic **Filled Sample Template of Portugal's `IRS Modelo 3 — Anexo J` (Quadro 9.2A & 8A)** with fictitious example data + interactive calculator mapping user's own numbers into Anexo J rows, downloadable cheat-sheet, official deadlines, and an **`.ics` Calendar Reminder Generator** (+ local reminders). | User requested concrete guidance on *what* to fill out, *when* to file, a sample filled Portuguese tax form with fictitious data, and reminders so investors never miss deadlines or holding-period milestones. |
 | **ADR-012** | 2026-11-17 | Accepted | **V3 Readability, Compact Portfolio UX, `EN/RU` & 3 Text Sizes (`A / A+ / A++`)** | Add a global **`🌐 EN | RU` language switcher**, a **3-level Font Size Zoom control (`A 100% | A+ 112% | A++ 125%`)**, distinct **4-Card Main Navigation Tabs**, a custom SVG **Favicon + Mariner's Compass Crest Logo**, an **Investor Wisdom & Habit Banner** (collapsible), and redesign `EtfSelector` to be **compact (~220px) by default** using a grouped `<select>` dropdown + active chips + a collapsible category drawer so beginners immediately see their 3Y/5Y revenue cards without scrolling through 35 cards. | User feedback: needed English/Russian toggle, larger font size presets, clearer clickable tabs, and elimination of the tall catalog wall on the home screen. |
+| **ADR-013** | 2026-11-17 | Accepted | **Windows Non-Hanging Build & Typecheck Rule** | **Always invoke `node` directly with closed `stdin` (`$null | node ...`) instead of `npm run` / `npx` wrappers on Windows:** Use `$null | node ./node_modules/typescript/bin/tsc --noEmit` and `$null | node ./node_modules/vite/bin/vite.js build` for builds/checks, and always run `npm install` or `git push` with `BypassSandbox: true`. | On Windows PowerShell inside the sandbox, `npm.ps1` / `npx.ps1` wrappers keep child `stdin`/`stdout` pipe handles open after completion, causing tasks to stay in `RUNNING` state indefinitely. Piping `$null | node ...` closes `stdin` (`EOF`) and exits cleanly. |
 
 ---
 
@@ -126,8 +130,13 @@ Following the Global Hub & Subagent Rules (`Argon` vs `Hydrogen`):
 
 <!-- USER: Add any custom requirements, extra countries, specific brokers, favorite ETFs (by ISIN/Ticker), or UI preferences below! -->
 - **2026-11-17:** Prioritize **Portugal (`PT`)**, **Netherlands (`NL`)**, **Germany (`DE`)**, and all major European countries (Austria, Ireland, UK, France, Spain, Italy, Belgium, Switzerland, Poland, Romania, Czechia, Sweden). Default country selector features Portugal, Germany, and Netherlands at the top for fast switching.
-- **2026-11-17 (V2 Feedback):**
-  1. Light / Dark theme toggle + toned-down sage-green palette + 3 font options (`Inter`, `Plus Jakarta Sans`, `Merriweather`).
-  2. Put Portfolio & Asset Selector *before* the "How much you could earn" cards so it is clear *what* the portfolio holds; include categorized ETFs (World, US, Europe) + 20 top individual stocks (`NVDA`, `AAPL`, `MSFT`, `GOOGL`, `META`, `AMZN`, `ASML.AS`, `EDP.LS`, etc.) and make ticker search (`NVDA`, etc.) work 100% reliably on GitHub Pages.
-  3. Add an Interactive Map of Europe + Market News & Insights tab/section.
-  4. In Taxes (especially Portugal): show *what* form to file and *when*, provide a sample filled Portuguese `IRS Anexo J` form with fictitious data (downloadable/printable), and let users set/download tax & holding-period reminders (`.ics` calendar + in-app reminders).
+- **2026-11-17 (V2 Feedback — Completed):**
+  1. Light / Dark theme toggle + toned-down sage-green palette + 3 font options.
+  2. Portfolio & Asset Selector placed *before* the "How much you could earn" cards; 35+ catalog with categorized ETFs (World, US, Europe) + 20 top individual stocks (`NVDA`, `AAPL`, `MSFT`, `GOOGL`, `META`, `AMZN`, `ASML.AS`, `EDP.LS`, etc.) and 100% reliable ticker search (`NVDA`, etc.) on GitHub Pages.
+  3. Interactive SVG Map of Europe (`EuropeTaxMap.tsx`) + Live Market News & Insights (`MarketNewsFeed.tsx`).
+  4. In Taxes (`TaxFilingToolkit.tsx`): shows *what* form to file and *when*, provides a sample filled Portuguese `IRS Anexo J` form with fictitious data (downloadable/printable), and lets users download `.ics` calendar reminders.
+- **2026-11-17 (V3 Feedback — Completed & Tagged `v3.0.0`):**
+  1. Full **`🌐 EN | RU` language switcher** in Header (`src/utils/i18n.ts`).
+  2. **3 Font Size Zoom levels (`A` 16px, `A+` 18px, `A++` 20px)** scaling all `rem` typography across the app.
+  3. **Compact Beginner Portfolio UX**: Replaced the tall 35-card wall with 1-click strategy presets, active holding chips, a grouped `<select>` dropdown by category, and a collapsible category drawer (closed by default).
+  4. **4 Distinct Numbered Feature-Card Navigation Tabs**, custom SVG Favicon + Header Crest Logo, and collapsible Investor Wisdom & Habit Banner.
