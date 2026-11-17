@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import type { ETFInstrument, EuropeanPortalResource } from '../../types';
 import { EUROPEAN_PORTALS, getEtfExternalLinks } from '../../data/europeanPortals';
+import { MarketNewsFeed } from './MarketNewsFeed';
 
 interface EuropeanPortalsHubProps {
   etfs: ETFInstrument[];
@@ -365,6 +366,9 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
           })}
         </div>
       </section>
+
+      {/* Live Financial News & Market Insights */}
+      <MarketNewsFeed />
     </div>
   );
 };

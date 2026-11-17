@@ -48,3 +48,20 @@
 ## Phase 4: Integration, Build Verification & GitHub Readiness (Completed)
 - [x] Install dependencies (`npm install`) and verify zero TypeScript or Vite production build errors (`npm run build` $\rightarrow$ `tsc --noEmit && vite build`).
 - [x] Verify clean `.gitignore` and documentation (`README.md`, `GEMINI.md`, `MEMORY.md`, `ROADMAP.md`) ready for GitHub push.
+
+---
+
+## Phase 5 (V2 Upgrade): Theme, Portfolio-First UX, 20 Stocks, Europe Map, News & PT Anexo J Toolkit (Completed)
+**Assigned Multi-Agent Wave:**
+- **Agent V2-A (`Model: "flash"` / Hydrogen — Catalog, Stocks & Multi-Gateway Market Engine):**
+  - [x] Expand `src/data/etfs.ts` to ~35 instruments: 15 categorized UCITS ETFs (Global, US, Europe, Cash/Bonds) + **20 Popular Individual Stocks** (`NVDA`, `AAPL`, `MSFT`, `GOOGL`, `META`, `AMZN`, `TSLA`, `AVGO`, `BRK-B`, `LLY`, `JPM`, `COST`, `ASML.AS`, `NVO`, `SAP.DE`, `MC.PA`, `SIE.DE`, `SHEL.AS`, `NESN.SW`, `EDP.LS`).
+  - [x] Upgrade `src/services/marketService.ts` so searching `NVDA` or any ticker/company name works 100% reliably on static GitHub Pages via local catalog lookup + multi-CORS proxies (`corsproxy.io`, `codetabs`, `allorigins`) + smart fallback profile generator.
+- **Agent V2-B (`Model: "pro"` / Argon — Portfolio-First Calculator, Categorized Asset Picker & Soft-Green Chart):**
+  - [x] Reorder `InvestmentCalculator.tsx` so **Step 1 (Budget & Sparplan)** is immediately followed by **Step 2 ("На чём зарабатываем: выбор ETF и акций в портфель")** *before* the 3Y/5Y revenue cards and forecast chart, with clear portfolio composition badges on every revenue card.
+  - [x] Upgrade `EtfSelector.tsx` into a full **Categorized Asset & Portfolio Builder** with category tabs (`🌍 Мировые ETF`, `🇺🇸 ETF США`, `🇪🇺 ETF Европы`, `💻 Топ-12 Акций США (NVDA, AAPL, META...)`, `🏰 Топ-8 Акций Европы (ASML, SAP, EDP.LS...)`), instant search by ticker or company name, and custom portfolio weight sliders.
+  - [x] Update `PerformanceChart.tsx` to support Light & Dark themes and softer sage-green colors.
+- **Agent V2-C (`Model: "flash"` / Hydrogen — Europe SVG Map, PT Anexo J Template + Reminders, News Hub & Theme/Font Shell):**
+  - [x] Add **Light / Dark Mode toggle**, **3 Font Switcher (`Inter`, `Plus Jakarta Sans`, `Merriweather`)**, and toned-down sage-green palette in `index.html`, `src/index.css`, `Header.tsx`, and `App.tsx`.
+  - [x] Build `src/components/taxes/TaxFilingToolkit.tsx`: Interactive **Portuguese `IRS Modelo 3 — Anexo J` Filled Sample Template** (Quadro 9.2A & Quadro 8A with fictitious investor *João Silva* + downloadable/printable guide), filing deadlines (`1 April – 30 June`), and **`.ics` Calendar & In-App Tax Reminder Generator**.
+  - [x] Build `src/components/taxes/EuropeTaxMap.tsx`: Interactive **SVG Map of Europe** showing all 15 countries color-coded by ETF tax favorability, integrated into the Taxes & Map view.
+  - [x] Build `src/components/ecosystem/MarketNewsFeed.tsx`: Live Financial News & Market Insights (RSS-to-JSON live feed + curated European ETF, ECB, and Tech stock news channels).

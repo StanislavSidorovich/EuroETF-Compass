@@ -1,6 +1,6 @@
 import { useMemo, useRef, useState } from 'react';
 import { Eye, EyeOff, ShieldAlert, TrendingUp } from 'lucide-react';
-import type { ChartTimelinePoint, CountryTaxRule } from '../../types';
+import type { ChartTimelinePoint, CountryTaxRule, ThemeMode } from '../../types';
 
 export type ForecastHorizonOption = 3 | 5 | 10 | 15 | 20;
 
@@ -12,6 +12,7 @@ export interface PerformanceChartProps {
   volatilityPct: number;
   selectedHorizonYears?: ForecastHorizonOption;
   onSelectHorizonYears?: (horizon: ForecastHorizonOption) => void;
+  theme?: ThemeMode;
 }
 
 const HORIZON_OPTIONS: ForecastHorizonOption[] = [3, 5, 10, 15, 20];
@@ -94,12 +95,32 @@ export function PerformanceChart({
   volatilityPct,
   selectedHorizonYears,
   onSelectHorizonYears,
+  theme = 'dark',
 }: PerformanceChartProps) {
   const [internalHorizon, setInternalHorizon] = useState<ForecastHorizonOption>(10);
   const [showDistNet, setShowDistNet] = useState(true);
   const [showPostTax, setShowPostTax] = useState(true);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const svgRef = useRef<SVGSVGElement | null>(null);
+
+  const isLight = theme === 'light';
+
+  // Refined sage/forest green palette & theme-adaptive chart tokens
+  const histColor = isLight ? '#2d8a61' : '#3b9b72';
+  const histLabelColor = isLight ? '#1f6e4b' : '#86d6b0';
+  const histBadgeBg = isLight ? 'rgba(45, 138, 97, 0.11)' : 'rgba(59, 155, 114, 0.16)';
+  const histBadgeStroke = isLight ? 'rgba(45, 138, 97, 0.42)' : 'rgba(59, 155, 114, 0.45)';
+  const forecastColor = isLight ? '#0284c7' : '#38bdf8';
+  const forecastLabelColor = isLight ? '#0369a1' : '#7dd3fc';
+  const postTaxColor = isLight ? '#7c3aed' : '#a78bfa';
+  const distColor = isLight ? '#d97706' : '#f59e0b';
+  const investedColor = isLight ? '#64748b' : '#94a3b8';
+  const axisTextColor = isLight ? '#334155' : '#cbd5e1';
+  const axisMutedColor = isLight ? '#475569' : '#94a3b8';
+  const dotInnerFill = isLight ? '#ffffff' : '#0f172a';
+  const dotOuterStroke = isLight ? '#ffffff' : '#f8fafc';
+  const gridStroke = isLight ? 'rgba(51, 65, 85, 0.14)' : 'rgba(203, 213, 225, 0.14)';
+  const todayLineStroke = isLight ? '#334155' : '#cbd5e1';
 
   const horizonYears = selectedHorizonYears ?? internalHorizon;
   const setHorizonYears = (h: ForecastHorizonOption) => {
@@ -317,41 +338,77 @@ export function PerformanceChart({
   const todayBadgeX = Math.max(PAD_LEFT + 62, Math.min(SVG_WIDTH - PAD_RIGHT - 62, todayX));
 
   return (
-    <div className="fintech-card overflow-hidden rounded-2xl">
+    <div
+      className={`overflow-hidden rounded-2xl border transition-colors ${
+        isLight
+          ? 'border-slate-200 bg-white shadow-sm'
+          : 'border-slate-700/60 bg-slate-900/90 shadow-xl'
+      }`}
+    >
       {/* Header & Horizon Controls */}
-      <div className="border-b border-slate-800/90 p-4 sm:p-5">
+      <div
+        className={`border-b p-4 sm:p-5 ${
+          isLight ? 'border-slate-200 bg-white' : 'border-slate-800/90 bg-slate-900/60'
+        }`}
+      >
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <TrendingUp className="h-4 w-4 text-emerald-400" />
-              <h3 className="text-base font-bold text-slate-100 sm:text-lg">
-                5Y Historical Backtest &amp; {horizonYears}Y Compounding Forecast
+              <TrendingUp
+                className={`h-4 w-4 ${isLight ? 'text-[#2d8a61]' : 'text-[#5fc497]'}`}
+              />
+              <h3
+                className={`text-base font-bold sm:text-lg ${
+                  isLight ? 'text-slate-900' : 'text-slate-100'
+                }`}
+              >
+                5-летний исторический бэктест и прогноз на {horizonYears} лет
               </h3>
-              <span className="rounded-full border border-slate-700 bg-slate-800/90 px-2.5 py-0.5 text-xs font-medium text-slate-300">
+              <span
+                className={`rounded-full border px-2.5 py-0.5 text-xs font-medium ${
+                  isLight
+                    ? 'border-slate-200 bg-slate-100 text-slate-700'
+                    : 'border-slate-700 bg-slate-800/90 text-slate-300'
+                }`}
+              >
                 {country.flag} {country.name} Tax Model
               </span>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
-              Blended Historical CAGR:{' '}
-              <span className="font-mono font-semibold text-emerald-300">
+            <p className={`mt-1 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              Среднегодовая доходность (CAGR):{' '}
+              <span
+                className={`font-mono font-semibold ${
+                  isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'
+                }`}
+              >
                 {historicalCagr5YPct >= 0 ? '+' : ''}
-                {historicalCagr5YPct.toFixed(2)}%/yr (5Y)
+                {historicalCagr5YPct.toFixed(2)}%/год (5Y)
               </span>{' '}
               ·{' '}
-              <span className="font-mono font-semibold text-sky-300">
+              <span
+                className={`font-mono font-semibold ${
+                  isLight ? 'text-sky-700' : 'text-sky-300'
+                }`}
+              >
                 {historicalCagr3YPct >= 0 ? '+' : ''}
-                {historicalCagr3YPct.toFixed(2)}%/yr (3Y)
+                {historicalCagr3YPct.toFixed(2)}%/год (3Y)
               </span>{' '}
-              · Realized Volatility:{' '}
-              <span className="font-mono font-semibold text-slate-200">
-                ±{volatilityPct.toFixed(1)}%/yr
+              · Волатильность:{' '}
+              <span
+                className={`font-mono font-semibold ${
+                  isLight ? 'text-slate-800' : 'text-slate-200'
+                }`}
+              >
+                ±{volatilityPct.toFixed(1)}%/год
               </span>
             </p>
           </div>
 
           {/* Forecast Horizon Zoom Pills */}
           <div className="flex flex-wrap items-center gap-1.5">
-            <span className="mr-1 text-xs font-medium text-slate-400">Forecast Horizon:</span>
+            <span className={`mr-1 text-xs font-medium ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              Горизонт прогноза:
+            </span>
             {HORIZON_OPTIONS.map((h) => {
               const active = horizonYears === h;
               return (
@@ -361,8 +418,12 @@ export function PerformanceChart({
                   onClick={() => setHorizonYears(h)}
                   className={`rounded-lg px-2.5 py-1 font-mono text-xs font-bold transition ${
                     active
-                      ? 'bg-sky-500 text-slate-950 shadow-sm shadow-sky-500/30'
-                      : 'border border-slate-700 bg-slate-900/80 text-slate-300 hover:border-sky-500/50 hover:text-sky-200'
+                      ? isLight
+                        ? 'bg-[#2d8a61] text-white shadow-sm'
+                        : 'bg-sky-500 text-slate-950 shadow-sm shadow-sky-500/30'
+                      : isLight
+                        ? 'border border-slate-300 bg-white text-slate-700 hover:border-[#2d8a61]/60 hover:text-[#1f6e4b]'
+                        : 'border border-slate-700 bg-slate-900/80 text-slate-300 hover:border-sky-500/50 hover:text-sky-200'
                   }`}
                 >
                   +{h}Y
@@ -374,9 +435,18 @@ export function PerformanceChart({
 
         {/* Interactive Legend Row */}
         <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
-          <div className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-2.5 py-1 text-emerald-200">
-            <span className="h-0.5 w-4 rounded-full bg-emerald-400" />
-            Historical Value (-5Y → Today)
+          <div
+            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 ${
+              isLight
+                ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
+                : 'border-[#3b9b72]/35 bg-[#2d8a61]/15 text-[#86d6b0]'
+            }`}
+          >
+            <span
+              className="h-0.5 w-4 rounded-full"
+              style={{ backgroundColor: histColor }}
+            />
+            Историческая стоимость (-5Y → Сегодня)
           </div>
 
           <button
@@ -384,18 +454,34 @@ export function PerformanceChart({
             onClick={() => setShowDistNet((prev) => !prev)}
             className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 transition ${
               showDistNet
-                ? 'border-amber-500/40 bg-amber-500/10 text-amber-200'
-                : 'border-slate-700 bg-slate-900/60 text-slate-500'
+                ? isLight
+                  ? 'border-amber-300 bg-amber-50 text-amber-800'
+                  : 'border-amber-500/40 bg-amber-500/10 text-amber-200'
+                : isLight
+                  ? 'border-slate-200 bg-slate-100 text-slate-400'
+                  : 'border-slate-700 bg-slate-900/60 text-slate-500'
             }`}
           >
-            <span className="h-0.5 w-4 border-t-2 border-dashed border-amber-400" />
-            Distributing Net (After Div Tax)
+            <span
+              className="h-0.5 w-4 border-t-2 border-dashed"
+              style={{ borderColor: distColor }}
+            />
+            Dist Net (после налога на дивиденды)
             {showDistNet ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
           </button>
 
-          <div className="inline-flex items-center gap-1.5 rounded-lg border border-sky-500/30 bg-sky-500/10 px-2.5 py-1 text-sky-200">
-            <span className="h-0.5 w-4 rounded-full bg-sky-400" />
-            Forecast Base (Hist. CAGR) + Cone
+          <div
+            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 ${
+              isLight
+                ? 'border-sky-200 bg-sky-50 text-sky-800'
+                : 'border-sky-500/30 bg-sky-500/10 text-sky-200'
+            }`}
+          >
+            <span
+              className="h-0.5 w-4 rounded-full"
+              style={{ backgroundColor: forecastColor }}
+            />
+            Базовый прогноз (Hist. CAGR) + коридор
           </div>
 
           <button
@@ -403,24 +489,44 @@ export function PerformanceChart({
             onClick={() => setShowPostTax((prev) => !prev)}
             className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 transition ${
               showPostTax
-                ? 'border-violet-500/40 bg-violet-500/10 text-violet-200'
-                : 'border-slate-700 bg-slate-900/60 text-slate-500'
+                ? isLight
+                  ? 'border-violet-200 bg-violet-50 text-violet-800'
+                  : 'border-violet-500/40 bg-violet-500/10 text-violet-200'
+                : isLight
+                  ? 'border-slate-200 bg-slate-100 text-slate-400'
+                  : 'border-slate-700 bg-slate-900/60 text-slate-500'
             }`}
           >
-            <span className="h-0.5 w-4 border-t-2 border-dashed border-violet-400" />
-            Est. Net After-Tax ({country.code})
+            <span
+              className="h-0.5 w-4 border-t-2 border-dashed"
+              style={{ borderColor: postTaxColor }}
+            />
+            Чистыми после налога ({country.code})
             {showPostTax ? <Eye className="h-3 w-3" /> : <EyeOff className="h-3 w-3" />}
           </button>
 
-          <div className="inline-flex items-center gap-1.5 rounded-lg border border-slate-700 bg-slate-900/80 px-2.5 py-1 text-slate-300">
-            <span className="h-0.5 w-4 border-t-2 border-dashed border-slate-400" />
-            Total Invested Principal
+          <div
+            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 ${
+              isLight
+                ? 'border-slate-200 bg-slate-100 text-slate-700'
+                : 'border-slate-700 bg-slate-900/80 text-slate-300'
+            }`}
+          >
+            <span
+              className="h-0.5 w-4 border-t-2 border-dashed"
+              style={{ borderColor: investedColor }}
+            />
+            Вложенный капитал
           </div>
         </div>
       </div>
 
       {/* Responsive Interactive SVG Canvas */}
-      <div className="relative w-full select-none bg-[#070b14] px-2 pb-2 pt-3 sm:px-4">
+      <div
+        className={`relative w-full select-none px-2 pb-2 pt-3 sm:px-4 ${
+          isLight ? 'bg-[#f8fafc]' : 'bg-[#0f172a]'
+        }`}
+      >
         <svg
           ref={svgRef}
           viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}
@@ -431,16 +537,16 @@ export function PerformanceChart({
         >
           <defs>
             <linearGradient id="histAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#10b981" stopOpacity="0.28" />
-              <stop offset="100%" stopColor="#10b981" stopOpacity="0.01" />
+              <stop offset="0%" stopColor={histColor} stopOpacity={isLight ? '0.22' : '0.26'} />
+              <stop offset="100%" stopColor={histColor} stopOpacity="0.01" />
             </linearGradient>
             <linearGradient id="investedAreaGrad" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#64748b" stopOpacity="0.16" />
-              <stop offset="100%" stopColor="#64748b" stopOpacity="0.02" />
+              <stop offset="0%" stopColor={investedColor} stopOpacity={isLight ? '0.12' : '0.16'} />
+              <stop offset="100%" stopColor={investedColor} stopOpacity="0.01" />
             </linearGradient>
             <linearGradient id="forecastConeGrad" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.14" />
-              <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.22" />
+              <stop offset="0%" stopColor={forecastColor} stopOpacity={isLight ? '0.12' : '0.14'} />
+              <stop offset="100%" stopColor={forecastColor} stopOpacity={isLight ? '0.2' : '0.22'} />
             </linearGradient>
           </defs>
 
@@ -450,14 +556,14 @@ export function PerformanceChart({
             y={PAD_TOP}
             width={Math.max(0, todayX - PAD_LEFT)}
             height={PLOT_HEIGHT}
-            fill="rgba(16, 185, 129, 0.035)"
+            fill={isLight ? 'rgba(45, 138, 97, 0.04)' : 'rgba(59, 155, 114, 0.045)'}
           />
           <rect
             x={todayX}
             y={PAD_TOP}
             width={Math.max(0, SVG_WIDTH - PAD_RIGHT - todayX)}
             height={PLOT_HEIGHT}
-            fill="rgba(56, 189, 248, 0.035)"
+            fill={isLight ? 'rgba(2, 132, 199, 0.035)' : 'rgba(56, 189, 248, 0.035)'}
           />
 
           {/* Phase Region Top Labels */}
@@ -465,11 +571,11 @@ export function PerformanceChart({
             <text
               x={PAD_LEFT + 8}
               y={PAD_TOP + 15}
-              fill="#34d399"
+              fill={histLabelColor}
               fontSize="10"
               fontWeight="700"
               letterSpacing="0.06em"
-              opacity="0.75"
+              opacity={isLight ? '0.9' : '0.82'}
             >
               HISTORICAL REALITY
             </text>
@@ -478,11 +584,11 @@ export function PerformanceChart({
             x={SVG_WIDTH - PAD_RIGHT - 8}
             y={PAD_TOP + 15}
             textAnchor="end"
-            fill="#38bdf8"
+            fill={forecastLabelColor}
             fontSize="10"
             fontWeight="700"
             letterSpacing="0.06em"
-            opacity="0.75"
+            opacity={isLight ? '0.9' : '0.82'}
           >
             EDUCATIONAL PROJECTION MODEL
           </text>
@@ -497,7 +603,7 @@ export function PerformanceChart({
                   y1={y}
                   x2={SVG_WIDTH - PAD_RIGHT}
                   y2={y}
-                  stroke="rgba(148, 163, 184, 0.14)"
+                  stroke={gridStroke}
                   strokeDasharray={tickVal === 0 ? undefined : '3 4'}
                   strokeWidth={1}
                 />
@@ -505,7 +611,7 @@ export function PerformanceChart({
                   x={PAD_LEFT - 10}
                   y={y + 4}
                   textAnchor="end"
-                  fill="#94a3b8"
+                  fill={axisTextColor}
                   fontSize="11"
                   fontFamily="var(--font-mono)"
                 >
@@ -526,14 +632,15 @@ export function PerformanceChart({
                   y1={baselineY}
                   x2={x}
                   y2={baselineY + 5}
-                  stroke={isToday ? '#e2e8f0' : 'rgba(148, 163, 184, 0.45)'}
+                  stroke={isToday ? todayLineStroke : axisMutedColor}
+                  strokeOpacity={isToday ? 0.9 : 0.45}
                   strokeWidth={isToday ? 1.5 : 1}
                 />
                 <text
                   x={x}
                   y={baselineY + 21}
                   textAnchor="middle"
-                  fill={isToday ? '#f8fafc' : '#94a3b8'}
+                  fill={isToday ? (isLight ? '#0f172a' : '#f8fafc') : axisTextColor}
                   fontSize="11"
                   fontWeight={isToday ? '700' : '500'}
                   fontFamily="var(--font-mono)"
@@ -554,7 +661,7 @@ export function PerformanceChart({
               <path
                 d={buildLinePath(investedCoords)}
                 fill="none"
-                stroke="#64748b"
+                stroke={investedColor}
                 strokeWidth={1.75}
                 strokeDasharray="4 4"
               />
@@ -569,20 +676,20 @@ export function PerformanceChart({
             <path
               d={buildLinePath(forecastOptCoords)}
               fill="none"
-              stroke="#38bdf8"
+              stroke={forecastColor}
               strokeWidth={1.25}
               strokeDasharray="4 4"
-              opacity={0.65}
+              opacity={0.7}
             />
           )}
           {forecastConsCoords.length >= 2 && (
             <path
               d={buildLinePath(forecastConsCoords)}
               fill="none"
-              stroke="#94a3b8"
+              stroke={axisMutedColor}
               strokeWidth={1.25}
               strokeDasharray="4 4"
-              opacity={0.7}
+              opacity={0.75}
             />
           )}
 
@@ -597,7 +704,7 @@ export function PerformanceChart({
             <path
               d={buildLinePath(histDistCoords)}
               fill="none"
-              stroke="#f59e0b"
+              stroke={distColor}
               strokeWidth={2}
               strokeDasharray="6 4"
             />
@@ -606,7 +713,7 @@ export function PerformanceChart({
             <path
               d={buildLinePath(histGrossCoords)}
               fill="none"
-              stroke="#10b981"
+              stroke={histColor}
               strokeWidth={2.75}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -618,7 +725,7 @@ export function PerformanceChart({
             <path
               d={buildLinePath(forecastBaseCoords)}
               fill="none"
-              stroke="#38bdf8"
+              stroke={forecastColor}
               strokeWidth={2.75}
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -628,7 +735,7 @@ export function PerformanceChart({
             <path
               d={buildLinePath(forecastPostTaxCoords)}
               fill="none"
-              stroke="#a78bfa"
+              stroke={postTaxColor}
               strokeWidth={2.25}
               strokeDasharray="6 4"
               strokeLinecap="round"
@@ -643,31 +750,31 @@ export function PerformanceChart({
                 y1={yScale(entry5YPoint.historicalValueEur ?? 0)}
                 x2={xScale(entry5YPoint.yearOffset)}
                 y2={baselineY}
-                stroke="rgba(16, 185, 129, 0.35)"
+                stroke={histBadgeStroke}
                 strokeDasharray="2 3"
               />
               <circle
                 cx={xScale(entry5YPoint.yearOffset)}
                 cy={yScale(entry5YPoint.historicalValueEur ?? 0)}
                 r={4.5}
-                fill="#090d16"
-                stroke="#10b981"
+                fill={dotInnerFill}
+                stroke={histColor}
                 strokeWidth={2.5}
               />
               <rect
                 x={xScale(entry5YPoint.yearOffset) + 2}
                 y={PAD_TOP + 24}
-                width={56}
+                width={58}
                 height={18}
                 rx={5}
-                fill="rgba(16, 185, 129, 0.16)"
-                stroke="rgba(16, 185, 129, 0.45)"
+                fill={histBadgeBg}
+                stroke={histBadgeStroke}
               />
               <text
-                x={xScale(entry5YPoint.yearOffset) + 30}
+                x={xScale(entry5YPoint.yearOffset) + 31}
                 y={PAD_TOP + 36}
                 textAnchor="middle"
-                fill="#6ee7b7"
+                fill={histLabelColor}
                 fontSize="10"
                 fontWeight="700"
               >
@@ -684,31 +791,31 @@ export function PerformanceChart({
                 y1={yScale(entry3YPoint.historicalValueEur ?? 0)}
                 x2={xScale(entry3YPoint.yearOffset)}
                 y2={baselineY}
-                stroke="rgba(56, 189, 248, 0.4)"
+                stroke={isLight ? 'rgba(2, 132, 199, 0.35)' : 'rgba(56, 189, 248, 0.4)'}
                 strokeDasharray="2 3"
               />
               <circle
                 cx={xScale(entry3YPoint.yearOffset)}
                 cy={yScale(entry3YPoint.historicalValueEur ?? 0)}
                 r={4.5}
-                fill="#090d16"
-                stroke="#38bdf8"
+                fill={dotInnerFill}
+                stroke={forecastColor}
                 strokeWidth={2.5}
               />
               <rect
                 x={xScale(entry3YPoint.yearOffset) + 2}
                 y={PAD_TOP + 24}
-                width={56}
+                width={58}
                 height={18}
                 rx={5}
-                fill="rgba(56, 189, 248, 0.15)"
-                stroke="rgba(56, 189, 248, 0.45)"
+                fill={isLight ? 'rgba(2, 132, 199, 0.1)' : 'rgba(56, 189, 248, 0.15)'}
+                stroke={isLight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(56, 189, 248, 0.45)'}
               />
               <text
-                x={xScale(entry3YPoint.yearOffset) + 30}
+                x={xScale(entry3YPoint.yearOffset) + 31}
                 y={PAD_TOP + 36}
                 textAnchor="middle"
-                fill="#7dd3fc"
+                fill={forecastLabelColor}
                 fontSize="10"
                 fontWeight="700"
               >
@@ -724,10 +831,10 @@ export function PerformanceChart({
               y1={28}
               x2={todayX}
               y2={baselineY}
-              stroke="#e2e8f0"
+              stroke={todayLineStroke}
               strokeWidth={1.5}
               strokeDasharray="5 4"
-              opacity={0.85}
+              opacity={0.8}
             />
             <rect
               x={todayBadgeX - 58}
@@ -735,15 +842,15 @@ export function PerformanceChart({
               width={116}
               height={20}
               rx={999}
-              fill="#0f172a"
-              stroke="#38bdf8"
+              fill={dotInnerFill}
+              stroke={forecastColor}
               strokeWidth={1.2}
             />
             <text
               x={todayBadgeX}
               y={21.5}
               textAnchor="middle"
-              fill="#f8fafc"
+              fill={isLight ? '#0f172a' : '#f8fafc'}
               fontSize="10"
               fontWeight="700"
               letterSpacing="0.03em"
@@ -755,8 +862,8 @@ export function PerformanceChart({
                 cx={todayX}
                 cy={yScale(todayPoint.historicalValueEur ?? 0)}
                 r={5.5}
-                fill="#10b981"
-                stroke="#f8fafc"
+                fill={histColor}
+                stroke={dotOuterStroke}
                 strokeWidth={2}
               />
             )}
@@ -773,7 +880,7 @@ export function PerformanceChart({
                     cx={endX}
                     cy={yScale(endPt.forecastOptimisticEur)}
                     r={3.5}
-                    fill="#38bdf8"
+                    fill={forecastColor}
                   />
                 )}
                 {typeof endPt.forecastBaseEur === 'number' && (
@@ -781,8 +888,8 @@ export function PerformanceChart({
                     cx={endX}
                     cy={yScale(endPt.forecastBaseEur)}
                     r={4.5}
-                    fill="#38bdf8"
-                    stroke="#090d16"
+                    fill={forecastColor}
+                    stroke={dotInnerFill}
                     strokeWidth={1.5}
                   />
                 )}
@@ -791,8 +898,8 @@ export function PerformanceChart({
                     cx={endX}
                     cy={yScale(endPt.forecastPostTaxBaseEur)}
                     r={4}
-                    fill="#a78bfa"
-                    stroke="#090d16"
+                    fill={postTaxColor}
+                    stroke={dotInnerFill}
                     strokeWidth={1.5}
                   />
                 )}
@@ -801,7 +908,7 @@ export function PerformanceChart({
                     cx={endX}
                     cy={yScale(endPt.forecastConservativeEur)}
                     r={3.5}
-                    fill="#94a3b8"
+                    fill={axisMutedColor}
                   />
                 )}
               </g>
@@ -816,15 +923,15 @@ export function PerformanceChart({
                 y1={PAD_TOP}
                 x2={hoveredX}
                 y2={baselineY}
-                stroke="rgba(226, 232, 240, 0.45)"
+                stroke={isLight ? 'rgba(51, 65, 85, 0.35)' : 'rgba(203, 213, 225, 0.45)'}
                 strokeWidth={1}
               />
               <circle
                 cx={hoveredX}
                 cy={yScale(hoveredPoint.totalInvestedEur)}
                 r={4}
-                fill="#64748b"
-                stroke="#f8fafc"
+                fill={investedColor}
+                stroke={dotOuterStroke}
                 strokeWidth={1.5}
               />
               {typeof hoveredPoint.historicalValueEur === 'number' && (
@@ -832,8 +939,8 @@ export function PerformanceChart({
                   cx={hoveredX}
                   cy={yScale(hoveredPoint.historicalValueEur)}
                   r={5.5}
-                  fill="#10b981"
-                  stroke="#f8fafc"
+                  fill={histColor}
+                  stroke={dotOuterStroke}
                   strokeWidth={2}
                 />
               )}
@@ -842,8 +949,8 @@ export function PerformanceChart({
                   cx={hoveredX}
                   cy={yScale(hoveredPoint.historicalDistNetEur)}
                   r={4.5}
-                  fill="#f59e0b"
-                  stroke="#090d16"
+                  fill={distColor}
+                  stroke={dotInnerFill}
                   strokeWidth={1.5}
                 />
               )}
@@ -852,8 +959,8 @@ export function PerformanceChart({
                   cx={hoveredX}
                   cy={yScale(hoveredPoint.forecastBaseEur)}
                   r={5.5}
-                  fill="#38bdf8"
-                  stroke="#f8fafc"
+                  fill={forecastColor}
+                  stroke={dotOuterStroke}
                   strokeWidth={2}
                 />
               )}
@@ -862,8 +969,8 @@ export function PerformanceChart({
                   cx={hoveredX}
                   cy={yScale(hoveredPoint.forecastPostTaxBaseEur)}
                   r={4.5}
-                  fill="#a78bfa"
-                  stroke="#f8fafc"
+                  fill={postTaxColor}
+                  stroke={dotOuterStroke}
                   strokeWidth={1.5}
                 />
               )}
@@ -899,15 +1006,33 @@ export function PerformanceChart({
                 ? 'translateX(calc(-100% - 14px))'
                 : 'translateX(14px)',
             }}
-            className="pointer-events-none absolute top-14 z-20 w-64 rounded-xl border border-slate-700/90 bg-slate-950/95 p-3 text-xs shadow-2xl backdrop-blur-md sm:w-72"
+            className={`pointer-events-none absolute top-14 z-20 w-64 rounded-xl border p-3 text-xs backdrop-blur-md sm:w-72 ${
+              isLight
+                ? 'border-slate-200 bg-white/95 text-slate-800 shadow-xl'
+                : 'border-slate-700/90 bg-slate-900/95 text-slate-100 shadow-2xl'
+            }`}
           >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-              <span className="font-mono font-semibold text-slate-100">{hoveredPoint.date}</span>
+            <div
+              className={`flex items-center justify-between border-b pb-1.5 ${
+                isLight ? 'border-slate-200' : 'border-slate-800'
+              }`}
+            >
+              <span
+                className={`font-mono font-semibold ${
+                  isLight ? 'text-slate-900' : 'text-slate-100'
+                }`}
+              >
+                {hoveredPoint.date}
+              </span>
               <span
                 className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-bold ${
                   hoveredPoint.phase === 'historical'
-                    ? 'bg-emerald-500/20 text-emerald-300'
-                    : 'bg-sky-500/20 text-sky-300'
+                    ? isLight
+                      ? 'bg-[#2d8a61]/15 text-[#1f6e4b]'
+                      : 'bg-[#2d8a61]/25 text-[#86d6b0]'
+                    : isLight
+                      ? 'bg-sky-100 text-sky-800'
+                      : 'bg-sky-500/20 text-sky-300'
                 }`}
               >
                 {formatYearOffsetLabel(hoveredPoint.yearOffset)} ·{' '}
@@ -916,9 +1041,17 @@ export function PerformanceChart({
             </div>
 
             <div className="mt-2 space-y-1.5 tabular-nums">
-              <div className="flex items-center justify-between text-slate-400">
-                <span>Total Invested:</span>
-                <span className="font-mono font-semibold text-slate-200">
+              <div
+                className={`flex items-center justify-between ${
+                  isLight ? 'text-slate-600' : 'text-slate-400'
+                }`}
+              >
+                <span>Вложено всего:</span>
+                <span
+                  className={`font-mono font-semibold ${
+                    isLight ? 'text-slate-900' : 'text-slate-200'
+                  }`}
+                >
                   {formatEurFull(hoveredPoint.totalInvestedEur)}
                 </span>
               </div>
@@ -933,17 +1066,31 @@ export function PerformanceChart({
                     : 0;
                 return (
                   <>
-                    <div className="flex items-center justify-between text-emerald-300">
-                      <span>Actual Value (Acc/Gross):</span>
+                    <div
+                      className={`flex items-center justify-between ${
+                        isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
+                      }`}
+                    >
+                      <span>Стоимость (Acc/Gross):</span>
                       <span className="font-mono font-bold">
                         {formatEurFull(histVal)}
                       </span>
                     </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-300">
-                      <span>Historical Profit:</span>
+                    <div
+                      className={`flex items-center justify-between text-[11px] ${
+                        isLight ? 'text-slate-600' : 'text-slate-300'
+                      }`}
+                    >
+                      <span>Историческая прибыль:</span>
                       <span
                         className={`font-mono font-semibold ${
-                          profit >= 0 ? 'text-emerald-400' : 'text-rose-400'
+                          profit >= 0
+                            ? isLight
+                              ? 'text-[#2d8a61]'
+                              : 'text-[#6ec9a0]'
+                            : isLight
+                              ? 'text-rose-600'
+                              : 'text-rose-400'
                         }`}
                       >
                         {profit >= 0 ? '+' : ''}
@@ -953,7 +1100,11 @@ export function PerformanceChart({
                     </div>
                     {showDistNet &&
                       typeof hoveredPoint.historicalDistNetEur === 'number' && (
-                        <div className="flex items-center justify-between text-amber-300">
+                        <div
+                          className={`flex items-center justify-between ${
+                            isLight ? 'text-amber-700' : 'text-amber-300'
+                          }`}
+                        >
                           <span>Distributing Net ({country.code}):</span>
                           <span className="font-mono font-semibold">
                             {formatEurFull(hoveredPoint.historicalDistNetEur)}
@@ -968,20 +1119,30 @@ export function PerformanceChart({
                 <div
                   className={
                     typeof hoveredPoint.historicalValueEur === 'number'
-                      ? 'mt-1.5 border-t border-slate-800 pt-1.5 space-y-1'
+                      ? `mt-1.5 space-y-1 border-t pt-1.5 ${
+                          isLight ? 'border-slate-200' : 'border-slate-800'
+                        }`
                       : 'space-y-1'
                   }
                 >
                   {typeof hoveredPoint.forecastOptimisticEur === 'number' && (
-                    <div className="flex items-center justify-between text-sky-200/80">
-                      <span>Optimistic Band:</span>
+                    <div
+                      className={`flex items-center justify-between ${
+                        isLight ? 'text-sky-700/80' : 'text-sky-200/80'
+                      }`}
+                    >
+                      <span>Оптимистичный (+σ):</span>
                       <span className="font-mono">
                         {formatEurFull(hoveredPoint.forecastOptimisticEur)}
                       </span>
                     </div>
                   )}
-                  <div className="flex items-center justify-between text-sky-300">
-                    <span>Base (Hist. CAGR):</span>
+                  <div
+                    className={`flex items-center justify-between ${
+                      isLight ? 'text-sky-700' : 'text-sky-300'
+                    }`}
+                  >
+                    <span>Базовый прогноз (CAGR):</span>
                     <span className="font-mono font-bold">
                       {formatEurFull(hoveredPoint.forecastBaseEur)}
                     </span>
@@ -995,9 +1156,17 @@ export function PerformanceChart({
                         ? (fProfit / hoveredPoint.totalInvestedEur) * 100
                         : 0;
                     return (
-                      <div className="flex items-center justify-between text-[11px] text-slate-300">
-                        <span>Projected Gross Gain:</span>
-                        <span className="font-mono font-semibold text-sky-300">
+                      <div
+                        className={`flex items-center justify-between text-[11px] ${
+                          isLight ? 'text-slate-600' : 'text-slate-300'
+                        }`}
+                      >
+                        <span>Прогнозный доход (до налога):</span>
+                        <span
+                          className={`font-mono font-semibold ${
+                            isLight ? 'text-sky-700' : 'text-sky-300'
+                          }`}
+                        >
                           {fProfit >= 0 ? '+' : ''}
                           {formatEurFull(fProfit)} ({fPct >= 0 ? '+' : ''}
                           {fPct.toFixed(1)}%)
@@ -1007,9 +1176,13 @@ export function PerformanceChart({
                   })()}
                   {showPostTax &&
                     typeof hoveredPoint.forecastPostTaxBaseEur === 'number' && (
-                      <div className="flex items-center justify-between text-violet-300">
+                      <div
+                        className={`flex items-center justify-between ${
+                          isLight ? 'text-violet-700' : 'text-violet-300'
+                        }`}
+                      >
                         <span>
-                          Net After Tax ({country.flag} {country.code}):
+                          Чистыми ({country.flag} {country.code}):
                         </span>
                         <span className="font-mono font-bold">
                           {formatEurFull(hoveredPoint.forecastPostTaxBaseEur)}
@@ -1017,8 +1190,12 @@ export function PerformanceChart({
                       </div>
                     )}
                   {typeof hoveredPoint.forecastConservativeEur === 'number' && (
-                    <div className="flex items-center justify-between text-slate-400">
-                      <span>Conservative Band:</span>
+                    <div
+                      className={`flex items-center justify-between ${
+                        isLight ? 'text-slate-500' : 'text-slate-400'
+                      }`}
+                    >
+                      <span>Консервативный (-σ):</span>
                       <span className="font-mono">
                         {formatEurFull(hoveredPoint.forecastConservativeEur)}
                       </span>
@@ -1031,13 +1208,21 @@ export function PerformanceChart({
         )}
       </div>
 
-      {/* Prominent High-Contrast Regulatory Warning Strip Inside Chart Card */}
-      <div className="flex items-start gap-2.5 border-t border-amber-500/40 bg-amber-500/15 px-4 py-3 text-xs text-amber-100 sm:px-5">
-        <ShieldAlert className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+      {/* Prominent Regulatory Warning Strip Inside Chart Card */}
+      <div
+        className={`flex items-start gap-2.5 border-t px-4 py-3 text-xs sm:px-5 ${
+          isLight
+            ? 'border-amber-200 bg-amber-50 text-amber-950'
+            : 'border-amber-500/40 bg-amber-500/15 text-amber-100'
+        }`}
+      >
+        <ShieldAlert
+          className={`mt-0.5 h-4 w-4 shrink-0 ${isLight ? 'text-amber-600' : 'text-amber-300'}`}
+        />
         <p className="font-medium leading-relaxed">
-          IMPORTANT NOTICE: Historical investment ratings and past performance (3-year and 5-year
-          lookbacks) are not promised or reliable indicators of future results. Future forecast
-          cones are mathematical models for educational purposes only.
+          ВАЖНОЕ УВЕДОМЛЕНИЕ: Историческая доходность и прошлые результаты (за 3 и 5 лет) не являются
+          обещанием или надёжным индикатором будущих результатов. Прогнозные коридоры —
+          математические модели исключительно для образовательных целей.
         </p>
       </div>
     </div>

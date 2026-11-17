@@ -10,12 +10,20 @@ import {
   GitBranch,
   Globe2,
   Landmark,
+  Moon,
   RefreshCw,
+  Sun,
+  Type,
   Wifi,
   WifiOff,
   X,
 } from 'lucide-react';
-import type { CountryTaxRule, LiveQuoteData } from '../../types';
+import type {
+  CountryTaxRule,
+  FontFamilyOption,
+  LiveQuoteData,
+  ThemeMode,
+} from '../../types';
 
 export type AppTab = 'calculator' | 'taxes' | 'ecosystem' | 'academy';
 
@@ -29,13 +37,23 @@ interface HeaderProps {
   totalEtfCount: number;
   onRefreshPrices: () => void;
   isRefreshing: boolean;
+  theme: ThemeMode;
+  onToggleTheme: () => void;
+  fontFamily: FontFamilyOption;
+  onChangeFont: (font: FontFamilyOption) => void;
 }
 
 const FEATURED_CODES = ['PT', 'NL', 'DE'] as const;
 
+const FONT_OPTIONS: Array<{ id: FontFamilyOption; label: string; title: string }> = [
+  { id: 'inter', label: 'Inter', title: 'Modern Sans (Inter)' },
+  { id: 'jakarta', label: 'Jakarta', title: 'Geometric Sans (Plus Jakarta Sans)' },
+  { id: 'serif', label: 'Serif', title: 'Editorial Serif (Merriweather)' },
+];
+
 const GIT_PUSH_SNIPPET = `git init
 git add .
-git commit -m "feat: EuroETF Compass v1.0 - UCITS ETFs, EU Tax Matrix & 3Y/5Y Backtest"
+git commit -m "feat: EuroETF Compass v2.0 - UCITS ETFs, Stocks, EU Map, Anexo J & Live News"
 git branch -M main
 git remote add origin https://github.com/<your-username>/euro-etf-compass.git
 git push -u origin main`;
@@ -50,6 +68,10 @@ export const Header: React.FC<HeaderProps> = ({
   totalEtfCount,
   onRefreshPrices,
   isRefreshing,
+  theme,
+  onToggleTheme,
+  fontFamily,
+  onChangeFont,
 }) => {
   const [showGithubModal, setShowGithubModal] = useState(false);
   const [copiedGit, setCopiedGit] = useState(false);
@@ -74,14 +96,14 @@ export const Header: React.FC<HeaderProps> = ({
     },
     {
       id: 'taxes',
-      label: `EU Country Tax & Legal Matrix (${countries.length})`,
-      shortLabel: `EU Tax Matrix (${countries.length})`,
+      label: `EU Tax Map, Laws & Anexo J (${countries.length})`,
+      shortLabel: `EU Taxes & Map (${countries.length})`,
       icon: <Landmark className="h-4 w-4" />,
     },
     {
       id: 'ecosystem',
-      label: 'Brokers & European Portals (justETF, Curvo, XTB...)',
-      shortLabel: 'Brokers & Portals',
+      label: 'Brokers, Portals & Market News',
+      shortLabel: 'Brokers & News',
       icon: <Globe2 className="h-4 w-4" />,
     },
     {
@@ -110,7 +132,7 @@ export const Header: React.FC<HeaderProps> = ({
           <div className="flex flex-wrap items-center justify-between gap-3 py-3">
             {/* Brand Identity */}
             <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-500 text-slate-950 shadow-lg shadow-emerald-500/20">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-600 text-white shadow-md shadow-emerald-500/20">
                 <Compass className="h-6 w-6 stroke-[2.2]" />
               </div>
               <div>
@@ -128,8 +150,67 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
             </div>
 
-            {/* Right Utility Controls: Country Quick Switcher, Live Status, Refresh, GitHub Ready */}
+            {/* Right Utility Controls: Theme, 3-Font Switcher, Country Switcher, Live Status */}
             <div className="flex flex-wrap items-center gap-2">
+              {/* Light / Dark Mode Toggle */}
+              <button
+                type="button"
+                onClick={onToggleTheme}
+                aria-label={theme === 'light' ? 'Switch to Dark Mode' : 'Switch to Light Mode'}
+                title={
+                  theme === 'light'
+                    ? 'Сейчас светлая тема — переключить на тёмную'
+                    : 'Сейчас тёмная тема — переключить на светлую'
+                }
+                className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+                  theme === 'light'
+                    ? 'border-amber-400/60 bg-amber-50 text-amber-900 shadow-sm hover:bg-amber-100'
+                    : 'border-slate-700 bg-slate-900 text-amber-200 hover:border-slate-500 hover:bg-slate-800'
+                }`}
+              >
+                {theme === 'light' ? (
+                  <>
+                    <Sun className="h-3.5 w-3.5 text-amber-600" />
+                    <span>☀️ Светлая</span>
+                  </>
+                ) : (
+                  <>
+                    <Moon className="h-3.5 w-3.5 text-cyan-300" />
+                    <span>🌙 Тёмная</span>
+                  </>
+                )}
+              </button>
+
+              {/* 3-Font Switcher Pill Group */}
+              <div
+                className="flex items-center gap-0.5 rounded-xl border border-slate-800 bg-slate-900/90 p-1"
+                role="group"
+                aria-label="Выбор шрифта интерфейса"
+              >
+                <span className="hidden items-center gap-1 px-1.5 text-[11px] font-medium text-slate-400 md:inline-flex">
+                  <Type className="h-3 w-3" />
+                  <span>Шрифт:</span>
+                </span>
+                {FONT_OPTIONS.map((font) => {
+                  const isActive = fontFamily === font.id;
+                  return (
+                    <button
+                      key={font.id}
+                      type="button"
+                      onClick={() => onChangeFont(font.id)}
+                      title={font.title}
+                      className={`rounded-lg px-2 py-1 text-[11px] font-semibold transition ${
+                        isActive
+                          ? 'bg-emerald-500/20 text-emerald-300 ring-1 ring-emerald-500/50'
+                          : 'text-slate-400 hover:bg-slate-800 hover:text-slate-100'
+                      }`}
+                    >
+                      {font.label}
+                    </button>
+                  );
+                })}
+              </div>
+
               {/* Quick Country Switcher */}
               <div className="flex items-center gap-1 rounded-xl border border-slate-800 bg-slate-900/90 p-1">
                 {FEATURED_CODES.map((code) => {
@@ -158,7 +239,7 @@ export const Header: React.FC<HeaderProps> = ({
                   aria-label="Select European tax residency country"
                   value={selectedCountryCode}
                   onChange={(e) => onSelectCountry(e.target.value)}
-                  className="ml-0.5 max-w-[140px] cursor-pointer rounded-lg border border-slate-700/70 bg-slate-950 px-2 py-1 text-xs font-medium text-slate-200 outline-none transition hover:border-slate-600 focus:border-emerald-500"
+                  className="ml-0.5 max-w-[135px] cursor-pointer rounded-lg border border-slate-700/70 bg-slate-950 px-2 py-1 text-xs font-medium text-slate-200 outline-none transition hover:border-slate-600 focus:border-emerald-500"
                 >
                   {countries.map((c) => (
                     <option key={c.code} value={c.code}>
@@ -187,16 +268,12 @@ export const Header: React.FC<HeaderProps> = ({
                     <span className="tabular-nums">
                       {liveCount}/{totalEtfCount} Live
                     </span>
-                    <span className="hidden text-[10px] text-emerald-200/80 xl:inline">
-                      ({liveProxyCount > 0 ? 'Yahoo Proxy' : 'CORS Live'}
-                      {baselineCount > 0 ? ` • ${baselineCount} Baseline` : ''})
-                    </span>
                   </>
                 ) : (
                   <>
                     <WifiOff className="h-3.5 w-3.5 text-slate-400" />
                     <span className="tabular-nums">
-                      {baselineCount}/{totalEtfCount} Verified Baseline
+                      {baselineCount}/{totalEtfCount} Baseline
                     </span>
                   </>
                 )}
@@ -211,9 +288,8 @@ export const Header: React.FC<HeaderProps> = ({
               >
                 <RefreshCw className={`h-3.5 w-3.5 ${isRefreshing ? 'animate-spin' : ''}`} />
                 <span className="hidden sm:inline">
-                  {isRefreshing ? 'Refreshing...' : 'Refresh Live Prices'}
+                  {isRefreshing ? 'Refreshing...' : 'Refresh'}
                 </span>
-                <span className="sm:hidden">{isRefreshing ? '...' : 'Refresh'}</span>
               </button>
 
               {/* GitHub Ready Info Button */}
@@ -223,7 +299,7 @@ export const Header: React.FC<HeaderProps> = ({
                 className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-slate-200 transition hover:border-slate-500 hover:bg-slate-800"
               >
                 <GitBranch className="h-3.5 w-3.5 text-purple-400" />
-                <span className="hidden md:inline">GitHub Ready</span>
+                <span className="hidden xl:inline">GitHub</span>
               </button>
             </div>
           </div>

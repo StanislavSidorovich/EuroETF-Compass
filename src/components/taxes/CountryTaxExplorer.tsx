@@ -13,6 +13,8 @@ import {
 } from 'lucide-react';
 import type { AccVsDistVerdict, CountryTaxRule } from '../../types';
 import { AccVsDistComparison } from './AccVsDistComparison';
+import { EuropeTaxMap } from './EuropeTaxMap';
+import { TaxFilingToolkit } from './TaxFilingToolkit';
 
 interface CountryTaxExplorerProps {
   countries: CountryTaxRule[];
@@ -111,6 +113,13 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
 
   return (
     <div className="space-y-6">
+      {/* Interactive SVG Map of Europe */}
+      <EuropeTaxMap
+        countries={countries}
+        selectedCountryCode={selectedCountry.code}
+        onSelectCountry={onSelectCountry}
+      />
+
       {/* Top Featured Priority Cards (PT, NL, DE) */}
       <section aria-label="Featured priority European countries">
         <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
@@ -466,6 +475,9 @@ export const CountryTaxExplorer: React.FC<CountryTaxExplorerProps> = ({
 
         {/* Interactive Acc vs Dist Simulator */}
         <AccVsDistComparison country={selectedCountry} />
+
+        {/* Tax Filing Toolkit: Deadlines, Portugal IRS Anexo J Sample & .ics Reminders */}
+        <TaxFilingToolkit selectedCountry={selectedCountry} />
       </section>
     </div>
   );

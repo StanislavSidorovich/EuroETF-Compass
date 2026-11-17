@@ -3,9 +3,35 @@
 
 export type DistributionPolicy = 'Acc' | 'Dist';
 
-export type ReplicationMethod = 'Physical (Full)' | 'Physical (Optimized Sampling)' | 'Synthetic (Unfunded Swap)';
+export type ReplicationMethod =
+  | 'Physical (Full)'
+  | 'Physical (Optimized Sampling)'
+  | 'Synthetic (Unfunded Swap)'
+  | 'Direct Equity (Single Stock)';
 
-export type AssetClass = 'Global Equities' | 'Developed World Equities' | 'US Equities' | 'Tech / Nasdaq Equities' | 'Emerging Markets' | 'European Equities' | 'EUR Money Market / Bonds';
+export type AssetClass =
+  | 'Global Equities'
+  | 'Developed World Equities'
+  | 'US Equities'
+  | 'Tech / Nasdaq Equities'
+  | 'Emerging Markets'
+  | 'European Equities'
+  | 'EUR Money Market / Bonds'
+  | 'Individual Stock (US)'
+  | 'Individual Stock (Europe)';
+
+export type InstrumentType = 'ETF' | 'Stock';
+
+export type CatalogCategory =
+  | 'Global ETFs'
+  | 'US ETFs'
+  | 'Europe & Bond ETFs'
+  | 'US Stocks'
+  | 'Europe Stocks';
+
+export type ThemeMode = 'dark' | 'light';
+
+export type FontFamilyOption = 'inter' | 'jakarta' | 'serif';
 
 export interface HistoricalPricePoint {
   date: string;       // YYYY-MM-DD
@@ -15,23 +41,34 @@ export interface HistoricalPricePoint {
 
 export interface ETFInstrument {
   id: string;
-  ticker: string;           // Primary Yahoo Finance European ticker, e.g. 'VWCE.DE'
+  ticker: string;           // Primary Yahoo Finance ticker, e.g. 'VWCE.DE' or 'NVDA'
   altTickers: string[];     // e.g. ['VWCE.AS', 'VWCE.MI']
-  isin: string;             // e.g. 'IE00BK5BQT80'
+  isin: string;             // e.g. 'IE00BK5BQT80' or 'US67066G1040'
   wkn: string;              // e.g. 'A2PKXG'
   justEtfSlug?: string;
   name: string;
   shortName: string;
-  provider: 'Vanguard' | 'iShares (BlackRock)' | 'Xtrackers (DWS)' | 'Invesco' | 'Amundi' | 'SPDR' | 'Custom';
+  instrumentType?: InstrumentType; // 'ETF' (default) | 'Stock'
+  catalogCategory?: CatalogCategory; // Category tab for easy browsing
+  provider:
+    | 'Vanguard'
+    | 'iShares (BlackRock)'
+    | 'Xtrackers (DWS)'
+    | 'Invesco'
+    | 'Amundi'
+    | 'SPDR'
+    | 'US Corporation (NASDAQ/NYSE)'
+    | 'European Corporation'
+    | 'Custom';
   indexTracked: string;
   assetClass: AssetClass;
   distributionPolicy: DistributionPolicy;
   pairedEtfId?: string;     // Links Acc <-> Dist twin (e.g., 'vwce' <-> 'vgwl')
-  ter: number;              // Total Expense Ratio in % (e.g. 0.22)
-  trackingDifference: number; // Typical annual TD in % (e.g. -0.02)
-  dividendYieldEst: number; // Estimated annual gross dividend yield % (reinvested internally for Acc, paid out for Dist)
+  ter: number;              // Total Expense Ratio in % (0.00 for individual stocks)
+  trackingDifference: number; // Typical annual TD in %
+  dividendYieldEst: number; // Estimated annual gross dividend yield %
   replication: ReplicationMethod;
-  domicile: 'Ireland (IE)' | 'Luxembourg (LU)' | 'Germany (DE)' | 'France (FR)';
+  domicile: 'Ireland (IE)' | 'Luxembourg (LU)' | 'Germany (DE)' | 'France (FR)' | 'United States (US)' | 'Europe (Direct)';
   currency: 'EUR' | 'USD';
   fundSizeBillionsEur: number;
   holdingsCount: number;

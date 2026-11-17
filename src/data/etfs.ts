@@ -9,7 +9,7 @@ interface PriceMilestone {
  * Generates a realistic 61-point monthly price series from 2021-11-01 to 2026-11-01.
  * Interpolates smoothly between real-world market milestones (including the 2022 bear market,
  * 2023-2024 recovery, and 2025-2026 trajectory) while adding deterministic monthly variance
- * proportional to the ETF's annualized volatility. Anchor milestones are preserved exactly.
+ * proportional to the instrument's annualized volatility. Anchor milestones are preserved exactly.
  */
 function generateMonthlyHistory5Y(
   milestones: PriceMilestone[],
@@ -58,7 +58,7 @@ function generateMonthlyHistory5Y(
     points.push({
       date: dateStr,
       timestamp,
-      close: Math.round(close * 100) / 100,
+      close: Math.max(0.1, Math.round(close * 100) / 100),
     });
   }
 
@@ -66,6 +66,9 @@ function generateMonthlyHistory5Y(
 }
 
 export const CURATED_ETFS: ETFInstrument[] = [
+  // =========================================================================
+  // CATEGORY 1: GLOBAL ETFs (5)
+  // =========================================================================
   {
     id: 'vwce',
     ticker: 'VWCE.DE',
@@ -75,6 +78,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'vanguard-ftse-all-world-ucits-etf-usd-accumulating',
     name: 'Vanguard FTSE All-World UCITS ETF (USD) Accumulating',
     shortName: 'Vanguard FTSE All-World (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Global ETFs',
     provider: 'Vanguard',
     indexTracked: 'FTSE All-World Index (Large & Mid Cap, Developed + Emerging Markets)',
     assetClass: 'Global Equities',
@@ -96,17 +101,17 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Irish UCITS domicile (15% US dividend withholding treaty vs 30%). Accumulating policy avoids annual dividend tax drag in deferral jurisdictions (PT, ES, IT, BE, PL, RO, CZ) and maximizes long-term compounding.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 99.0 },   // 2021-11
-        { monthIndex: 2, price: 102.4 },  // 2022-01 peak
-        { monthIndex: 7, price: 90.2 },   // 2022-06 dip
-        { monthIndex: 11, price: 88.6 },  // 2022-10 bear trough
-        { monthIndex: 18, price: 97.8 },  // 2023-05
-        { monthIndex: 24, price: 104.0 }, // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 116.5 }, // 2024-05
-        { monthIndex: 36, price: 126.2 }, // 2024-11
-        { monthIndex: 42, price: 124.8 }, // 2025-05 spring pullback
-        { monthIndex: 48, price: 131.6 }, // 2025-11
-        { monthIndex: 60, price: 138.4 }, // 2026-11 current
+        { monthIndex: 0, price: 99.0 },
+        { monthIndex: 2, price: 102.4 },
+        { monthIndex: 7, price: 90.2 },
+        { monthIndex: 11, price: 88.6 },
+        { monthIndex: 18, price: 97.8 },
+        { monthIndex: 24, price: 104.0 },
+        { monthIndex: 30, price: 116.5 },
+        { monthIndex: 36, price: 126.2 },
+        { monthIndex: 42, price: 124.8 },
+        { monthIndex: 48, price: 131.6 },
+        { monthIndex: 60, price: 138.4 },
       ],
       0.024,
       1.1
@@ -121,6 +126,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'vanguard-ftse-all-world-ucits-etf-usd-distributing',
     name: 'Vanguard FTSE All-World UCITS ETF (USD) Distributing',
     shortName: 'Vanguard FTSE All-World (Dist)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Global ETFs',
     provider: 'Vanguard',
     indexTracked: 'FTSE All-World Index (Large & Mid Cap, Developed + Emerging Markets)',
     assetClass: 'Global Equities',
@@ -142,17 +149,17 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Useful in Germany up to the €1,000 Sparerpauschbetrag tax-free allowance (or €2,000 joint). Less tax-efficient in Portugal, Spain, Italy, Belgium, or Poland where every quarterly dividend triggers immediate income tax without deferral.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 101.2 },  // 2021-11
-        { monthIndex: 2, price: 104.1 },  // 2022-01
-        { monthIndex: 7, price: 90.8 },   // 2022-06
-        { monthIndex: 11, price: 88.4 },  // 2022-10
-        { monthIndex: 18, price: 96.6 },  // 2023-05
-        { monthIndex: 24, price: 101.8 }, // 2023-11 (3Y ago) - price ex-dividends
-        { monthIndex: 30, price: 112.9 }, // 2024-05
-        { monthIndex: 36, price: 121.0 }, // 2024-11
-        { monthIndex: 42, price: 118.4 }, // 2025-05
-        { monthIndex: 48, price: 123.7 }, // 2025-11
-        { monthIndex: 60, price: 128.4 }, // 2026-11 current (price-only excluding paid ~1.85%/yr dividends)
+        { monthIndex: 0, price: 101.2 },
+        { monthIndex: 2, price: 104.1 },
+        { monthIndex: 7, price: 90.8 },
+        { monthIndex: 11, price: 88.4 },
+        { monthIndex: 18, price: 96.6 },
+        { monthIndex: 24, price: 101.8 },
+        { monthIndex: 30, price: 112.9 },
+        { monthIndex: 36, price: 121.0 },
+        { monthIndex: 42, price: 118.4 },
+        { monthIndex: 48, price: 123.7 },
+        { monthIndex: 60, price: 128.4 },
       ],
       0.024,
       1.15
@@ -167,6 +174,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'ishares-core-msci-world-ucits-etf-usd-acc',
     name: 'iShares Core MSCI World UCITS ETF USD (Acc)',
     shortName: 'iShares Core MSCI World (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Global ETFs',
     provider: 'iShares (BlackRock)',
     indexTracked: 'MSCI World Index (23 Developed Markets, Large & Mid Cap)',
     assetClass: 'Developed World Equities',
@@ -188,17 +197,17 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Irish domicile + Accumulating policy maximizes tax deferral in Europe. Can be paired 88/12 with IS3N.DE (MSCI EM IMI) to replicate a full global portfolio at slightly lower blended TER than VWCE.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 73.0 },   // 2021-11
-        { monthIndex: 2, price: 75.8 },   // 2022-01
-        { monthIndex: 7, price: 66.5 },   // 2022-06
-        { monthIndex: 11, price: 65.4 },  // 2022-10
-        { monthIndex: 18, price: 72.9 },  // 2023-05
-        { monthIndex: 24, price: 78.0 },  // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 88.2 },  // 2024-05
-        { monthIndex: 36, price: 96.4 },  // 2024-11
-        { monthIndex: 42, price: 95.3 },  // 2025-05
-        { monthIndex: 48, price: 102.1 }, // 2025-11
-        { monthIndex: 60, price: 108.6 }, // 2026-11 current
+        { monthIndex: 0, price: 73.0 },
+        { monthIndex: 2, price: 75.8 },
+        { monthIndex: 7, price: 66.5 },
+        { monthIndex: 11, price: 65.4 },
+        { monthIndex: 18, price: 72.9 },
+        { monthIndex: 24, price: 78.0 },
+        { monthIndex: 30, price: 88.2 },
+        { monthIndex: 36, price: 96.4 },
+        { monthIndex: 42, price: 95.3 },
+        { monthIndex: 48, price: 102.1 },
+        { monthIndex: 60, price: 108.6 },
       ],
       0.025,
       2.3
@@ -213,6 +222,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'ishares-msci-world-ucits-etf-dist',
     name: 'iShares MSCI World UCITS ETF (Dist)',
     shortName: 'iShares MSCI World (Dist)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Global ETFs',
     provider: 'iShares (BlackRock)',
     indexTracked: 'MSCI World Index (23 Developed Markets, Large & Mid Cap)',
     assetClass: 'Developed World Equities',
@@ -234,22 +245,73 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Higher 0.50% TER plus quarterly taxable dividend payouts create a noticeable long-term drag outside tax-free wrappers. Only consider Dist if you specifically need cash payouts or German Sparerpauschbetrag harvesting (and compare lower-fee Dist alternatives like VGWL).',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 54.0 },   // 2021-11
-        { monthIndex: 2, price: 55.9 },   // 2022-01
-        { monthIndex: 7, price: 48.6 },   // 2022-06
-        { monthIndex: 11, price: 47.4 },  // 2022-10
-        { monthIndex: 18, price: 52.1 },  // 2023-05
-        { monthIndex: 24, price: 55.2 },  // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 61.8 },  // 2024-05
-        { monthIndex: 36, price: 66.8 },  // 2024-11
-        { monthIndex: 42, price: 65.4 },  // 2025-05
-        { monthIndex: 48, price: 69.3 },  // 2025-11
-        { monthIndex: 60, price: 72.8 },  // 2026-11 current
+        { monthIndex: 0, price: 54.0 },
+        { monthIndex: 2, price: 55.9 },
+        { monthIndex: 7, price: 48.6 },
+        { monthIndex: 11, price: 47.4 },
+        { monthIndex: 18, price: 52.1 },
+        { monthIndex: 24, price: 55.2 },
+        { monthIndex: 30, price: 61.8 },
+        { monthIndex: 36, price: 66.8 },
+        { monthIndex: 42, price: 65.4 },
+        { monthIndex: 48, price: 69.3 },
+        { monthIndex: 60, price: 72.8 },
       ],
       0.025,
       2.35
     ),
   },
+  {
+    id: 'is3n',
+    ticker: 'IS3N.DE',
+    altTickers: ['EMIM.AS', 'EMIM.L', 'EIMI.L'],
+    isin: 'IE00BKM4GZ66',
+    wkn: 'A111X9',
+    justEtfSlug: 'ishares-core-msci-em-imi-ucits-etf-usd-acc',
+    name: 'iShares Core MSCI EM IMI UCITS ETF (Acc)',
+    shortName: 'iShares MSCI EM IMI (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Global ETFs',
+    provider: 'iShares (BlackRock)',
+    indexTracked: 'MSCI Emerging Markets Investable Market Index (Large, Mid & Small Cap)',
+    assetClass: 'Emerging Markets',
+    distributionPolicy: 'Acc',
+    ter: 0.18,
+    trackingDifference: 0.12,
+    dividendYieldEst: 2.65,
+    replication: 'Physical (Optimized Sampling)',
+    domicile: 'Ireland (IE)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 22.8,
+    holdingsCount: 3180,
+    volatilityAnnualPct: 16.8,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Low-cost building block (0.18% TER, >3,100 holdings across China, India, Taiwan, South Korea, Brazil) often combined with EUNL/IWDA at a ~10-15% weight to match global market capitalization.',
+    taxEfficiencyNotes:
+      'Emerging markets pay higher average dividends (~2.65%), making the Accumulating structure especially valuable in tax-deferral countries (PT, ES, IT, BE, FR) where avoiding annual dividend taxation saves substantial compounding.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 31.2 },
+        { monthIndex: 2, price: 31.6 },
+        { monthIndex: 7, price: 28.4 },
+        { monthIndex: 11, price: 26.2 },
+        { monthIndex: 18, price: 27.6 },
+        { monthIndex: 24, price: 28.1 },
+        { monthIndex: 30, price: 31.0 },
+        { monthIndex: 36, price: 33.4 },
+        { monthIndex: 42, price: 32.8 },
+        { monthIndex: 48, price: 35.1 },
+        { monthIndex: 60, price: 37.2 },
+      ],
+      0.03,
+      6.2
+    ),
+  },
+
+  // =========================================================================
+  // CATEGORY 2: US ETFs (5)
+  // =========================================================================
   {
     id: 'sxr8',
     ticker: 'SXR8.DE',
@@ -259,6 +321,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'ishares-core-sp-500-ucits-etf-acc',
     name: 'iShares Core S&P 500 UCITS ETF USD (Acc)',
     shortName: 'iShares Core S&P 500 (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'US ETFs',
     provider: 'iShares (BlackRock)',
     indexTracked: 'S&P 500 Index (500 Largest US Public Companies)',
     assetClass: 'US Equities',
@@ -280,17 +344,17 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Single-country US concentration carries USD FX exposure and US tech mega-cap concentration risk; pair with non-US equities or use VWCE/IWDA if seeking geographic balance. Accumulating structure defers all dividend taxation.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 410.0 },  // 2021-11
-        { monthIndex: 2, price: 426.0 },  // 2022-01
-        { monthIndex: 7, price: 374.0 },  // 2022-06
-        { monthIndex: 11, price: 368.0 }, // 2022-10
-        { monthIndex: 18, price: 405.0 }, // 2023-05
-        { monthIndex: 24, price: 435.0 }, // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 504.0 }, // 2024-05
-        { monthIndex: 36, price: 561.0 }, // 2024-11
-        { monthIndex: 42, price: 552.0 }, // 2025-05
-        { monthIndex: 48, price: 594.0 }, // 2025-11
-        { monthIndex: 60, price: 632.5 }, // 2026-11 current
+        { monthIndex: 0, price: 410.0 },
+        { monthIndex: 2, price: 426.0 },
+        { monthIndex: 7, price: 374.0 },
+        { monthIndex: 11, price: 368.0 },
+        { monthIndex: 18, price: 405.0 },
+        { monthIndex: 24, price: 435.0 },
+        { monthIndex: 30, price: 504.0 },
+        { monthIndex: 36, price: 561.0 },
+        { monthIndex: 42, price: 552.0 },
+        { monthIndex: 48, price: 594.0 },
+        { monthIndex: 60, price: 632.5 },
       ],
       0.028,
       3.7
@@ -305,6 +369,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'vanguard-sp-500-ucits-etf-usd-distributing',
     name: 'Vanguard S&P 500 UCITS ETF (USD) Distributing',
     shortName: 'Vanguard S&P 500 (Dist)',
+    instrumentType: 'ETF',
+    catalogCategory: 'US ETFs',
     provider: 'Vanguard',
     indexTracked: 'S&P 500 Index (500 Largest US Public Companies)',
     assetClass: 'US Equities',
@@ -321,22 +387,22 @@ export const CURATED_ETFS: ETFInstrument[] = [
     volatilityAnnualPct: 16.4,
     riskRatingPriips: 5,
     whyCarefulChoice:
-      'Lower share price (~€108 vs ~€632 for SXR8) makes whole-share purchasing accessible even at brokers without fractional shares, at the same institutional 0.07% TER.',
+      'Lower share price (~€107 vs ~€632 for SXR8) makes whole-share purchasing accessible even at brokers without fractional shares, at the same institutional 0.07% TER.',
     taxEfficiencyNotes:
       'Pays quarterly cash dividends subject to local dividend taxation in the year received. For pure long-term compounding in Portugal, Spain, Italy, or Belgium, accumulating VUAA.DE / SXR8.DE avoids annual tax drag.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 74.5 },   // 2021-11
-        { monthIndex: 2, price: 77.1 },   // 2022-01
-        { monthIndex: 7, price: 67.1 },   // 2022-06
-        { monthIndex: 11, price: 65.6 },  // 2022-10
-        { monthIndex: 18, price: 71.6 },  // 2023-05
-        { monthIndex: 24, price: 76.2 },  // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 87.6 },  // 2024-05
-        { monthIndex: 36, price: 96.8 },  // 2024-11
-        { monthIndex: 42, price: 94.5 },  // 2025-05
-        { monthIndex: 48, price: 101.2 }, // 2025-11
-        { monthIndex: 60, price: 106.8 }, // 2026-11 current
+        { monthIndex: 0, price: 74.5 },
+        { monthIndex: 2, price: 77.1 },
+        { monthIndex: 7, price: 67.1 },
+        { monthIndex: 11, price: 65.6 },
+        { monthIndex: 18, price: 71.6 },
+        { monthIndex: 24, price: 76.2 },
+        { monthIndex: 30, price: 87.6 },
+        { monthIndex: 36, price: 96.8 },
+        { monthIndex: 42, price: 94.5 },
+        { monthIndex: 48, price: 101.2 },
+        { monthIndex: 60, price: 106.8 },
       ],
       0.028,
       3.75
@@ -351,6 +417,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'invesco-eqqq-nasdaq-100-ucits-etf-acc',
     name: 'Invesco EQQQ Nasdaq-100 UCITS ETF Acc',
     shortName: 'Invesco Nasdaq-100 (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'US ETFs',
     provider: 'Invesco',
     indexTracked: 'NASDAQ-100 Index (100 Largest Non-Financial Nasdaq Companies)',
     assetClass: 'Tech / Nasdaq Equities',
@@ -372,17 +440,17 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Low dividend yield (~0.75%) combined with Accumulating policy keeps annual tax drag minimal even in imputed-tax jurisdictions, though high volatility makes holding discipline critical.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 245.0 },  // 2021-11
-        { monthIndex: 2, price: 251.0 },  // 2022-01
-        { monthIndex: 7, price: 189.0 },  // 2022-06 sharp tech selloff
-        { monthIndex: 11, price: 176.5 }, // 2022-10 bear trough (~-30% from peak)
-        { monthIndex: 18, price: 218.0 }, // 2023-05 AI rebound
-        { monthIndex: 24, price: 248.0 }, // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 294.0 }, // 2024-05
-        { monthIndex: 36, price: 334.0 }, // 2024-11
-        { monthIndex: 42, price: 318.0 }, // 2025-05
-        { monthIndex: 48, price: 362.0 }, // 2025-11
-        { monthIndex: 60, price: 396.0 }, // 2026-11 current
+        { monthIndex: 0, price: 245.0 },
+        { monthIndex: 2, price: 251.0 },
+        { monthIndex: 7, price: 189.0 },
+        { monthIndex: 11, price: 176.5 },
+        { monthIndex: 18, price: 218.0 },
+        { monthIndex: 24, price: 248.0 },
+        { monthIndex: 30, price: 294.0 },
+        { monthIndex: 36, price: 334.0 },
+        { monthIndex: 42, price: 318.0 },
+        { monthIndex: 48, price: 362.0 },
+        { monthIndex: 60, price: 396.0 },
       ],
       0.038,
       4.9
@@ -397,6 +465,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'invesco-eqqq-nasdaq-100-ucits-etf-dist',
     name: 'Invesco EQQQ Nasdaq-100 UCITS ETF Dist',
     shortName: 'Invesco Nasdaq-100 (Dist)',
+    instrumentType: 'ETF',
+    catalogCategory: 'US ETFs',
     provider: 'Invesco',
     indexTracked: 'NASDAQ-100 Index (100 Largest Non-Financial Nasdaq Companies)',
     assetClass: 'Tech / Nasdaq Equities',
@@ -418,65 +488,215 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Distributes small quarterly dividends (~0.75%/yr). Because tech companies pay modest dividends, the Acc vs Dist tax gap is narrower than for All-World ETFs, though Acc (EQQB) still wins on convenience and deferral.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 344.0 },  // 2021-11
-        { monthIndex: 2, price: 352.0 },  // 2022-01
-        { monthIndex: 7, price: 263.5 },  // 2022-06
-        { monthIndex: 11, price: 245.0 }, // 2022-10
-        { monthIndex: 18, price: 301.0 }, // 2023-05
-        { monthIndex: 24, price: 341.0 }, // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 402.0 }, // 2024-05
-        { monthIndex: 36, price: 454.5 }, // 2024-11
-        { monthIndex: 42, price: 431.0 }, // 2025-05
-        { monthIndex: 48, price: 488.0 }, // 2025-11
-        { monthIndex: 60, price: 530.5 }, // 2026-11 current
+        { monthIndex: 0, price: 344.0 },
+        { monthIndex: 2, price: 352.0 },
+        { monthIndex: 7, price: 263.5 },
+        { monthIndex: 11, price: 245.0 },
+        { monthIndex: 18, price: 301.0 },
+        { monthIndex: 24, price: 341.0 },
+        { monthIndex: 30, price: 402.0 },
+        { monthIndex: 36, price: 454.5 },
+        { monthIndex: 42, price: 431.0 },
+        { monthIndex: 48, price: 488.0 },
+        { monthIndex: 60, price: 530.5 },
       ],
       0.038,
       4.95
     ),
   },
   {
-    id: 'is3n',
-    ticker: 'IS3N.DE',
-    altTickers: ['EMIM.AS', 'EMIM.L', 'EIMI.L'],
-    isin: 'IE00BKM4GZ66',
-    wkn: 'A111X9',
-    justEtfSlug: 'ishares-core-msci-em-imi-ucits-etf-usd-acc',
-    name: 'iShares Core MSCI EM IMI UCITS ETF (Acc)',
-    shortName: 'iShares MSCI EM IMI (Acc)',
+    id: 'qdve',
+    ticker: 'QDVE.DE',
+    altTickers: ['IUIT.L', 'IUIT.AS', 'QDVF.DE'],
+    isin: 'IE00B3WJKG14',
+    wkn: 'A142N1',
+    justEtfSlug: 'ishares-sp-500-information-technology-sector-ucits-etf',
+    name: 'iShares S&P 500 Information Technology Sector UCITS ETF USD (Acc)',
+    shortName: 'iShares S&P 500 Info Tech (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'US ETFs',
     provider: 'iShares (BlackRock)',
-    indexTracked: 'MSCI Emerging Markets Investable Market Index (Large, Mid & Small Cap)',
-    assetClass: 'Emerging Markets',
+    indexTracked: 'S&P 500 Capped 35/20 Information Technology Index',
+    assetClass: 'Tech / Nasdaq Equities',
     distributionPolicy: 'Acc',
-    ter: 0.18,
-    trackingDifference: 0.12,
-    dividendYieldEst: 2.65,
+    ter: 0.15,
+    trackingDifference: -0.05,
+    dividendYieldEst: 0.65,
+    replication: 'Physical (Full)',
+    domicile: 'Ireland (IE)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 11.4,
+    holdingsCount: 69,
+    volatilityAnnualPct: 24.5,
+    riskRatingPriips: 6,
+    whyCarefulChoice:
+      'High-growth US technology sector UCITS ETF (Apple, Microsoft, NVIDIA, Broadcom) with a very low 0.15% TER. Treat strictly as a satellite tilt—not a diversified core holding.',
+    taxEfficiencyNotes:
+      'Irish UCITS accumulating share class defers taxation of dividends while compounding tech exposure. High concentration (~69 stocks) creates steep drawdowns during rate hikes.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 18.8 },
+        { monthIndex: 2, price: 19.6 },
+        { monthIndex: 7, price: 14.9 },
+        { monthIndex: 11, price: 14.3 },
+        { monthIndex: 18, price: 18.2 },
+        { monthIndex: 24, price: 21.6 },
+        { monthIndex: 30, price: 26.8 },
+        { monthIndex: 36, price: 30.4 },
+        { monthIndex: 42, price: 28.9 },
+        { monthIndex: 48, price: 33.1 },
+        { monthIndex: 60, price: 35.8 },
+      ],
+      0.042,
+      5.4
+    ),
+  },
+
+  // =========================================================================
+  // CATEGORY 3: EUROPE & BOND ETFs (5)
+  // =========================================================================
+  {
+    id: 'eunk',
+    ticker: 'EUNK.DE',
+    altTickers: ['IMEU.AS', 'IMEU.L', 'SMEA.L'],
+    isin: 'IE00B4K48X80',
+    wkn: 'A0RPWG',
+    justEtfSlug: 'ishares-core-msci-europe-ucits-etf-eur-acc',
+    name: 'iShares Core MSCI Europe UCITS ETF EUR (Acc)',
+    shortName: 'iShares Core MSCI Europe (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Europe & Bond ETFs',
+    provider: 'iShares (BlackRock)',
+    indexTracked: 'MSCI Europe Index (15 Developed European Countries, Large & Mid Cap)',
+    assetClass: 'European Equities',
+    distributionPolicy: 'Acc',
+    pairedEtfId: 'exsa',
+    ter: 0.12,
+    trackingDifference: -0.18,
+    dividendYieldEst: 3.10,
     replication: 'Physical (Optimized Sampling)',
     domicile: 'Ireland (IE)',
     currency: 'EUR',
-    fundSizeBillionsEur: 22.8,
-    holdingsCount: 3180,
-    volatilityAnnualPct: 16.8,
+    fundSizeBillionsEur: 10.6,
+    holdingsCount: 416,
+    volatilityAnnualPct: 14.1,
     riskRatingPriips: 4,
     whyCarefulChoice:
-      'Low-cost building block (0.18% TER, >3,100 holdings across China, India, Taiwan, South Korea, Brazil) often combined with EUNL/IWDA at a ~10-15% weight to match global market capitalization.',
+      'Pure-EUR exposure to ~416 top European corporations (ASML, Novo Nordisk, Nestlé, SAP, LVMH) at just 0.12% TER, balancing out US mega-cap valuation concentration.',
     taxEfficiencyNotes:
-      'Emerging markets pay higher average dividends (~2.65%), making the Accumulating structure especially valuable in tax-deferral countries (PT, ES, IT, BE, FR) where avoiding annual dividend taxation saves substantial compounding.',
+      'European stocks pay higher dividends (~3.1%/yr), making the Accumulating policy of EUNK.DE dramatically more tax-efficient than distributing alternatives in Portugal, Spain, Italy, and Belgium.',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 31.2 },   // 2021-11
-        { monthIndex: 2, price: 31.6 },   // 2022-01
-        { monthIndex: 7, price: 28.4 },   // 2022-06
-        { monthIndex: 11, price: 26.2 },  // 2022-10
-        { monthIndex: 18, price: 27.6 },  // 2023-05
-        { monthIndex: 24, price: 28.1 },  // 2023-11 (3Y ago)
-        { monthIndex: 30, price: 31.0 },  // 2024-05
-        { monthIndex: 36, price: 33.4 },  // 2024-11
-        { monthIndex: 42, price: 32.8 },  // 2025-05
-        { monthIndex: 48, price: 35.1 },  // 2025-11
-        { monthIndex: 60, price: 37.2 },  // 2026-11 current
+        { monthIndex: 0, price: 66.2 },
+        { monthIndex: 2, price: 67.4 },
+        { monthIndex: 7, price: 59.5 },
+        { monthIndex: 11, price: 57.8 },
+        { monthIndex: 18, price: 67.1 },
+        { monthIndex: 24, price: 68.4 },
+        { monthIndex: 30, price: 76.8 },
+        { monthIndex: 36, price: 78.9 },
+        { monthIndex: 42, price: 81.2 },
+        { monthIndex: 48, price: 84.5 },
+        { monthIndex: 60, price: 89.4 },
       ],
-      0.03,
-      6.2
+      0.025,
+      7.8
+    ),
+  },
+  {
+    id: 'meud',
+    ticker: 'MEUD.PA',
+    altTickers: ['LYP6.DE', 'MEUD.MI'],
+    isin: 'LU0908500753',
+    wkn: 'LYX0Q0',
+    justEtfSlug: 'amundi-stoxx-europe-600-ucits-etf-acc',
+    name: 'Amundi Stoxx Europe 600 UCITS ETF Acc',
+    shortName: 'Amundi Stoxx Europe 600 (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Europe & Bond ETFs',
+    provider: 'Amundi',
+    indexTracked: 'STOXX Europe 600 Index (600 Large, Mid & Small Cap European Companies)',
+    assetClass: 'European Equities',
+    distributionPolicy: 'Acc',
+    pairedEtfId: 'exsa',
+    ter: 0.07,
+    trackingDifference: -0.15,
+    dividendYieldEst: 3.15,
+    replication: 'Physical (Full)',
+    domicile: 'Luxembourg (LU)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 8.9,
+    holdingsCount: 600,
+    volatilityAnnualPct: 14.0,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Ultra-low 0.07% TER covering 600 European companies across 17 countries, offering broader mid-cap breadth than MSCI Europe at rock-bottom cost.',
+    taxEfficiencyNotes:
+      'Luxembourg-domiciled physical Accumulating ETF; reinvests ~3.15% European dividend yields automatically without annual dividend tax events in deferral jurisdictions.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 204.0 },
+        { monthIndex: 2, price: 207.5 },
+        { monthIndex: 7, price: 182.0 },
+        { monthIndex: 11, price: 177.5 },
+        { monthIndex: 18, price: 206.0 },
+        { monthIndex: 24, price: 211.0 },
+        { monthIndex: 30, price: 236.0 },
+        { monthIndex: 36, price: 243.0 },
+        { monthIndex: 42, price: 251.0 },
+        { monthIndex: 48, price: 261.0 },
+        { monthIndex: 60, price: 276.5 },
+      ],
+      0.024,
+      8.2
+    ),
+  },
+  {
+    id: 'exsa',
+    ticker: 'EXSA.DE',
+    altTickers: ['EXSA.AS', 'EXSA.SW'],
+    isin: 'DE0002635307',
+    wkn: '263530',
+    justEtfSlug: 'ishares-stoxx-europe-600-ucits-etf-de',
+    name: 'iShares STOXX Europe 600 UCITS ETF (DE) Dist',
+    shortName: 'iShares STOXX Europe 600 (Dist)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Europe & Bond ETFs',
+    provider: 'iShares (BlackRock)',
+    indexTracked: 'STOXX Europe 600 Index (600 European Equities)',
+    assetClass: 'European Equities',
+    distributionPolicy: 'Dist',
+    pairedEtfId: 'meud',
+    ter: 0.20,
+    trackingDifference: 0.05,
+    dividendYieldEst: 3.15,
+    replication: 'Physical (Full)',
+    domicile: 'Germany (DE)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 7.2,
+    holdingsCount: 600,
+    volatilityAnnualPct: 14.0,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Long-running German-domiciled STOXX Europe 600 benchmark ETF paying quarterly cash income (~3.15% yield) for investors prioritizing European dividend cashflow.',
+    taxEfficiencyNotes:
+      'German domicile + Distributing policy makes it traditional for German Sparerpauschbetrag income strategies, whereas MEUD.PA / EUNK.DE (Acc) is far more tax-efficient in PT, ES, IT, BE, and FR.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 47.0 },
+        { monthIndex: 2, price: 47.6 },
+        { monthIndex: 7, price: 40.9 },
+        { monthIndex: 11, price: 39.4 },
+        { monthIndex: 18, price: 44.8 },
+        { monthIndex: 24, price: 45.2 },
+        { monthIndex: 30, price: 49.8 },
+        { monthIndex: 36, price: 50.4 },
+        { monthIndex: 42, price: 51.2 },
+        { monthIndex: 48, price: 52.3 },
+        { monthIndex: 60, price: 54.1 },
+      ],
+      0.024,
+      8.6
     ),
   },
   {
@@ -488,6 +708,8 @@ export const CURATED_ETFS: ETFInstrument[] = [
     justEtfSlug: 'xtrackers-ii-eur-overnight-rate-swap-ucits-etf-1c',
     name: 'Xtrackers II EUR Overnight Rate Swap UCITS ETF 1C (Acc)',
     shortName: 'Xtrackers EUR €STR Money Market (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Europe & Bond ETFs',
     provider: 'Xtrackers (DWS)',
     indexTracked: 'Solactive €STR +8.5 bps Overnight Rate Index (ECB Cash Rate)',
     assetClass: 'EUR Money Market / Bonds',
@@ -508,17 +730,972 @@ export const CURATED_ETFS: ETFInstrument[] = [
       'Accumulates daily overnight interest into NAV rather than paying taxable monthly/annual coupons. Note for Belgium: as a bond/money-market fund, capital gains are subject to the 30% Reynders Tax. In Germany, 0% Teilfreistellung applies (full 26.375% tax above Sparerpauschbetrag).',
     baselineHistory5Y: generateMonthlyHistory5Y(
       [
-        { monthIndex: 0, price: 134.8 },  // 2021-11 (negative ECB rate era)
-        { monthIndex: 7, price: 134.3 },  // 2022-06 (last negative rate month)
-        { monthIndex: 11, price: 134.5 }, // 2022-10 (ECB hikes start)
-        { monthIndex: 18, price: 136.8 }, // 2023-05
-        { monthIndex: 24, price: 139.4 }, // 2023-11 (3Y ago, ~3.9% €STR)
-        { monthIndex: 36, price: 144.6 }, // 2024-11
-        { monthIndex: 48, price: 148.7 }, // 2025-11 (rate normalization)
-        { monthIndex: 60, price: 152.1 }, // 2026-11 current
+        { monthIndex: 0, price: 134.8 },
+        { monthIndex: 7, price: 134.3 },
+        { monthIndex: 11, price: 134.5 },
+        { monthIndex: 18, price: 136.8 },
+        { monthIndex: 24, price: 139.4 },
+        { monthIndex: 36, price: 144.6 },
+        { monthIndex: 48, price: 148.7 },
+        { monthIndex: 60, price: 152.1 },
       ],
-      0.0005, // Near-zero volatility smooth curve
+      0.0005,
       7.1
+    ),
+  },
+  {
+    id: 'euna',
+    ticker: 'EUNA.DE',
+    altTickers: ['AGGH.AS', 'AGGH.L', 'AGGH.MI'],
+    isin: 'IE00BDBRDM35',
+    wkn: 'A2H6ZT',
+    justEtfSlug: 'ishares-core-global-aggregate-bond-ucits-etf-eur-hedged-acc',
+    name: 'iShares Core Global Aggregate Bond UCITS ETF EUR Hedged (Acc)',
+    shortName: 'iShares Global Aggregate Bond EUR (Acc)',
+    instrumentType: 'ETF',
+    catalogCategory: 'Europe & Bond ETFs',
+    provider: 'iShares (BlackRock)',
+    indexTracked: 'Bloomberg Global Aggregate Bond Index (EUR Hedged)',
+    assetClass: 'EUR Money Market / Bonds',
+    distributionPolicy: 'Acc',
+    ter: 0.10,
+    trackingDifference: 0.05,
+    dividendYieldEst: 0.0,
+    replication: 'Physical (Optimized Sampling)',
+    domicile: 'Ireland (IE)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 11.8,
+    holdingsCount: 15200,
+    volatilityAnnualPct: 5.8,
+    riskRatingPriips: 2,
+    whyCarefulChoice:
+      'Investment-grade global government & corporate bond stabilizer (>15,000 bonds) hedged into EUR. Helps dampen equity bear-market volatility for balanced 80/20 or 60/40 portfolios.',
+    taxEfficiencyNotes:
+      'Accumulates bond coupons internally at 0.10% TER. Note: bond ETFs do not qualify for Germany’s 30% equity Teilfreistellung and are subject to Belgium’s 30% Reynders Tax on realized gains.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 5.32 },
+        { monthIndex: 7, price: 4.78 },
+        { monthIndex: 11, price: 4.46 },
+        { monthIndex: 18, price: 4.55 },
+        { monthIndex: 24, price: 4.52 },
+        { monthIndex: 30, price: 4.64 },
+        { monthIndex: 36, price: 4.79 },
+        { monthIndex: 42, price: 4.82 },
+        { monthIndex: 48, price: 4.94 },
+        { monthIndex: 60, price: 5.12 },
+      ],
+      0.012,
+      9.3
+    ),
+  },
+
+  // =========================================================================
+  // CATEGORY 4: US STOCKS (12 Famous US Individual Companies)
+  // =========================================================================
+  {
+    id: 'nvda',
+    ticker: 'NVDA',
+    altTickers: ['NVD.DE'],
+    isin: 'US67066G1040',
+    wkn: '918422',
+    name: 'NVIDIA Corporation',
+    shortName: 'NVIDIA (NVDA)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — AI GPUs, Data Center & Accelerated Computing',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Acc',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.03,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 3150.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 42.0,
+    riskRatingPriips: 6,
+    whyCarefulChoice:
+      'Single-stock concentration warning: NVIDIA delivered extraordinary AI-driven returns, but single stocks carry ~3x the volatility of VWCE and severe drawdown risk. Careful investors typically cap individual stocks to 5–10% "satellite" positions.',
+    taxEfficiencyNotes:
+      'Pays virtually zero dividend (~0.03%), so returns come almost entirely from capital gains—making it naturally tax-deferred until sale in PT, DE, ES, IT, and BE. Remember W-8BEN form for US dividend withholding (15%).',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 26.0 },
+        { monthIndex: 7, price: 15.2 },
+        { monthIndex: 11, price: 12.8 },
+        { monthIndex: 18, price: 34.5 },
+        { monthIndex: 24, price: 45.0 },
+        { monthIndex: 30, price: 96.0 },
+        { monthIndex: 36, price: 128.0 },
+        { monthIndex: 42, price: 112.0 },
+        { monthIndex: 48, price: 126.0 },
+        { monthIndex: 60, price: 132.5 },
+      ],
+      0.075,
+      11.1
+    ),
+  },
+  {
+    id: 'aapl',
+    ticker: 'AAPL',
+    altTickers: ['APC.DE'],
+    isin: 'US0378331005',
+    wkn: '865985',
+    name: 'Apple Inc.',
+    shortName: 'Apple (AAPL)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Consumer Hardware, Services & Ecosystem',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.45,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 3280.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 24.5,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Already the #1 or #2 largest component (~4–5%) inside VWCE, IWDA, and SXR8. Adding AAPL individually increases US mega-cap concentration rather than diversifying.',
+    taxEfficiencyNotes:
+      'Modest ~0.45% dividend yield subject to 15% US withholding (with W-8BEN) plus local European dividend tax. Most return is achieved via share buybacks and capital appreciation.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 135.0 },
+        { monthIndex: 7, price: 132.0 },
+        { monthIndex: 11, price: 146.0 },
+        { monthIndex: 18, price: 162.0 },
+        { monthIndex: 24, price: 172.0 },
+        { monthIndex: 30, price: 178.0 },
+        { monthIndex: 36, price: 212.0 },
+        { monthIndex: 42, price: 198.0 },
+        { monthIndex: 48, price: 214.0 },
+        { monthIndex: 60, price: 224.0 },
+      ],
+      0.042,
+      12.2
+    ),
+  },
+  {
+    id: 'msft',
+    ticker: 'MSFT',
+    altTickers: ['MSF.DE'],
+    isin: 'US5949181045',
+    wkn: '870747',
+    name: 'Microsoft Corporation',
+    shortName: 'Microsoft (MSFT)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Enterprise Cloud (Azure), AI & Software',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.72,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 3050.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 23.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Blue-chip enterprise software & cloud leader already heavily weighted inside SXR8 and VWCE. Single-company regulatory or AI capex cycles still create ~2x the risk of a global ETF.',
+    taxEfficiencyNotes:
+      'Pays a growing ~0.72% quarterly dividend (15% US withholding with W-8BEN). Note that individual stocks do NOT qualify for Germany’s 30% ETF Teilfreistellung.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 290.0 },
+        { monthIndex: 7, price: 246.0 },
+        { monthIndex: 11, price: 232.0 },
+        { monthIndex: 18, price: 298.0 },
+        { monthIndex: 24, price: 340.0 },
+        { monthIndex: 30, price: 386.0 },
+        { monthIndex: 36, price: 398.0 },
+        { monthIndex: 42, price: 392.0 },
+        { monthIndex: 48, price: 414.0 },
+        { monthIndex: 60, price: 428.0 },
+      ],
+      0.038,
+      13.3
+    ),
+  },
+  {
+    id: 'googl',
+    ticker: 'GOOGL',
+    altTickers: ['ABEA.DE'],
+    isin: 'US02079K3059',
+    wkn: 'A14Y6F',
+    name: 'Alphabet Inc. (Google Class A)',
+    shortName: 'Alphabet / Google (GOOGL)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Search, YouTube, Google Cloud & AI',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.44,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 2120.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 26.5,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Dominant search & cloud platform, though exposed to antitrust litigation and AI search disruption. Prefer holding primarily through broad UCITS ETFs unless intentionally taking a small satellite stake.',
+    taxEfficiencyNotes:
+      'Initiated a modest ~0.44% dividend in 2024; previously zero dividend. Capital gains remain deferred until sale in most EU jurisdictions.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 125.0 },
+        { monthIndex: 7, price: 104.0 },
+        { monthIndex: 11, price: 94.0 },
+        { monthIndex: 18, price: 112.0 },
+        { monthIndex: 24, price: 128.0 },
+        { monthIndex: 30, price: 158.0 },
+        { monthIndex: 36, price: 164.0 },
+        { monthIndex: 42, price: 156.0 },
+        { monthIndex: 48, price: 172.0 },
+        { monthIndex: 60, price: 182.0 },
+      ],
+      0.045,
+      14.4
+    ),
+  },
+  {
+    id: 'meta',
+    ticker: 'META',
+    altTickers: ['FB2A.DE'],
+    isin: 'US30303M1027',
+    wkn: 'A1JWVX',
+    name: 'Meta Platforms, Inc. (Facebook / Instagram / WhatsApp)',
+    shortName: 'Meta Platforms (META)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Social Platforms, Digital Ads & Open-Weights AI',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.35,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 1380.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 36.5,
+    riskRatingPriips: 6,
+    whyCarefulChoice:
+      'Textbook example of single-stock risk: plunged over 65% in 2022 before surging >400% off its lows. Investors who panicked at the bottom locked in huge losses—diversified ETFs smooth out these shocks.',
+    taxEfficiencyNotes:
+      'Small ~0.35% dividend introduced in 2024. Watch FX impact (EUR/USD) and W-8BEN status at your European broker.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 290.0 },
+        { monthIndex: 7, price: 155.0 },
+        { monthIndex: 11, price: 105.0 },
+        { monthIndex: 18, price: 235.0 },
+        { monthIndex: 24, price: 305.0 },
+        { monthIndex: 30, price: 438.0 },
+        { monthIndex: 36, price: 525.0 },
+        { monthIndex: 42, price: 488.0 },
+        { monthIndex: 48, price: 540.0 },
+        { monthIndex: 60, price: 565.0 },
+      ],
+      0.062,
+      15.5
+    ),
+  },
+  {
+    id: 'amzn',
+    ticker: 'AMZN',
+    altTickers: ['AMZ.DE'],
+    isin: 'US0231351067',
+    wkn: '906866',
+    name: 'Amazon.com, Inc.',
+    shortName: 'Amazon (AMZN)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — AWS Cloud, E-Commerce & Digital Advertising',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Acc',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.0,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 2080.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 29.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Reinvests all operating cash flows back into AWS and logistics rather than paying dividends, though experienced a ~48% drawdown in 2022.',
+    taxEfficiencyNotes:
+      '0% dividend yield means zero annual dividend tax drag and zero US dividend withholding—100% of taxation is deferred until you sell shares.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 155.0 },
+        { monthIndex: 7, price: 102.0 },
+        { monthIndex: 11, price: 96.0 },
+        { monthIndex: 18, price: 110.0 },
+        { monthIndex: 24, price: 138.0 },
+        { monthIndex: 30, price: 170.0 },
+        { monthIndex: 36, price: 192.0 },
+        { monthIndex: 42, price: 178.0 },
+        { monthIndex: 48, price: 195.0 },
+        { monthIndex: 60, price: 204.0 },
+      ],
+      0.048,
+      16.6
+    ),
+  },
+  {
+    id: 'tsla',
+    ticker: 'TSLA',
+    altTickers: ['TL0.DE'],
+    isin: 'US88160R1014',
+    wkn: 'A1CX3T',
+    name: 'Tesla, Inc.',
+    shortName: 'Tesla (TSLA)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Electric Vehicles, Energy Storage & Autonomy',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Acc',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.0,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 920.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 52.0,
+    riskRatingPriips: 7,
+    whyCarefulChoice:
+      'Extreme volatility (~52% annualized) with repeated 50–70% drawdowns. Careful long-term investors avoid concentrating core retirement savings in hyper-volatile single equities.',
+    taxEfficiencyNotes:
+      'Pays 0% dividends; all gains/losses are realized only on sale. In Germany/Portugal, remember single-stock capital losses can generally offset capital gains.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 280.0 },
+        { monthIndex: 7, price: 218.0 },
+        { monthIndex: 11, price: 224.0 },
+        { monthIndex: 14, price: 115.0 },
+        { monthIndex: 18, price: 188.0 },
+        { monthIndex: 24, price: 215.0 },
+        { monthIndex: 30, price: 168.0 },
+        { monthIndex: 36, price: 295.0 },
+        { monthIndex: 42, price: 248.0 },
+        { monthIndex: 48, price: 288.0 },
+        { monthIndex: 60, price: 310.0 },
+      ],
+      0.095,
+      17.7
+    ),
+  },
+  {
+    id: 'avgo',
+    ticker: 'AVGO',
+    altTickers: ['1YD.DE'],
+    isin: 'US11135F1012',
+    wkn: 'A2JG9Z',
+    name: 'Broadcom Inc.',
+    shortName: 'Broadcom (AVGO)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Custom AI Silicon, Networking & Enterprise Software',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 1.35,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 790.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 33.5,
+    riskRatingPriips: 6,
+    whyCarefulChoice:
+      'Strong semiconductor & infrastructure software compounder (split-adjusted 10-for-1 in 2024), yet highly cyclical with AI hardware capex swings.',
+    taxEfficiencyNotes:
+      'Pays ~1.35% quarterly dividend subject to 15% US withholding (with W-8BEN) plus local European dividend tax.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 48.0 },
+        { monthIndex: 7, price: 47.0 },
+        { monthIndex: 11, price: 46.5 },
+        { monthIndex: 18, price: 73.0 },
+        { monthIndex: 24, price: 88.0 },
+        { monthIndex: 30, price: 124.0 },
+        { monthIndex: 36, price: 156.0 },
+        { monthIndex: 42, price: 148.0 },
+        { monthIndex: 48, price: 164.0 },
+        { monthIndex: 60, price: 172.0 },
+      ],
+      0.056,
+      18.8
+    ),
+  },
+  {
+    id: 'brkb',
+    ticker: 'BRK-B',
+    altTickers: ['BRYN.DE'],
+    isin: 'US0846707026',
+    wkn: 'A0YJQ2',
+    name: 'Berkshire Hathaway Inc. (Class B)',
+    shortName: 'Berkshire Hathaway (BRK-B)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Diversified Conglomerate, Insurance & Cash Reserves',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Acc',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.0,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 930.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 16.5,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Acts almost like an internally managed value/quality holding company with massive T-bill cash reserves and zero management fee, though subject to key-person transition and US concentration.',
+    taxEfficiencyNotes:
+      'Famous for paying 0% dividends for decades—effectively functioning like an accumulating fund for European investors in PT, ES, IT, and BE with zero annual dividend tax drag.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 250.0 },
+        { monthIndex: 7, price: 262.0 },
+        { monthIndex: 11, price: 288.0 },
+        { monthIndex: 18, price: 302.0 },
+        { monthIndex: 24, price: 330.0 },
+        { monthIndex: 30, price: 378.0 },
+        { monthIndex: 36, price: 424.0 },
+        { monthIndex: 42, price: 416.0 },
+        { monthIndex: 48, price: 430.0 },
+        { monthIndex: 60, price: 438.0 },
+      ],
+      0.028,
+      19.9
+    ),
+  },
+  {
+    id: 'lly',
+    ticker: 'LLY',
+    altTickers: ['LLY.DE'],
+    isin: 'US5324571083',
+    wkn: '858560',
+    name: 'Eli Lilly and Company',
+    shortName: 'Eli Lilly (LLY)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Pharmaceuticals, GLP-1 Metabolic & Oncology',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.78,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 740.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 28.5,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Healthcare growth powerhouse driven by GLP-1 treatments, yet single-pharma valuations carry patent cliff, pricing policy, and clinical trial risks.',
+    taxEfficiencyNotes:
+      'Pays ~0.78% dividend with 15% US treaty withholding (W-8BEN). High share price (~€790) often requires fractional-share brokers for smaller monthly contributions.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 230.0 },
+        { monthIndex: 7, price: 302.0 },
+        { monthIndex: 11, price: 356.0 },
+        { monthIndex: 18, price: 405.0 },
+        { monthIndex: 24, price: 540.0 },
+        { monthIndex: 30, price: 730.0 },
+        { monthIndex: 36, price: 745.0 },
+        { monthIndex: 42, price: 720.0 },
+        { monthIndex: 48, price: 765.0 },
+        { monthIndex: 60, price: 790.0 },
+      ],
+      0.048,
+      20.1
+    ),
+  },
+  {
+    id: 'jpm',
+    ticker: 'JPM',
+    altTickers: ['CMC.DE'],
+    isin: 'US46625H1005',
+    wkn: '850628',
+    name: 'JPMorgan Chase & Co.',
+    shortName: 'JPMorgan Chase (JPM)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Global Investment & Commercial Banking',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 2.15,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 615.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 22.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Largest US bank with strong fortress balance sheet, though banking stocks remain sensitive to credit cycles, interest rate cuts, and regulatory capital rules.',
+    taxEfficiencyNotes:
+      'Distributes ~2.15% quarterly dividends—subject to 15% US withholding tax (W-8BEN) plus domestic dividend tax in PT (28%), DE (26.375%), ES, IT, and BE.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 142.0 },
+        { monthIndex: 7, price: 110.0 },
+        { monthIndex: 11, price: 124.0 },
+        { monthIndex: 18, price: 128.0 },
+        { monthIndex: 24, price: 140.0 },
+        { monthIndex: 30, price: 184.0 },
+        { monthIndex: 36, price: 212.0 },
+        { monthIndex: 42, price: 204.0 },
+        { monthIndex: 48, price: 219.0 },
+        { monthIndex: 60, price: 228.0 },
+      ],
+      0.036,
+      21.2
+    ),
+  },
+  {
+    id: 'cost',
+    ticker: 'COST',
+    altTickers: ['CTO.DE'],
+    isin: 'US22160K1051',
+    wkn: '888351',
+    name: 'Costco Wholesale Corporation',
+    shortName: 'Costco Wholesale (COST)',
+    instrumentType: 'Stock',
+    catalogCategory: 'US Stocks',
+    provider: 'US Corporation (NASDAQ/NYSE)',
+    indexTracked: 'Direct Single Equity — Membership Warehouse Retail',
+    assetClass: 'Individual Stock (US)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.52,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'United States (US)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 375.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 21.5,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Steady defensive consumer staples compounder with high membership renewal rates, though trading at premium valuation multiples.',
+    taxEfficiencyNotes:
+      'Low regular dividend (~0.52%) plus occasional special dividends; US dividends are subject to 15% W-8BEN withholding plus local European dividend tax.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 440.0 },
+        { monthIndex: 7, price: 448.0 },
+        { monthIndex: 11, price: 492.0 },
+        { monthIndex: 18, price: 468.0 },
+        { monthIndex: 24, price: 535.0 },
+        { monthIndex: 30, price: 725.0 },
+        { monthIndex: 36, price: 810.0 },
+        { monthIndex: 42, price: 795.0 },
+        { monthIndex: 48, price: 842.0 },
+        { monthIndex: 60, price: 865.0 },
+      ],
+      0.034,
+      22.3
+    ),
+  },
+
+  // =========================================================================
+  // CATEGORY 5: EUROPE STOCKS (8 Famous European Individual Companies)
+  // =========================================================================
+  {
+    id: 'asml',
+    ticker: 'ASML.AS',
+    altTickers: ['ASML', 'ASME.DE'],
+    isin: 'NL0010273215',
+    wkn: 'A1J4U4',
+    name: 'ASML Holding N.V. (Netherlands)',
+    shortName: 'ASML Holding (NL)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — EUV Lithography Semiconductor Systems (AEX / Euro Stoxx 50)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 0.95,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 272.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 34.0,
+    riskRatingPriips: 6,
+    whyCarefulChoice:
+      'Europe’s premier semiconductor monopoly in EUV lithography, yet highly cyclical—export restrictions and wafer-fab order pauses caused sharp >30% pullbacks in 2022 and 2024.',
+    taxEfficiencyNotes:
+      'Dutch-domiciled stock: 15% Netherlands dividend withholding tax applies to its ~0.95% dividend (usually creditable under EU double-taxation treaties in PT/DE/FR, zero extra headache for NL residents).',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 690.0 },
+        { monthIndex: 7, price: 448.0 },
+        { monthIndex: 11, price: 468.0 },
+        { monthIndex: 18, price: 618.0 },
+        { monthIndex: 24, price: 620.0 },
+        { monthIndex: 30, price: 860.0 },
+        { monthIndex: 36, price: 655.0 },
+        { monthIndex: 42, price: 625.0 },
+        { monthIndex: 48, price: 668.0 },
+        { monthIndex: 60, price: 685.0 },
+      ],
+      0.058,
+      23.4
+    ),
+  },
+  {
+    id: 'novo',
+    ticker: 'NOVO-B.CO',
+    altTickers: ['NVO', 'NOVC.DE'],
+    isin: 'DK0062498333',
+    wkn: 'A3EU6F',
+    name: 'Novo Nordisk A/S (Denmark)',
+    shortName: 'Novo Nordisk (DK)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Diabetes & Obesity Biopharma (OMX Copenhagen 25)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 1.45,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 435.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 29.5,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Europe’s largest healthcare champion by market cap, though clinical readouts and GLP-1 competition create sharp single-stock swings. Already ~3% of EUNK.DE / MEUD.PA.',
+    taxEfficiencyNotes:
+      'Watch out for Danish dividend withholding tax (27% statutory!) when holding NOVO-B.CO directly—reclaiming excess withholding above 15% treaty limits can be slow for non-Danish EU investors.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 46.0 },
+        { monthIndex: 7, price: 52.0 },
+        { monthIndex: 11, price: 55.0 },
+        { monthIndex: 18, price: 76.0 },
+        { monthIndex: 24, price: 92.0 },
+        { monthIndex: 30, price: 124.0 },
+        { monthIndex: 36, price: 104.0 },
+        { monthIndex: 42, price: 98.0 },
+        { monthIndex: 48, price: 105.0 },
+        { monthIndex: 60, price: 108.0 },
+      ],
+      0.052,
+      24.5
+    ),
+  },
+  {
+    id: 'sap',
+    ticker: 'SAP.DE',
+    altTickers: ['SAP'],
+    isin: 'DE0007164600',
+    wkn: '716460',
+    name: 'SAP SE (Germany)',
+    shortName: 'SAP SE (DE)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Enterprise ERP Cloud Software (DAX 40)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 1.05,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 265.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 22.5,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Germany’s largest tech company by market cap, trading directly in EUR on Xetra without USD currency risk.',
+    taxEfficiencyNotes:
+      'German dividend withholding (26.375%) applies to SAP’s ~1.05% annual dividend. For non-German EU residents (e.g., PT/NL), ETFs like EUNK.DE or MEUD.PA often manage cross-border dividend withholding far more cleanly.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 118.0 },
+        { monthIndex: 7, price: 89.0 },
+        { monthIndex: 11, price: 94.0 },
+        { monthIndex: 18, price: 122.0 },
+        { monthIndex: 24, price: 136.0 },
+        { monthIndex: 30, price: 174.0 },
+        { monthIndex: 36, price: 214.0 },
+        { monthIndex: 42, price: 206.0 },
+        { monthIndex: 48, price: 218.0 },
+        { monthIndex: 60, price: 222.0 },
+      ],
+      0.036,
+      25.6
+    ),
+  },
+  {
+    id: 'lvmh',
+    ticker: 'MC.PA',
+    altTickers: ['MOH.DE'],
+    isin: 'FR0000121014',
+    wkn: '853292',
+    name: 'LVMH Moët Hennessy Louis Vuitton SE (France)',
+    shortName: 'LVMH (FR)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Global Luxury Goods (CAC 40 / Euro Stoxx 50)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 2.05,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 325.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 26.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Iconic luxury conglomerate, yet cyclical to Chinese & US luxury consumer demand—notice how a 5-year holding experienced flat/negative stretches when China consumption cooled.',
+    taxEfficiencyNotes:
+      'French dividend withholding tax (25% statutory unless reduced to 12.8%/15% via treaty relief at your broker) plus 0.3% French Financial Transaction Tax (FTT) on purchases.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 680.0 },
+        { monthIndex: 7, price: 575.0 },
+        { monthIndex: 11, price: 640.0 },
+        { monthIndex: 18, price: 825.0 },
+        { monthIndex: 24, price: 705.0 },
+        { monthIndex: 30, price: 745.0 },
+        { monthIndex: 36, price: 615.0 },
+        { monthIndex: 42, price: 590.0 },
+        { monthIndex: 48, price: 625.0 },
+        { monthIndex: 60, price: 645.0 },
+      ],
+      0.044,
+      26.7
+    ),
+  },
+  {
+    id: 'siemens',
+    ticker: 'SIE.DE',
+    altTickers: ['SIEGY'],
+    isin: 'DE0007236101',
+    wkn: '723610',
+    name: 'Siemens AG (Germany)',
+    shortName: 'Siemens AG (DE)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Industrial Automation, Smart Infrastructure & Mobility',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 2.55,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 148.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 23.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Core European industrial electrification and factory automation leader listed in EUR on Xetra.',
+    taxEfficiencyNotes:
+      'Pays ~2.55% annual dividend subject to German 26.375% withholding at source; non-German investors must file reclaim or accept partial double-taxation unless holding via a broad European ETF.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 142.0 },
+        { monthIndex: 7, price: 102.0 },
+        { monthIndex: 11, price: 110.0 },
+        { monthIndex: 18, price: 152.0 },
+        { monthIndex: 24, price: 148.0 },
+        { monthIndex: 30, price: 175.0 },
+        { monthIndex: 36, price: 182.0 },
+        { monthIndex: 42, price: 174.0 },
+        { monthIndex: 48, price: 183.0 },
+        { monthIndex: 60, price: 188.0 },
+      ],
+      0.038,
+      27.8
+    ),
+  },
+  {
+    id: 'shell',
+    ticker: 'SHEL.AS',
+    altTickers: ['SHEL.L', 'SHEL'],
+    isin: 'GB00BP6MXD84',
+    wkn: 'A3C99G',
+    name: 'Shell plc (Netherlands / UK)',
+    shortName: 'Shell plc (NL/UK)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Integrated Energy, LNG & Transition Fuels',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 3.9,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 205.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 24.0,
+    riskRatingPriips: 5,
+    whyCarefulChoice:
+      'Traditional European income & energy hedge traded in EUR on Euronext Amsterdam, though strongly tied to cyclical oil & gas prices.',
+    taxEfficiencyNotes:
+      'UK-headquartered share structure pays dividends with 0% UK withholding tax—a notable advantage for EU investors compared to French, German, or Swiss dividends, though local income tax still applies.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 19.5 },
+        { monthIndex: 7, price: 24.8 },
+        { monthIndex: 11, price: 26.5 },
+        { monthIndex: 18, price: 27.4 },
+        { monthIndex: 24, price: 29.8 },
+        { monthIndex: 30, price: 33.4 },
+        { monthIndex: 36, price: 31.2 },
+        { monthIndex: 42, price: 30.6 },
+        { monthIndex: 48, price: 31.8 },
+        { monthIndex: 60, price: 32.4 },
+      ],
+      0.04,
+      28.9
+    ),
+  },
+  {
+    id: 'nestle',
+    ticker: 'NESN.SW',
+    altTickers: ['NSRGY'],
+    isin: 'CH0038863350',
+    wkn: 'A0Q4DC',
+    name: 'Nestlé S.A. (Switzerland)',
+    shortName: 'Nestlé (CH)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Global Packaged Foods, Coffee & Nutrition (SMI)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 3.25,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 225.0,
+    holdingsCount: 1,
+    volatilityAnnualPct: 15.8,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Often seen as a defensive staple, yet Nestlé’s 5-year decline reminds careful investors that even "safe" blue-chip single stocks can lag broad ETFs over multi-year cycles.',
+    taxEfficiencyNotes:
+      'Important warning: Switzerland levies a steep 35% dividend withholding tax! Non-Swiss investors must reclaim the 20% excess above treaty rates, whereas EUNK.DE / IWDA.AS absorb Nestlé without retail reclaim paperwork.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 112.0 },
+        { monthIndex: 7, price: 109.0 },
+        { monthIndex: 11, price: 108.0 },
+        { monthIndex: 18, price: 111.0 },
+        { monthIndex: 24, price: 103.0 },
+        { monthIndex: 30, price: 96.0 },
+        { monthIndex: 36, price: 84.0 },
+        { monthIndex: 42, price: 85.0 },
+        { monthIndex: 48, price: 85.5 },
+        { monthIndex: 60, price: 86.0 },
+      ],
+      0.026,
+      29.1
+    ),
+  },
+  {
+    id: 'edp',
+    ticker: 'EDP.LS',
+    altTickers: ['EDPFY'],
+    isin: 'PTEDP0AM0009',
+    wkn: '896520',
+    name: 'EDP - Energias de Portugal, S.A. (Portugal PSI-20)',
+    shortName: 'EDP Portugal (EDP.LS)',
+    instrumentType: 'Stock',
+    catalogCategory: 'Europe Stocks',
+    provider: 'European Corporation',
+    indexTracked: 'Direct Single Equity — Iberian Utilities & Global Renewables (PSI-20)',
+    assetClass: 'Individual Stock (Europe)',
+    distributionPolicy: 'Dist',
+    ter: 0,
+    trackingDifference: 0,
+    dividendYieldEst: 5.1,
+    replication: 'Direct Equity (Single Stock)',
+    domicile: 'Europe (Direct)',
+    currency: 'EUR',
+    fundSizeBillionsEur: 16.1,
+    holdingsCount: 1,
+    volatilityAnnualPct: 21.8,
+    riskRatingPriips: 4,
+    whyCarefulChoice:
+      'Portugal’s flagship utility & renewable energy leader on Euronext Lisbon. Demonstrates why single-country utility stocks are interest-rate sensitive compared to global ETFs like VWCE.',
+    taxEfficiencyNotes:
+      'Pays a high ~5.1% dividend, which in Portugal is taxed at 28% every single year (withholding at source if held via a Portuguese bank, or declared on IRS Anexo E/J). Compare against accumulating ETFs where 0% is taxed annually.',
+    baselineHistory5Y: generateMonthlyHistory5Y(
+      [
+        { monthIndex: 0, price: 4.75 },
+        { monthIndex: 7, price: 4.48 },
+        { monthIndex: 11, price: 4.35 },
+        { monthIndex: 18, price: 4.68 },
+        { monthIndex: 24, price: 4.15 },
+        { monthIndex: 30, price: 3.72 },
+        { monthIndex: 36, price: 3.58 },
+        { monthIndex: 42, price: 3.65 },
+        { monthIndex: 48, price: 3.76 },
+        { monthIndex: 60, price: 3.85 },
+      ],
+      0.036,
+      30.2
     ),
   },
 ];

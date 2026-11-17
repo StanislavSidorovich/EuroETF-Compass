@@ -7,7 +7,12 @@ import {
   fetchAllLiveEtfQuotes,
   fetchCustomYahooEtf,
 } from './services/marketService';
-import type { ETFInstrument, LiveQuoteData } from './types';
+import type {
+  ETFInstrument,
+  FontFamilyOption,
+  LiveQuoteData,
+  ThemeMode,
+} from './types';
 import { Header, type AppTab } from './components/layout/Header';
 import { LiveTickerBar } from './components/layout/LiveTickerBar';
 import { DisclaimerBanner } from './components/layout/DisclaimerBanner';
@@ -25,7 +30,30 @@ function buildInitialQuotes(etfs: ETFInstrument[]): Record<string, LiveQuoteData
   return initial;
 }
 
+const THEME_STORAGE_KEY = 'euroetf_theme_v1';
+const FONT_STORAGE_KEY = 'euroetf_font_v1';
+
 export function App() {
+  const [theme, setTheme] = useState<ThemeMode>(() => {
+    try {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === 'dark' || saved === 'light') return saved;
+    } catch {
+      // ignore storage errors
+    }
+    return 'light';
+  });
+
+  const [fontFamily, setFontFamily] = useState<FontFamilyOption>(() => {
+    try {
+      const saved = localStorage.getItem(FONT_STORAGE_KEY);
+      if (saved === 'inter' || saved === 'jakarta' || saved === 'serif') return saved;
+    } catch {
+      // ignore storage errors
+    }
+    return 'inter';
+  });
+
   const [etfs, setEtfs] = useState<ETFInstrument[]>(CURATED_ETFS);
   const [quotesByEtfId, setQuotesByEtfId] = useState<Record<string, LiveQuoteData>>(() =>
     buildInitialQuotes(CURATED_ETFS)
@@ -36,6 +64,35 @@ export function App() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [isFetchingCustomTicker, setIsFetchingCustomTicker] = useState(false);
   const [customTickerError, setCustomTickerError] = useState<string | null>(null);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, theme);
+    } catch {
+      // ignore storage errors
+    }
+    const root = document.documentElement;
+    root.dataset.theme = theme;
+    if (theme === 'light') {
+      root.classList.add('theme-light');
+      root.classList.remove('dark');
+    } else {
+      root.classList.remove('theme-light');
+      root.classList.add('dark');
+    }
+  }, [theme]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(FONT_STORAGE_KEY, fontFamily);
+    } catch {
+      // ignore storage errors
+    }
+  }, [fontFamily]);
+
+  const handleToggleTheme = useCallback(() => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
+  }, []);
 
   const refreshAllQuotes = useCallback(
     async (targetEtfs: ETFInstrument[], forceRefresh = false) => {
@@ -101,7 +158,10 @@ export function App() {
   );
 
   return (
-    <div className="min-h-screen bg-[#090d16] fintech-grid-bg text-slate-100 flex flex-col">
+    <div
+      data-theme={theme}
+      className={`min-h-screen bg-[#090d16] fintech-grid-bg text-slate-100 flex flex-col font-theme-${fontFamily}`}
+    >
       <Header
         activeTab={activeTab}
         onSelectTab={setActiveTab}
@@ -112,6 +172,10 @@ export function App() {
         totalEtfCount={etfs.length}
         onRefreshPrices={handleRefreshPrices}
         isRefreshing={isRefreshing}
+        theme={theme}
+        onToggleTheme={handleToggleTheme}
+        fontFamily={fontFamily}
+        onChangeFont={setFontFamily}
       />
 
       <LiveTickerBar

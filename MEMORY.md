@@ -60,6 +60,8 @@ We model 12+ European jurisdictions across three distinct tax archetypes so user
 
 > **Add your own rules, notes, or changes below:**
 
-- `[ ]` *Example: Add specific countries or brokers you want prioritized.*
-- `[ ]` *Example: Add specific ETFs (ISIN or Ticker) to include in the default watchlist.*
-- `[ ]` *Example: Add custom tax brackets or personal allowance defaults.*
+- `[x]` **V2 Upgrade — Light/Dark Theme, Soft Green Palette & 3 Fonts:** Added Light/Dark toggle (`light` / `dark`), softened the green accent from bright neon emerald to calm forest/sage green (`#2d8a61`), and added 3 selectable fonts (`Inter`, `Plus Jakarta Sans`, `Merriweather`).
+- `[x]` **V2 Upgrade — Portfolio Builder First + 20 Popular Individual Stocks & Categorized ETFs:** Moved the interactive portfolio builder directly underneath the Budget inputs (before the 3Y/5Y revenue cards) so it is always explicit *which* ETFs and stocks generate the return. Added category browser (`Global ETFs`, `US ETFs`, `European & Bond ETFs`, `US Individual Stocks`, `European Individual Stocks`) with 20 famous stocks (`NVDA`, `AAPL`, `MSFT`, `GOOGL`, `META`, `AMZN`, `TSLA`, `AVGO`, `BRK-B`, `LLY`, `JPM`, `COST`, `ASML.AS`, `NVO`, `SAP.DE`, `MC.PA`, `SIE.DE`, `SHEL.AS`, `NESN.SW`, `EDP.LS`).
+- `[x]` **V2 Upgrade — Bulletproof Ticker Search (`NVDA`, Company Names, Any Symbol):** Upgraded `marketService.ts` so searching by ticker (`NVDA`) or company name (`NVIDIA`, `Apple`, `Facebook`) matches the built-in 35+ catalog immediately and falls back through multi-CORS gateways (`corsproxy.io`, `codetabs`, `allorigins`) plus a smart deterministic symbol builder so GitHub Pages never blocks adding a ticker.
+- `[x]` **V2 Upgrade — Interactive Map of Europe & Live Financial News Hub:** Added an SVG Map of Europe colored by ETF tax regime and a Live Financial News & Market Insights section (RSS-to-JSON live feeds + curated European financial news sources).
+- `[x]` **V2 Upgrade — Portugal `IRS Modelo 3 Anexo J` Sample Filled Form, Deadlines & `.ics` Reminders:** Added a visual filled template of Portugal's `Anexo J` (*Quadro 9.2A* for ETF/Stock sales via FIFO & *Quadro 8A* for dividends) with realistic fictitious data, downloadable cheat-sheet, filing calendar (`1 April – 30 June` in Portugal), and `.ics` calendar reminder generator.
