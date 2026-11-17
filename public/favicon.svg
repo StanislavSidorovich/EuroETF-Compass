@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bgGrad" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#143829"/>
+      <stop offset="55%" stop-color="#1f5c42"/>
+      <stop offset="100%" stop-color="#0f291e"/>
+    </linearGradient>
+    <linearGradient id="goldGrad" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#f6d365"/>
+      <stop offset="50%" stop-color="#e2b049"/>
+      <stop offset="100%" stop-color="#c89128"/>
+    </linearGradient>
+    <linearGradient id="sageGrad" x1="16" y1="44" x2="48" y2="16" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#5ec294"/>
+      <stop offset="100%" stop-color="#a7f3d0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Outer Rounded Crest Shield -->
+  <rect x="4" y="4" width="56" height="56" rx="16" fill="url(#bgGrad)" stroke="url(#goldGrad)" stroke-width="2.5"/>
+
+  <!-- Subtle Compass Ring -->
+  <circle cx="32" cy="32" r="21" stroke="#5ec294" stroke-opacity="0.28" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <circle cx="32" cy="32" r="16" stroke="url(#goldGrad)" stroke-opacity="0.45" stroke-width="1.2"/>
+
+  <!-- Cardinal Compass Ticks -->
+  <path d="M32 8V13M32 51V56M8 32H13M51 32H56" stroke="url(#goldGrad)" stroke-width="2" stroke-linecap="round"/>
+
+  <!-- Ascending Compounding Growth Curve -->
+  <path d="M15 43C22 42 27 38 32 32C37 26 41 20 47 16" stroke="url(#sageGrad)" stroke-width="3.2" stroke-linecap="round"/>
+  <path d="M41 15H48V22" stroke="url(#sageGrad)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <!-- Compass Diamond Needle (North-East Wealth Vector) -->
+  <polygon points="32,15 36.5,32 32,29 27.5,32" fill="url(#goldGrad)"/>
+  <polygon points="32,49 36.5,32 32,35 27.5,32" fill="#5ec294" fill-opacity="0.65"/>
+
+  <!-- Center Pivot Jewel -->
+  <circle cx="32" cy="32" r="3.2" fill="#0f291e" stroke="url(#goldGrad)" stroke-width="2"/>
+</svg>

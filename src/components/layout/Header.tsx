@@ -4,7 +4,6 @@ import {
   BookOpen,
   Calculator,
   Check,
-  Compass,
   Copy,
   FileCode2,
   GitBranch,
@@ -130,22 +129,93 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {/* Top Brand + Controls Row */}
           <div className="flex flex-wrap items-center justify-between gap-3 py-3">
-            {/* Brand Identity */}
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-emerald-500 to-cyan-600 text-white shadow-md shadow-emerald-500/20">
-                <Compass className="h-6 w-6 stroke-[2.2]" />
+            {/* Brand Identity with Custom Mariner's Compass & Compounding Crest Logo */}
+            <div className="flex items-center gap-3 group">
+              <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-md transition-transform duration-300 group-hover:scale-105">
+                <svg
+                  viewBox="0 0 64 64"
+                  className="h-11 w-11"
+                  fill="none"
+                  aria-label="EuroETF Compass Logo"
+                >
+                  <defs>
+                    <linearGradient id="hdrBgGrad" x1="6" y1="6" x2="58" y2="58" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#143829" />
+                      <stop offset="55%" stopColor="#1f5c42" />
+                      <stop offset="100%" stopColor="#0f291e" />
+                    </linearGradient>
+                    <linearGradient id="hdrGoldGrad" x1="14" y1="12" x2="50" y2="52" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#f6d365" />
+                      <stop offset="50%" stopColor="#e2b049" />
+                      <stop offset="100%" stopColor="#c89128" />
+                    </linearGradient>
+                    <linearGradient id="hdrSageGrad" x1="16" y1="44" x2="48" y2="16" gradientUnits="userSpaceOnUse">
+                      <stop offset="0%" stopColor="#5ec294" />
+                      <stop offset="100%" stopColor="#a7f3d0" />
+                    </linearGradient>
+                  </defs>
+                  <rect
+                    x="3"
+                    y="3"
+                    width="58"
+                    height="58"
+                    rx="15"
+                    fill="url(#hdrBgGrad)"
+                    stroke="url(#hdrGoldGrad)"
+                    strokeWidth="2.4"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="21"
+                    stroke="#5ec294"
+                    strokeOpacity="0.3"
+                    strokeWidth="1.4"
+                    strokeDasharray="3 3"
+                  />
+                  <circle
+                    cx="32"
+                    cy="32"
+                    r="15.5"
+                    stroke="url(#hdrGoldGrad)"
+                    strokeOpacity="0.45"
+                    strokeWidth="1.2"
+                  />
+                  <path
+                    d="M32 8V12.5M32 51.5V56M8 32H12.5M51.5 32H56"
+                    stroke="url(#hdrGoldGrad)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M15 43C22 42 27 38 32 32C37 26 41 20 47 16"
+                    stroke="url(#hdrSageGrad)"
+                    strokeWidth="3.2"
+                    strokeLinecap="round"
+                  />
+                  <path
+                    d="M41 15H48V22"
+                    stroke="url(#hdrSageGrad)"
+                    strokeWidth="2.8"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                  <polygon points="32,15 36.5,32 32,29 27.5,32" fill="url(#hdrGoldGrad)" />
+                  <polygon points="32,49 36.5,32 32,35 27.5,32" fill="#5ec294" fillOpacity="0.65" />
+                  <circle cx="32" cy="32" r="3" fill="#0f291e" stroke="url(#hdrGoldGrad)" strokeWidth="2" />
+                </svg>
               </div>
               <div>
                 <div className="flex items-center gap-2">
                   <h1 className="text-base font-bold tracking-tight text-white sm:text-lg">
                     EuroETF Compass
                   </h1>
-                  <span className="hidden rounded-full border border-emerald-500/30 bg-emerald-500/10 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-emerald-300 sm:inline-block">
-                    UCITS Europe
+                  <span className="hidden rounded-full border border-[#c89128]/40 bg-[#c89128]/15 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-[#e2b049] sm:inline-block">
+                    Wealth &amp; Tax Club
                   </span>
                 </div>
                 <p className="text-[11px] text-slate-400 sm:text-xs">
-                  Careful UCITS ETF Investing • EU Tax Law • Live 3Y/5Y Backtest &amp; Forecast
+                  Разумные инвестиции в ETF и Акции • Налоги ЕС • История 3Y/5Y и Прогноз
                 </p>
               </div>
             </div>

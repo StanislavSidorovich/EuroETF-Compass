@@ -15,6 +15,7 @@ import type {
 } from './types';
 import { Header, type AppTab } from './components/layout/Header';
 import { LiveTickerBar } from './components/layout/LiveTickerBar';
+import { InvestorWisdomBanner } from './components/layout/InvestorWisdomBanner';
 import { DisclaimerBanner } from './components/layout/DisclaimerBanner';
 import { InvestmentCalculator } from './components/calculator/InvestmentCalculator';
 import { CountryTaxExplorer } from './components/taxes/CountryTaxExplorer';
@@ -186,6 +187,8 @@ export function App() {
         customTickerError={customTickerError}
       />
 
+      <InvestorWisdomBanner theme={theme} onNavigateTab={setActiveTab} />
+
       <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-6 sm:px-6">
         <DisclaimerBanner />
 
@@ -199,6 +202,7 @@ export function App() {
             onAddCustomTicker={handleAddCustomTicker}
             isFetchingCustomTicker={isFetchingCustomTicker}
             customTickerError={customTickerError}
+            theme={theme}
           />
         )}
 
