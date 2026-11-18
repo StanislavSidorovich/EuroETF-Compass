@@ -1,4 +1,4 @@
-import type { ThemeMode } from '../types';
+import type { FontFamilyOption, FontSizeOption, ThemeMode } from '../types';
 
 export type BorderWidthOption = '1px' | '1.5px' | '2px';
 export type BorderStyleOption = 'solid' | 'dashed' | 'dotted';
@@ -570,4 +570,36 @@ export function formatThemeCssSnippet(theme: ThemeMode, config: ModeThemeConfig)
     `--ui-border-style: ${vars['--ui-border-style']};`,
   ];
   return lines.join('\n');
+}
+
+export function buildThemeExportJson(params: {
+  theme: ThemeMode;
+  fontFamily: FontFamilyOption;
+  fontSize: FontSizeOption;
+  studioState: ThemeStudioState;
+}): string {
+  return JSON.stringify(
+    {
+      version: 'euroetf-theme-v1',
+      activeTheme: params.theme,
+      fontFamily: params.fontFamily,
+      fontSize: params.fontSize,
+      light: params.studioState.light,
+      dark: params.studioState.dark,
+    },
+    null,
+    2
+  );
+}
+
+export function downloadThemeJsonFile(jsonContent: string): void {
+  const blob = new Blob([jsonContent], { type: 'application/json;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'euroetf-theme-config.json';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
 }

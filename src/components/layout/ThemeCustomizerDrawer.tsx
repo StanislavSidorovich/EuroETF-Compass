@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import {
   Check,
   Copy,
+  Download,
   Layers,
   Minimize2,
   Maximize2,
@@ -23,6 +24,8 @@ import {
   type ModeThemeConfig,
   THEME_PRESETS,
   type ThemeStudioState,
+  buildThemeExportJson,
+  downloadThemeJsonFile,
   formatThemeCssSnippet,
   hexToHsl,
   hslToCss,
@@ -199,6 +202,7 @@ export const ThemeCustomizerDrawer: React.FC<ThemeCustomizerDrawerProps> = ({
   const [dockLeft, setDockLeft] = useState(false);
   const [minimized, setMinimized] = useState(false);
   const [copiedCss, setCopiedCss] = useState(false);
+  const [copiedJson, setCopiedJson] = useState(false);
 
   if (!isOpen) return null;
 
@@ -229,6 +233,32 @@ export const ThemeCustomizerDrawer: React.FC<ThemeCustomizerDrawerProps> = ({
     } catch {
       setCopiedCss(false);
     }
+  };
+
+  const handleCopyJson = async () => {
+    const json = buildThemeExportJson({
+      theme,
+      fontFamily,
+      fontSize,
+      studioState,
+    });
+    try {
+      await navigator.clipboard.writeText(json);
+      setCopiedJson(true);
+      globalThis.setTimeout(() => setCopiedJson(false), 2500);
+    } catch {
+      downloadThemeJsonFile(json);
+    }
+  };
+
+  const handleDownloadJson = () => {
+    const json = buildThemeExportJson({
+      theme,
+      fontFamily,
+      fontSize,
+      studioState,
+    });
+    downloadThemeJsonFile(json);
   };
 
   const sectionTabs: Array<{
@@ -618,34 +648,74 @@ export const ThemeCustomizerDrawer: React.FC<ThemeCustomizerDrawerProps> = ({
           </div>
 
           {/* Footer Actions */}
-          <div className="flex items-center justify-between gap-2 border-t ui-border-subtle px-3.5 py-2.5">
-            <button
-              type="button"
-              onClick={handleResetMode}
-              disabled={isDefault}
-              className="inline-flex items-center gap-1 rounded-lg border ui-border-default ui-surface-elevated px-2.5 py-1.5 text-[11px] font-semibold ui-text-secondary transition ui-hover-elevated disabled:opacity-45"
-            >
-              <RotateCcw className="h-3.5 w-3.5" />
-              <span>{tr(lang, 'Reset', 'Сбросить')}</span>
-            </button>
-
-            <button
-              type="button"
-              onClick={handleCopyCss}
-              className="ui-soft-pill inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition"
-            >
-              {copiedCss ? (
-                <>
-                  <Check className="h-3.5 w-3.5" />
-                  <span>{tr(lang, 'CSS Copied', 'CSS скопирован')}</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="h-3.5 w-3.5" />
-                  <span>{tr(lang, 'Copy CSS', 'Копировать CSS')}</span>
-                </>
+          <div className="space-y-2 border-t ui-border-subtle px-3.5 py-2.5">
+            <p className="text-[10px] leading-snug ui-text-muted">
+              {tr(
+                lang,
+                'Copy JSON or download .json and send it to me — I will set it as the default theme.',
+                'Скопируйте JSON или скачайте .json и отправьте мне — я поставлю эти цвета по умолчанию.'
               )}
-            </button>
+            </p>
+            <div className="flex flex-wrap items-center justify-between gap-1.5">
+              <button
+                type="button"
+                onClick={handleResetMode}
+                disabled={isDefault}
+                className="inline-flex items-center gap-1 rounded-lg border ui-border-default ui-surface-elevated px-2 py-1.5 text-[11px] font-semibold ui-text-secondary transition ui-hover-elevated disabled:opacity-45"
+              >
+                <RotateCcw className="h-3.5 w-3.5" />
+                <span>{tr(lang, 'Reset', 'Сброс')}</span>
+              </button>
+
+              <div className="flex flex-wrap items-center gap-1.5">
+                <button
+                  type="button"
+                  onClick={handleCopyCss}
+                  title={tr(lang, 'Copy CSS variables', 'Копировать CSS-переменные')}
+                  className="inline-flex items-center gap-1 rounded-lg border ui-border-default ui-surface-elevated px-2 py-1.5 text-[11px] font-semibold ui-text-secondary transition ui-hover-elevated"
+                >
+                  {copiedCss ? (
+                    <>
+                      <Check className="h-3.5 w-3.5 ui-text-sage" />
+                      <span>CSS</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3 w-3" />
+                      <span>CSS</span>
+                    </>
+                  )}
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleDownloadJson}
+                  title={tr(lang, 'Download theme JSON file', 'Скачать файл настроек .json')}
+                  className="inline-flex items-center gap-1 rounded-lg border ui-border-default ui-surface-elevated px-2 py-1.5 text-[11px] font-semibold ui-text-secondary transition ui-hover-elevated"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  <span>.json</span>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={handleCopyJson}
+                  className="ui-selected-pill inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-[11px] font-semibold transition"
+                >
+                  {copiedJson ? (
+                    <>
+                      <Check className="h-3.5 w-3.5" />
+                      <span>{tr(lang, 'JSON Copied!', 'Скопировано!')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-3.5 w-3.5" />
+                      <span>{tr(lang, 'Copy JSON', 'Копировать JSON')}</span>
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
           </div>
         </>
       )}
