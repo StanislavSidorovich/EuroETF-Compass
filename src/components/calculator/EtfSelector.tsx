@@ -481,7 +481,7 @@ export function EtfSelector({
               isLight ? 'text-slate-600' : 'text-slate-400'
             }`}
           >
-            <Sparkles className={`h-3.5 w-3.5 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`} />
+            <Sparkles className="h-3.5 w-3.5 ui-text-sage" />
             {tr(lang, '1-Click Portfolios:', 'Готовые портфели:')}
           </span>
 
@@ -523,9 +523,7 @@ export function EtfSelector({
           {/* Compact Active Header + Allocation Progress Bar */}
           <div className="flex flex-wrap items-center justify-between gap-2">
             <div className="flex items-center gap-2">
-              <Scale
-                className={`h-4 w-4 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
-              />
+              <Scale className="h-4 w-4 ui-text-sage" />
               <span
                 className={`text-xs font-bold uppercase tracking-wider ${
                   isLight ? 'text-slate-800' : 'text-slate-200'
@@ -552,9 +550,7 @@ export function EtfSelector({
               <span
                 className={`rounded-full border px-2 py-0.5 font-mono text-[11px] font-bold tabular-nums ${
                   Math.abs(totalWeightPct - 100) < 0.01
-                    ? isLight
-                      ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
-                      : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]'
+                    ? 'ui-soft-pill'
                     : isLight
                       ? 'border-amber-300 bg-amber-50 text-amber-800'
                       : 'border-amber-500/40 bg-amber-500/15 text-amber-300'
@@ -655,9 +651,7 @@ export function EtfSelector({
                           <span
                             className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
                               etf.distributionPolicy === 'Acc'
-                                ? isLight
-                                  ? 'bg-[#2d8a61]/15 text-[#1f6e4b]'
-                                  : 'bg-[#2d8a61]/25 text-[#86d6b0]'
+                                ? 'ui-soft-pill border'
                                 : isLight
                                   ? 'bg-amber-100 text-amber-800'
                                   : 'bg-amber-500/20 text-amber-300'
@@ -690,9 +684,7 @@ export function EtfSelector({
                       <span
                         className={`ml-1.5 text-[10px] font-semibold ${
                           dayChangePct >= 0
-                            ? isLight
-                              ? 'text-[#2d8a61]'
-                              : 'text-[#6ec9a0]'
+                            ? 'ui-text-sage'
                             : isLight
                               ? 'text-rose-600'
                               : 'text-rose-400'
@@ -713,9 +705,7 @@ export function EtfSelector({
                         value={item.weightPct}
                         onChange={(e) => handleWeightChange(item.etfId, Number(e.target.value))}
                         aria-label={`Weight slider for ${etf.ticker}`}
-                        className={`h-1.5 w-20 cursor-pointer sm:w-24 ${
-                          isLight ? 'accent-[#2d8a61]' : 'accent-[#3b9b72]'
-                        }`}
+                        className="h-1.5 w-20 cursor-pointer accent-emerald-500 sm:w-24"
                       />
                     )}
                     <div
@@ -822,9 +812,7 @@ export function EtfSelector({
                   onClick={() => setAddMode('mix')}
                   className={`rounded-lg px-2 py-1 transition ${
                     addMode === 'mix'
-                      ? isLight
-                        ? 'bg-[#2d8a61] text-white shadow-2xs'
-                        : 'bg-[#3b9b72] text-slate-950 shadow-2xs'
+                      ? 'ui-selected-pill shadow-2xs'
                       : isLight
                         ? 'text-slate-600 hover:text-slate-900'
                         : 'text-slate-400 hover:text-slate-200'
@@ -859,8 +847,8 @@ export function EtfSelector({
                 )}
                 className={`min-w-[210px] flex-1 cursor-pointer rounded-xl border px-3 py-2 text-xs font-semibold focus:outline-none ${
                   isLight
-                    ? 'border-slate-300 bg-white text-slate-800 focus:border-[#2d8a61]'
-                    : 'border-slate-700 bg-slate-950 text-slate-100 focus:border-[#3b9b72]'
+                    ? 'border-slate-300 bg-white text-slate-800 focus:border-emerald-500'
+                    : 'border-slate-700 bg-slate-950 text-slate-100 focus:border-emerald-500'
                 }`}
               >
                 <option value="">
@@ -928,19 +916,15 @@ export function EtfSelector({
                   aria-label={tr(lang, 'Add custom ticker', 'Добавить по тикеру')}
                   className={`w-full rounded-xl border py-2 pl-8 pr-2.5 font-mono text-xs focus:outline-none ${
                     isLight
-                      ? 'border-slate-300 bg-white text-slate-900 placeholder:font-sans placeholder:text-slate-400 focus:border-[#2d8a61]'
-                      : 'border-slate-700 bg-slate-950 text-slate-100 placeholder:font-sans placeholder:text-slate-500 focus:border-[#3b9b72]'
+                      ? 'border-slate-300 bg-white text-slate-900 placeholder:font-sans placeholder:text-slate-400 focus:border-emerald-500'
+                      : 'border-slate-700 bg-slate-950 text-slate-100 placeholder:font-sans placeholder:text-slate-500 focus:border-emerald-500'
                   }`}
                 />
               </div>
               <button
                 type="submit"
                 disabled={isFetchingCustomTicker || !tickerInput.trim()}
-                className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl px-3 py-2 text-xs font-bold transition disabled:cursor-not-allowed disabled:opacity-50 ${
-                  isLight
-                    ? 'bg-[#2d8a61] text-white hover:bg-[#236f4d]'
-                    : 'bg-[#3b9b72] text-slate-950 hover:bg-[#4eb386]'
-                }`}
+                className="ui-selected-pill inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-2 text-xs font-bold transition hover:opacity-90 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isFetchingCustomTicker ? (
                   <>
@@ -959,13 +943,7 @@ export function EtfSelector({
 
           {/* Inline Action Confirmation or Error Notice */}
           {actionNotice && (
-            <div
-              className={`mt-2.5 flex items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs font-medium ${
-                isLight
-                  ? 'border-[#2d8a61]/30 bg-[#2d8a61]/10 text-[#1f6e4b]'
-                  : 'border-[#3b9b72]/35 bg-[#2d8a61]/15 text-[#86d6b0]'
-              }`}
-            >
+            <div className="ui-soft-pill mt-2.5 flex items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs font-medium">
               <div className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
                 <span>{actionNotice}</span>

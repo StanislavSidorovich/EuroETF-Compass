@@ -134,11 +134,7 @@ export function ForecastSection({
                     >
                       {formatEur(f.baseGrossEur)}
                     </span>
-                    <span
-                      className={`block font-mono text-[11px] tabular-nums ${
-                        isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'
-                      }`}
-                    >
+                    <span className="block font-mono text-[11px] tabular-nums ui-text-sage">
                       +{formatEur(f.baseGrossProfitEur)} {tr(lang, 'gain', 'доход')}
                     </span>
                   </div>
@@ -307,11 +303,7 @@ export function ForecastSection({
                       }`}
                     >
                       {formatEur(f.baseGrossEur)}
-                      <span
-                        className={`ml-1.5 text-[10px] font-medium ${
-                          isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'
-                        }`}
-                      >
+                      <span className="ml-1.5 text-[10px] font-medium ui-text-sage">
                         (+{formatEur(f.baseGrossProfitEur)})
                       </span>
                     </td>

@@ -202,13 +202,7 @@ export function InvestmentCalculator({
           style={{ borderColor: isLight ? '#e2e8f0' : 'rgba(30, 41, 59, 0.9)' }}
         >
           <div className="flex items-center gap-2.5">
-            <div
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-xl ${
-                isLight
-                  ? 'bg-[#2d8a61]/12 text-[#2d8a61]'
-                  : 'bg-[#3b9b72]/15 text-[#6ec9a0]'
-              }`}
-            >
+            <div className="ui-tint-sage ui-text-sage flex h-9 w-9 shrink-0 items-center justify-center rounded-xl">
               <Calculator className="h-4 w-4" />
             </div>
             <div>
@@ -238,8 +232,8 @@ export function InvestmentCalculator({
             href="#step-2-portfolio"
             className={`inline-flex shrink-0 items-center gap-1 self-start rounded-xl border px-2.5 py-1 text-xs font-semibold transition sm:self-auto ${
               isLight
-                ? 'border-slate-300 bg-slate-50 text-slate-700 hover:border-[#2d8a61] hover:text-[#1f6e4b]'
-                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]/70 hover:text-[#86d6b0]'
+                ? 'border-slate-300 bg-slate-50 text-slate-700 hover:border-emerald-500 hover:text-emerald-700'
+                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-emerald-500/70 hover:text-emerald-300'
             }`}
           >
             {tr(lang, 'Step 2: Portfolio', 'Шаг 2: Портфель')}
@@ -257,11 +251,11 @@ export function InvestmentCalculator({
                 isLight ? 'text-slate-700' : 'text-slate-300'
               }`}
             >
-              <Coins className={`h-3.5 w-3.5 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`} />
+              <Coins className="h-3.5 w-3.5 ui-text-sage" />
               {tr(lang, 'Initial Capital (€)', 'Стартовый капитал (€)')}
             </label>
             <div
-              className={`${inputSurface} mt-1.5 flex items-center rounded-xl px-3 py-1.5 focus-within:border-[#2d8a61]`}
+              className={`${inputSurface} mt-1.5 flex items-center rounded-xl px-3 py-1.5 focus-within:border-emerald-500`}
             >
               <span
                 className={`mr-1.5 font-mono text-sm font-bold ${
@@ -461,11 +455,7 @@ export function InvestmentCalculator({
 
           <a
             href="#step-3-results"
-            className={`inline-flex shrink-0 items-center gap-1 self-start rounded-xl border px-2.5 py-1 text-xs font-semibold transition sm:self-auto ${
-              isLight
-                ? 'border-[#2d8a61]/40 bg-[#2d8a61]/10 text-[#1f6e4b] hover:bg-[#2d8a61]/15'
-                : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0] hover:bg-[#2d8a61]/25'
-            }`}
+            className="ui-soft-pill inline-flex shrink-0 items-center gap-1 self-start rounded-xl border px-2.5 py-1 text-xs font-semibold transition hover:opacity-85 sm:self-auto"
           >
             {tr(lang, 'Step 3: 3Y / 5Y Returns', 'Шаг 3: Доходность 3Y / 5Y')}
             <ArrowDown className="h-3.5 w-3.5" />

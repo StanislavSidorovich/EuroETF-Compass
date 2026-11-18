@@ -81,7 +81,7 @@ export function BacktestResultsSection({
         'Full 60-month cycle (2022 dip + 2023–2026 recovery)',
         'Полный 60-месячный цикл (просадка 2022 + рост 2023–2026)'
       ),
-      accentBorder: isLight ? 'border-[#2d8a61]/40' : 'border-[#3b9b72]/40',
+      accentBorder: 'border-emerald-500/40',
       metrics: calculation.backtest5Y,
     },
   ];
@@ -103,7 +103,7 @@ export function BacktestResultsSection({
           isLight ? 'text-slate-600' : 'text-slate-400'
         }`}
       >
-        <Briefcase className={`h-3 w-3 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`} />
+        <Briefcase className="h-3 w-3 ui-text-sage" />
         {tr(lang, 'Active Mix:', 'В расчёте:')}
       </span>
       {activeCompositionPills.map((pill) => (
@@ -115,11 +115,7 @@ export function BacktestResultsSection({
               : 'border-slate-700/90 bg-slate-900 text-slate-100'
           }`}
         >
-          <span
-            className={`font-mono font-bold ${
-              isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'
-            }`}
-          >
+          <span className="font-mono font-bold ui-text-sage">
             {pill.pct}%
           </span>
           <span className="font-mono font-bold">{pill.ticker}</span>
@@ -135,11 +131,7 @@ export function BacktestResultsSection({
       <div className={`${cardSurface} rounded-2xl p-4`}>
         <div className="flex flex-col gap-2 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-              }`}
-            >
+            <span className="ui-step-badge rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
               {tr(lang, 'Step 3', 'Шаг 3')}
             </span>
             <h3
@@ -147,9 +139,7 @@ export function BacktestResultsSection({
                 isLight ? 'text-slate-900' : 'text-slate-100'
               }`}
             >
-              <TrendingUp
-                className={`h-4 w-4 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
-              />
+              <TrendingUp className="h-4 w-4 ui-text-sage" />
               {tr(
                 lang,
                 'Historical Earnings (3Y & 5Y Ago) & Future Forecast',
@@ -198,13 +188,9 @@ export function BacktestResultsSection({
                 isLight ? 'text-slate-700' : 'text-slate-300'
               }`}
             >
-              <Activity
-                className={`h-3.5 w-3.5 ${isLight ? 'text-[#2d8a61]' : 'text-[#6ec9a0]'}`}
-              />
+              <Activity className="h-3.5 w-3.5 ui-text-sage" />
               5Y CAGR:{' '}
-              <strong
-                className={`font-mono ${isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'}`}
-              >
+              <strong className="font-mono ui-text-sage">
                 {calculation.blendedHistoricalCagr5YPct >= 0 ? '+' : ''}
                 {calculation.blendedHistoricalCagr5YPct.toFixed(2)}%
               </strong>
@@ -321,26 +307,14 @@ export function BacktestResultsSection({
                   </span>
                 </div>
 
-                <div
-                  className={`col-span-2 rounded-xl border p-2.5 sm:col-span-1 ${
-                    isLight
-                      ? 'border-[#2d8a61]/30 bg-[#2d8a61]/10'
-                      : 'border-[#3b9b72]/35 bg-[#2d8a61]/15'
-                  }`}
-                >
-                  <span
-                    className={`block text-[11px] font-medium ${
-                      isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
-                    }`}
-                  >
+                <div className="col-span-2 rounded-xl border border-emerald-500/35 ui-tint-sage p-2.5 sm:col-span-1">
+                  <span className="block text-[11px] font-medium ui-text-sage">
                     {tr(lang, 'Historical Profit', 'Исторический доход')}
                   </span>
                   <span
                     className={`mt-0.5 block font-mono text-sm font-bold tabular-nums sm:text-base ${
                       profitPositive
-                        ? isLight
-                          ? 'text-[#1f6e4b]'
-                          : 'text-[#7fd4ad]'
+                        ? 'ui-text-sage'
                         : isLight
                           ? 'text-rose-700'
                           : 'text-rose-400'
@@ -352,9 +326,7 @@ export function BacktestResultsSection({
                   <span
                     className={`mt-0.5 block font-mono text-[11px] font-semibold tabular-nums ${
                       profitPositive
-                        ? isLight
-                          ? 'text-[#2d8a61]'
-                          : 'text-[#6ec9a0]'
+                        ? 'ui-text-sage'
                         : isLight
                           ? 'text-rose-600'
                           : 'text-rose-400'
@@ -382,9 +354,7 @@ export function BacktestResultsSection({
                   <span
                     className={`font-mono font-bold tabular-nums ${
                       bt.annualizedCagrPct >= 0
-                        ? isLight
-                          ? 'text-[#1f6e4b]'
-                          : 'text-[#7fd4ad]'
+                        ? 'ui-text-sage'
                         : isLight
                           ? 'text-rose-600'
                           : 'text-rose-400'
@@ -442,19 +412,9 @@ export function BacktestResultsSection({
                 </div>
 
                 <div className="mt-2 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <div
-                    className={`rounded-lg border p-2 ${
-                      isLight
-                        ? 'border-[#2d8a61]/30 bg-[#2d8a61]/10'
-                        : 'border-[#3b9b72]/35 bg-[#2d8a61]/12'
-                    }`}
-                  >
+                  <div className="rounded-lg border border-emerald-500/35 ui-tint-sage p-2">
                     <div className="flex items-center justify-between text-[11px]">
-                      <span
-                        className={`font-semibold ${
-                          isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
-                        }`}
-                      >
+                      <span className="font-semibold ui-text-sage">
                         {tr(lang, 'Accumulating (Acc) Net', 'Accumulating (Acc) чистыми')}
                       </span>
                       <span
@@ -512,9 +472,7 @@ export function BacktestResultsSection({
                 <div
                   className={`mt-2 flex items-center justify-between rounded-lg border px-2.5 py-1.5 text-xs font-semibold ${
                     accWins
-                      ? isLight
-                        ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
-                        : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]'
+                      ? 'ui-soft-pill'
                       : distWins
                         ? isLight
                           ? 'border-amber-300 bg-amber-50 text-amber-800'

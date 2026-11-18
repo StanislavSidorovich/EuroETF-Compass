@@ -127,8 +127,8 @@ export function EtfCatalogDrawer({
         aria-expanded={isDrawerOpen}
         className={`flex w-full items-center justify-between gap-3 px-4 py-2.5 text-left text-xs font-bold transition ${
           isLight
-            ? 'text-slate-700 hover:bg-slate-50 hover:text-[#1f6e4b]'
-            : 'text-slate-200 hover:bg-slate-900/80 hover:text-[#86d6b0]'
+            ? 'text-slate-700 hover:bg-slate-50 hover:text-emerald-700'
+            : 'text-slate-200 hover:bg-slate-900/80 hover:text-emerald-300'
         }`}
       >
         <span className="inline-flex items-center gap-2">
@@ -181,14 +181,12 @@ export function EtfCatalogDrawer({
                       setDrawerSearch('');
                       setShowAllInDrawerTab(false);
                     }}
-                    className={`inline-flex items-center gap-1.5 rounded-xl px-2.5 py-1.5 text-xs font-semibold transition ${
+                    className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
                       active
-                        ? isLight
-                          ? 'bg-[#2d8a61] text-white shadow-2xs'
-                          : 'bg-[#3b9b72] text-slate-950 shadow-2xs'
+                        ? 'ui-selected-pill shadow-2xs'
                         : isLight
-                          ? 'border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
-                          : 'border border-slate-700/80 bg-slate-900/70 text-slate-300 hover:text-white'
+                          ? 'border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100'
+                          : 'border-slate-700/80 bg-slate-900/70 text-slate-300 hover:text-white'
                     }`}
                   >
                     <span>{tab.label}</span>
@@ -210,8 +208,8 @@ export function EtfCatalogDrawer({
                 )}
                 className={`w-full rounded-xl border py-1.5 pl-8 pr-7 text-xs focus:outline-none ${
                   isLight
-                    ? 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-[#2d8a61]'
-                    : 'border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-500 focus:border-[#3b9b72]'
+                    ? 'border-slate-300 bg-white text-slate-900 placeholder:text-slate-400 focus:border-emerald-500'
+                    : 'border-slate-700 bg-slate-950 text-slate-100 placeholder:text-slate-500 focus:border-emerald-500'
                 }`}
               />
               {drawerSearch && (
@@ -274,9 +272,7 @@ export function EtfCatalogDrawer({
                       key={etf.id}
                       className={`rounded-xl border p-3 transition ${
                         isInMix
-                          ? isLight
-                            ? 'border-[#2d8a61] bg-[#2d8a61]/5'
-                            : 'border-[#3b9b72]/70 bg-[#2d8a61]/10'
+                          ? 'border-emerald-500/70 ui-tint-sage'
                           : isLight
                             ? 'border-slate-200 bg-slate-50/65 hover:border-slate-300'
                             : 'border-slate-800 bg-slate-950/60 hover:border-slate-700'
@@ -306,9 +302,7 @@ export function EtfCatalogDrawer({
                               <span
                                 className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
                                   etf.distributionPolicy === 'Acc'
-                                    ? isLight
-                                      ? 'bg-[#2d8a61]/15 text-[#1f6e4b]'
-                                      : 'bg-[#2d8a61]/25 text-[#86d6b0]'
+                                    ? 'ui-soft-pill border'
                                     : isLight
                                       ? 'bg-amber-100 text-amber-800'
                                       : 'bg-amber-500/20 text-amber-300'
@@ -354,9 +348,7 @@ export function EtfCatalogDrawer({
                           <div
                             className={`inline-flex items-center gap-0.5 text-[10px] font-semibold ${
                               isPositiveDay
-                                ? isLight
-                                  ? 'text-[#2d8a61]'
-                                  : 'text-[#6ec9a0]'
+                                ? 'ui-text-sage'
                                 : isLight
                                   ? 'text-rose-600'
                                   : 'text-rose-400'
@@ -379,23 +371,13 @@ export function EtfCatalogDrawer({
                           <button
                             type="button"
                             onClick={() => onAddAssetToPortfolio(etf.id, 'mix')}
-                            className={`inline-flex items-center gap-1 rounded-lg px-2.5 py-1 text-[11px] font-bold transition ${
-                              isLight
-                                ? 'bg-[#2d8a61] text-white hover:bg-[#236f4d]'
-                                : 'bg-[#3b9b72] text-slate-950 hover:bg-[#4eb386]'
-                            }`}
+                            className="ui-selected-pill inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-bold transition hover:opacity-90"
                           >
                             <Plus className="h-3 w-3" />
                             {tr(lang, 'Add to Mix', 'В портфель')}
                           </button>
                         ) : (
-                          <span
-                            className={`inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-bold ${
-                              isLight
-                                ? 'border-[#2d8a61]/40 bg-[#2d8a61]/10 text-[#1f6e4b]'
-                                : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]'
-                            }`}
-                          >
+                          <span className="ui-soft-pill inline-flex items-center gap-1 rounded-lg border px-2 py-1 text-[11px] font-bold">
                             <Check className="h-3 w-3" />
                             {activeWeight}%
                           </span>

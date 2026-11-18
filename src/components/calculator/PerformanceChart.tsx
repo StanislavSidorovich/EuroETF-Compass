@@ -491,9 +491,7 @@ export function PerformanceChart({
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <TrendingUp
-                className={`h-4 w-4 ${isLight ? 'text-[#2d8a61]' : 'text-[#5fc497]'}`}
-              />
+              <TrendingUp className="h-4 w-4 ui-text-sage" />
               <h3
                 className={`text-base font-bold sm:text-lg ${
                   isLight ? 'text-slate-900' : 'text-slate-100'
@@ -519,13 +517,7 @@ export function PerformanceChart({
             {/* Active Index / Portfolio Badge + Inline Switcher */}
             {etfs.length > 0 && (
               <div className="mt-2 flex flex-wrap items-center gap-2">
-                <div
-                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold ${
-                    isLight
-                      ? 'border-[#2d8a61]/35 bg-[#eaf5ef] text-[#1b5e3f]'
-                      : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]'
-                  }`}
-                >
+                <div className="ui-soft-pill inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold">
                   <BarChart3 className="h-3.5 w-3.5 shrink-0" />
                   <span>
                     {tr(lang, 'Based on:', 'Основа графика:')} {activeMixLabel}
@@ -549,8 +541,8 @@ export function PerformanceChart({
                     onChange={(e) => handleQuickPortfolioSelect(e.target.value)}
                     className={`max-w-[270px] cursor-pointer rounded-lg border px-2 py-1 text-xs font-medium outline-none transition ${
                       isLight
-                        ? 'border-slate-300 bg-white text-slate-800 hover:border-[#2d8a61] focus:border-[#2d8a61]'
-                        : 'border-slate-700 bg-slate-900 text-slate-100 hover:border-[#3b9b72] focus:border-[#3b9b72]'
+                        ? 'border-slate-300 bg-white text-slate-800 hover:border-emerald-500 focus:border-emerald-500'
+                        : 'border-slate-700 bg-slate-900 text-slate-100 hover:border-emerald-500 focus:border-emerald-500'
                     }`}
                   >
                     {currentSelectValue === 'custom' && (
@@ -588,11 +580,7 @@ export function PerformanceChart({
 
             <p className={`mt-1.5 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
               {tr(lang, 'Annualized CAGR:', 'Среднегодовая доходность (CAGR):')}{' '}
-              <span
-                className={`font-mono font-semibold ${
-                  isLight ? 'text-[#1f6e4b]' : 'text-[#7fd4ad]'
-                }`}
-              >
+              <span className="font-mono font-semibold ui-text-sage">
                 {historicalCagr5YPct >= 0 ? '+' : ''}
                 {historicalCagr5YPct.toFixed(2)}%{tr(lang, '/yr (5Y)', '/год (5Y)')}
               </span>{' '}
@@ -632,14 +620,12 @@ export function PerformanceChart({
                   key={h}
                   type="button"
                   onClick={() => setHorizonYears(h)}
-                  className={`rounded-lg px-2.5 py-1 font-mono text-xs font-bold transition ${
+                  className={`rounded-lg border px-2.5 py-1 font-mono text-xs font-bold transition ${
                     active
-                      ? isLight
-                        ? 'bg-[#2d8a61] text-white shadow-sm'
-                        : 'bg-sky-500 text-white shadow-sm shadow-sky-500/30'
+                      ? 'ui-selected-pill shadow-sm'
                       : isLight
-                        ? 'border border-slate-300 bg-white text-slate-700 hover:border-[#2d8a61]/60 hover:text-[#1f6e4b]'
-                        : 'border border-slate-700 bg-slate-900/80 text-slate-300 hover:border-sky-500/50 hover:text-sky-200'
+                        ? 'border-slate-300 bg-white text-slate-700 hover:border-emerald-500/60 hover:text-emerald-700'
+                        : 'border-slate-700 bg-slate-900/80 text-slate-300 hover:border-emerald-500/60 hover:text-emerald-300'
                   }`}
                 >
                   +{h}Y
@@ -651,13 +637,7 @@ export function PerformanceChart({
 
         {/* Interactive Legend Row */}
         <div className="mt-3.5 flex flex-wrap items-center gap-2 text-xs">
-          <div
-            className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 ${
-              isLight
-                ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
-                : 'border-[#3b9b72]/35 bg-[#2d8a61]/15 text-[#86d6b0]'
-            }`}
-          >
+          <div className="ui-soft-pill inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1">
             <span className="h-0.5 w-4 rounded-full" style={{ backgroundColor: histColor }} />
             {tr(lang, 'Historical Value (-5Y → Today)', 'Историческая стоимость (-5Y → Сегодня)')}
           </div>
@@ -1347,9 +1327,7 @@ export function PerformanceChart({
               <span
                 className={`rounded-full px-2 py-0.5 font-mono text-[10px] font-bold ${
                   hoveredPoint.phase === 'historical'
-                    ? isLight
-                      ? 'bg-[#2d8a61]/15 text-[#1f6e4b]'
-                      : 'bg-[#2d8a61]/25 text-[#86d6b0]'
+                    ? 'ui-soft-pill border'
                     : isLight
                       ? 'bg-sky-100 text-sky-800'
                       : 'bg-sky-500/20 text-sky-300'
@@ -1388,11 +1366,7 @@ export function PerformanceChart({
                     : 0;
                 return (
                   <>
-                    <div
-                      className={`flex items-center justify-between ${
-                        isLight ? 'text-[#1f6e4b]' : 'text-[#86d6b0]'
-                      }`}
-                    >
+                    <div className="flex items-center justify-between ui-text-sage">
                       <span>{tr(lang, 'Value (Acc/Gross):', 'Стоимость (Acc/Gross):')}</span>
                       <span className="font-mono font-bold">{formatEurFull(histVal)}</span>
                     </div>
@@ -1405,9 +1379,7 @@ export function PerformanceChart({
                       <span
                         className={`font-mono font-semibold ${
                           profit >= 0
-                            ? isLight
-                              ? 'text-[#2d8a61]'
-                              : 'text-[#6ec9a0]'
+                            ? 'ui-text-sage'
                             : isLight
                               ? 'text-rose-600'
                               : 'text-rose-400'

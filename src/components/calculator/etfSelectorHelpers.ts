@@ -90,7 +90,7 @@ export const PORTFOLIO_PRESET_SPECS: PortfolioPresetSpec[] = [
 ];
 
 export const SLICE_COLORS = [
-  'bg-[#2d8a61]',
+  'bg-emerald-500',
   'bg-sky-500',
   'bg-violet-500',
   'bg-amber-500',

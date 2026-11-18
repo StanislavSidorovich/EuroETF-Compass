@@ -43,9 +43,7 @@ export function getVerdictBadgeClasses(
   switch (verdict) {
     case 'ACC_STRONGLY_PREFERRED':
     case 'ACC_PREFERRED_WITH_HOLDING_DISCOUNT':
-      return isLight
-        ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b]'
-        : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]';
+      return 'ui-soft-pill';
     case 'DIST_UP_TO_ALLOWANCE_THEN_ACC':
     case 'ACC_PREFERRED_WITH_REPORTING_CHECK':
       return isLight
