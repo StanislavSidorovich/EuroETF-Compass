@@ -83,8 +83,8 @@
 - [x] Header no longer sticky; shorter tab titles; removed redundant "active" badge.
 - [x] Unknown tickers no longer get fabricated price history (error instead); dictionary tickers labelled approximate.
 
-## Phase 8 (Planned — recommended next, by priority)
-- [ ] **Real prices on GitHub Pages:** scheduled GitHub Action fetches Yahoo quotes server-side -> `public/data/quotes.json`; app reads it first. Optional Cloudflare Worker proxy for arbitrary tickers. (All 4 CORS gateways are dead on static hosting as of 2026-11-18.)
+## Phase 8 (In Progress — by priority)
+- [x] **Real prices on GitHub Pages:** `scripts/fetch-quotes.mjs` + `.github/workflows/quotes.yml` (daily cron) write `public/data/quotes.json`; `marketService.ts` reads `./data/quotes.json` first, dead CORS gateways removed, header shows `Data as of <date>` / `Данные на <дата>`. Cloudflare Worker proxy note added to `README.md`.
 - [ ] **Shorter first screen:** collapse the quote banner and "Power of Time" block by default so the calculator is visible immediately.
 - [ ] **Replace `!important` light-theme overrides** (~400 lines in `index.css`) with CSS variables.
 - [ ] **Verify tax data** (PT holding-period discounts, Anexo J, DE Vorabpauschale, NL Box 3) against official sources (AT, BZSt, Belastingdienst) before presenting as guidance.

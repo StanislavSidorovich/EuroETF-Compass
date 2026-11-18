@@ -20,10 +20,15 @@ EuroETF Compass is an interactive European investment education, tax-optimizatio
    - One-click dynamic **ISIN & Ticker Deep-Linker** to **justETF.com**, **extraETF.com**, **Finanzfluss.de**, **Curvo.eu**, **OeKB Profitweb (`my.oekb.at`)**, **TrackingDifferences.com**, and **Yahoo Finance**.
    - Filterable **European Broker Comparison Matrix** (**XTB**, **DEGIRO**, **Trade Republic**, **Interactive Brokers**, **Scalable Capital**, **Lightyear**, **Trading 212**) highlighting local tax support (e.g., XTB Portugal's pre-filled *IRS Anexo J* report and German *Steuereinfach* brokers).
 
-4. **Live Market Feed + 3Y/5Y Historical Revenue Backtest & Future Forecast Calculator:**
-   - **Live Prices:** Connects to the Yahoo Finance v8 Chart API via Vite proxy (`/api/yahoo`) and CORS-safe fallback, plus custom ticker lookup for any European ETF (`.DE`, `.AS`, `.L`, `.PA`) and a verified 5-year offline baseline cache.
+4. **Market Data + 3Y/5Y Historical Revenue Backtest & Future Forecast Calculator:**
+   - **Daily Snapshot Quotes (`public/data/quotes.json`):** A scheduled GitHub Action ([`.github/workflows/quotes.yml`](./.github/workflows/quotes.yml)) runs [`scripts/fetch-quotes.mjs`](./scripts/fetch-quotes.mjs) once daily (Node 20, zero API keys) against the Yahoo Finance v8 Chart API (`range=5y&interval=1mo`) and commits `public/data/quotes.json`. The app reads `./data/quotes.json` first and falls back to its built-in 5-year baseline cache if unavailable. In local Vite dev mode, `/api/yahoo` is also available.
    - **3-Year & 5-Year Historical Backtest:** Shows exact revenue (`€` profit), final portfolio value, CAGR, max drawdown, and net after-tax `Acc` vs `Dist` wealth if you had invested **3 years ago** or **5 years ago**.
    - **Future Forecast Cone (`3Y`, `5Y`, `10Y`, `15Y`, `20Y`):** Projects Conservative (`-1σ`), Base Historical CAGR, Optimistic (`+1σ`), and Post-Tax Net curves with a prominent regulatory notice that *historical investment ratings and past returns are not promised for the future*.
+
+### Optional: Connecting a Cloudflare Worker Proxy for Arbitrary Tickers
+Because public browser CORS gateways are unreliable on static GitHub Pages, arbitrary tickers outside the 35-asset `quotes.json` snapshot (and the built-in dictionary) cannot be queried directly from the browser. If you want on-demand lookup for any arbitrary Yahoo symbol on GitHub Pages later:
+1. Deploy a minimal Cloudflare Worker (free tier) that proxies `GET /?symbol=<TICKER>` to `https://query1.finance.yahoo.com/v8/finance/chart/<TICKER>?range=5y&interval=1mo&includeAdjustedClose=true` with `Access-Control-Allow-Origin: https://<your-username>.github.io` and a `User-Agent` header.
+2. Expose its URL via `VITE_YAHOO_WORKER_URL` (or add it inside `fetchYahooChartViaDevProxy` / a `fetchYahooChartFromWorker` branch in `src/services/marketService.ts`) for `fetchCustomYahooEtf`.
 
 ## Project Memory & Roadmap Files
 

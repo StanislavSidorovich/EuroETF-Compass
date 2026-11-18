@@ -93,7 +93,8 @@ export interface LiveQuoteData {
   currency: string;
   exchangeName: string;
   lastUpdated: string;
-  source: 'live-yahoo-proxy' | 'live-cors-fallback' | 'verified-baseline';
+  source: 'live-yahoo-proxy' | 'snapshot-quotes-json' | 'verified-baseline';
+  snapshotDate?: string;
   history5Y: HistoricalPricePoint[];
 }
 

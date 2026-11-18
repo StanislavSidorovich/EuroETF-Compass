@@ -1,0 +1,41 @@
+name: Update Daily ETF & Stock Quotes
+
+on:
+  schedule:
+    # Run once daily at 21:30 UTC (after both European and US markets close)
+    - cron: '30 21 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fetch-quotes:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Fetch latest 5Y monthly quotes from Yahoo Finance
+        run: node scripts/fetch-quotes.mjs
+
+      - name: Commit updated quotes if changed
+        run: |
+          if [ ! -f public/data/quotes.json ]; then
+            echo "public/data/quotes.json not found, skipping commit."
+            exit 0
+          fi
+          if git diff --quiet -- public/data/quotes.json && [ -z "$(git status --porcelain -- public/data/quotes.json)" ]; then
+            echo "quotes.json unchanged, nothing to commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data/quotes.json
+          git commit -m "chore(data): update daily ETF & stock quotes"
+          git push

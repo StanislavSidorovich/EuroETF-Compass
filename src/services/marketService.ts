@@ -9,9 +9,8 @@ import type {
 } from '../types';
 
 const YAHOO_PROXY_PREFIX = '/api/yahoo/v8/finance/chart/';
-const YAHOO_DIRECT_PREFIX = 'https://query1.finance.yahoo.com/v8/finance/chart/';
 
-const REQUEST_TIMEOUT_MS = 3500;
+const REQUEST_TIMEOUT_MS = 4500;
 const CACHE_TTL_MS = 5 * 60 * 1000;
 
 interface CacheEntry {
@@ -20,6 +19,131 @@ interface CacheEntry {
 }
 
 const quoteCache = new Map<string, CacheEntry>();
+
+interface SnapshotQuoteEntry {
+  ticker?: string;
+  currentPrice?: number;
+  previousClose?: number;
+  dayChangeEur?: number;
+  dayChangePct?: number;
+  currency?: string;
+  exchangeName?: string;
+  lastUpdated?: string;
+  history5Y?: HistoricalPricePoint[];
+}
+
+interface QuotesSnapshotFile {
+  updatedAt?: string | null;
+  updatedDate?: string | null;
+  quotes?: Record<string, SnapshotQuoteEntry>;
+}
+
+let snapshotFileCache: {
+  expiresAt: number;
+  data: QuotesSnapshotFile | null;
+} | null = null;
+
+function getQuotesJsonUrl(): string {
+  const base = import.meta.env.BASE_URL || './';
+  const normalizedBase = base.endsWith('/') ? base : `${base}/`;
+  return `${normalizedBase}data/quotes.json`;
+}
+
+async function loadSnapshotQuotesFile(forceRefresh = false): Promise<QuotesSnapshotFile | null> {
+  if (!forceRefresh && snapshotFileCache && snapshotFileCache.expiresAt > Date.now()) {
+    return snapshotFileCache.data;
+  }
+
+  try {
+    const controller = new AbortController();
+    const timerId = globalThis.setTimeout(() => controller.abort(), REQUEST_TIMEOUT_MS);
+    try {
+      const res = await fetch(getQuotesJsonUrl(), {
+        method: 'GET',
+        headers: { Accept: 'application/json' },
+        cache: forceRefresh ? 'no-cache' : 'default',
+        signal: controller.signal,
+      });
+      if (!res.ok) {
+        snapshotFileCache = { expiresAt: Date.now() + CACHE_TTL_MS, data: null };
+        return null;
+      }
+      const parsed = (await res.json()) as QuotesSnapshotFile;
+      if (!parsed || typeof parsed !== 'object' || !parsed.quotes || typeof parsed.quotes !== 'object') {
+        snapshotFileCache = { expiresAt: Date.now() + CACHE_TTL_MS, data: null };
+        return null;
+      }
+      snapshotFileCache = { expiresAt: Date.now() + CACHE_TTL_MS, data: parsed };
+      return parsed;
+    } finally {
+      globalThis.clearTimeout(timerId);
+    }
+  } catch {
+    snapshotFileCache = { expiresAt: Date.now() + CACHE_TTL_MS, data: null };
+    return null;
+  }
+}
+
+function buildQuoteFromSnapshot(
+  etf: ETFInstrument,
+  entry: SnapshotQuoteEntry,
+  snapshotFile: QuotesSnapshotFile
+): LiveQuoteData | null {
+  if (!isFinitePositive(entry.currentPrice) || !Array.isArray(entry.history5Y) || entry.history5Y.length < 2) {
+    return null;
+  }
+
+  const validHistory = entry.history5Y.filter(
+    (pt) =>
+      pt &&
+      typeof pt.date === 'string' &&
+      typeof pt.timestamp === 'number' &&
+      Number.isFinite(pt.timestamp) &&
+      isFinitePositive(pt.close)
+  );
+  if (validHistory.length < 2) {
+    return null;
+  }
+
+  const currentPrice = Number(entry.currentPrice.toFixed(2));
+  const previousClose = isFinitePositive(entry.previousClose)
+    ? Number(entry.previousClose.toFixed(2))
+    : currentPrice;
+  const dayChangeEur =
+    typeof entry.dayChangeEur === 'number' && Number.isFinite(entry.dayChangeEur)
+      ? Number(entry.dayChangeEur.toFixed(2))
+      : Number((currentPrice - previousClose).toFixed(2));
+  const dayChangePct =
+    typeof entry.dayChangePct === 'number' && Number.isFinite(entry.dayChangePct)
+      ? Number(entry.dayChangePct.toFixed(2))
+      : previousClose > 0
+        ? Number(((dayChangeEur / previousClose) * 100).toFixed(2))
+        : 0;
+
+  const lastUpdated =
+    typeof entry.lastUpdated === 'string' && entry.lastUpdated
+      ? entry.lastUpdated
+      : snapshotFile.updatedAt ?? new Date().toISOString();
+
+  const snapshotDate =
+    snapshotFile.updatedDate ??
+    (typeof snapshotFile.updatedAt === 'string' ? snapshotFile.updatedAt.slice(0, 10) : undefined) ??
+    lastUpdated.slice(0, 10);
+
+  return {
+    ticker: entry.ticker ?? etf.ticker,
+    currentPrice,
+    previousClose,
+    dayChangeEur,
+    dayChangePct,
+    currency: entry.currency ?? etf.currency,
+    exchangeName: entry.exchangeName ?? inferExchangeNameFromTicker(etf.ticker),
+    lastUpdated,
+    snapshotDate,
+    source: 'snapshot-quotes-json',
+    history5Y: validHistory,
+  };
+}
 
 interface YahooChartMeta {
   currency?: string;
@@ -110,54 +234,24 @@ async function parseYahooChartJson(response: Response): Promise<YahooChartResult
   return result;
 }
 
-async function fetchYahooChartWithFallback(
+async function fetchYahooChartViaDevProxy(
   ticker: string,
   timeoutMs = REQUEST_TIMEOUT_MS
 ): Promise<{
   result: YahooChartResult;
-  source: 'live-yahoo-proxy' | 'live-cors-fallback';
+  source: 'live-yahoo-proxy';
 }> {
+  if (!import.meta.env.DEV) {
+    throw new Error('Live Yahoo dev proxy is only available in local Vite dev mode');
+  }
+
   const encodedTicker = encodeURIComponent(ticker);
   const queryParams = 'range=5y&interval=1mo&includeAdjustedClose=true';
   const proxyUrl = `${YAHOO_PROXY_PREFIX}${encodedTicker}?${queryParams}`;
-  const directUrl = `${YAHOO_DIRECT_PREFIX}${encodedTicker}?${queryParams}`;
 
-  const gateways: Array<{
-    url: string;
-    source: 'live-yahoo-proxy' | 'live-cors-fallback';
-  }> = [
-    { url: proxyUrl, source: 'live-yahoo-proxy' },
-    {
-      url: `https://corsproxy.io/?${encodeURIComponent(directUrl)}`,
-      source: 'live-cors-fallback',
-    },
-    {
-      url: `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(directUrl)}`,
-      source: 'live-cors-fallback',
-    },
-    {
-      url: `https://api.allorigins.win/raw?url=${encodeURIComponent(directUrl)}`,
-      source: 'live-cors-fallback',
-    },
-  ];
-
-  let lastError: unknown = new Error('All market gateways unreachable');
-
-  for (const gateway of gateways) {
-    try {
-      const res = await fetchWithTimeout(gateway.url, timeoutMs);
-      const result = await parseYahooChartJson(res);
-      return { result, source: gateway.source };
-    } catch (err) {
-      lastError = err;
-      // If our own dev proxy reports an explicit Yahoo symbol error, skip redundant CORS retries.
-      if (gateway.source === 'live-yahoo-proxy' && err instanceof YahooSymbolError) {
-        throw err;
-      }
-    }
-  }
-
-  throw lastError instanceof Error ? lastError : new Error('Unable to reach market gateways');
+  const res = await fetchWithTimeout(proxyUrl, timeoutMs);
+  const result = await parseYahooChartJson(res);
+  return { result, source: 'live-yahoo-proxy' };
 }
 
 function normalizeCurrencyAndDivisor(rawCurrency?: string): { currency: string; divisor: number } {
@@ -232,7 +326,7 @@ function extractMonthlyHistory(
 function parseResultToLiveQuote(
   requestedTicker: string,
   result: YahooChartResult,
-  source: 'live-yahoo-proxy' | 'live-cors-fallback',
+  source: 'live-yahoo-proxy',
   fallbackHistory: HistoricalPricePoint[]
 ): LiveQuoteData {
   const meta = result.meta ?? {};
@@ -329,10 +423,10 @@ export function buildBaselineQuote(etf: ETFInstrument): LiveQuoteData {
 }
 
 /**
- * Fetches live price and 5-year monthly history for a known ETFInstrument:
- * 1) Vite dev proxy `/api/yahoo`
- * 2) Public CORS fallbacks (`corsproxy.io`, `codetabs`, `allorigins`) for static hosting
- * 3) Bundled verified baseline fallback if offline or rate-limited
+ * Fetches price and 5-year monthly history for a known ETFInstrument:
+ * 1) Static daily snapshot `public/data/quotes.json` (relative path respecting `base: './'`)
+ * 2) Local Vite dev proxy `/api/yahoo` (only in `DEV` mode if missing from snapshot)
+ * 3) Bundled baseline fallback if unavailable
  */
 export async function fetchLiveEtfQuote(
   etf: ETFInstrument,
@@ -344,20 +438,36 @@ export async function fetchLiveEtfQuote(
     return cached.quote;
   }
 
-  const candidateTickers = [etf.ticker, ...(etf.altTickers ?? []).slice(0, 1)];
-  const timeoutMs = options?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+  const snapshotFile = await loadSnapshotQuotesFile(options?.forceRefresh);
+  const snapshotEntry =
+    snapshotFile?.quotes?.[etf.id] ??
+    Object.values(snapshotFile?.quotes ?? {}).find(
+      (q) => q.ticker?.toUpperCase() === etf.ticker.toUpperCase()
+    );
 
-  for (let i = 0; i < candidateTickers.length; i += 1) {
-    const candidate = candidateTickers[i];
-    try {
-      const { result, source } = await fetchYahooChartWithFallback(candidate, timeoutMs);
-      const quote = parseResultToLiveQuote(candidate, result, source, etf.baselineHistory5Y);
-      quoteCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, quote });
-      return quote;
-    } catch (err) {
-      // Only try altTicker when Yahoo specifically reports an unknown/empty primary symbol.
-      if (!(err instanceof YahooSymbolError)) {
-        break;
+  if (snapshotFile && snapshotEntry) {
+    const snapQuote = buildQuoteFromSnapshot(etf, snapshotEntry, snapshotFile);
+    if (snapQuote) {
+      quoteCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, quote: snapQuote });
+      return snapQuote;
+    }
+  }
+
+  if (import.meta.env.DEV) {
+    const candidateTickers = [etf.ticker, ...(etf.altTickers ?? []).slice(0, 1)];
+    const timeoutMs = options?.timeoutMs ?? REQUEST_TIMEOUT_MS;
+
+    for (let i = 0; i < candidateTickers.length; i += 1) {
+      const candidate = candidateTickers[i];
+      try {
+        const { result, source } = await fetchYahooChartViaDevProxy(candidate, timeoutMs);
+        const quote = parseResultToLiveQuote(candidate, result, source, etf.baselineHistory5Y);
+        quoteCache.set(cacheKey, { expiresAt: Date.now() + CACHE_TTL_MS, quote });
+        return quote;
+      } catch (err) {
+        if (!(err instanceof YahooSymbolError)) {
+          break;
+        }
       }
     }
   }
@@ -366,36 +476,39 @@ export async function fetchLiveEtfQuote(
 }
 
 /**
- * Fetches live quotes for a catalog of instruments.
- * By default (`!options?.forceRefresh`), performs live network requests only for the first 6
- * instruments and returns `buildBaselineQuote` for the remainder so initial load stays fast
- * and avoids triggering rate-limiting.
+ * Loads quotes for the entire catalog:
+ * 1) Reads `./data/quotes.json` first (single request, works on GitHub Pages with `base: './'`)
+ * 2) Falls back to `buildBaselineQuote` for any missing ticker or if `quotes.json` fails
  */
 export async function fetchAllLiveEtfQuotes(
   etfs: ETFInstrument[],
   options?: { forceRefresh?: boolean }
 ): Promise<Record<string, LiveQuoteData>> {
   const quotesById: Record<string, LiveQuoteData> = {};
-  const liveTargetCount = options?.forceRefresh ? etfs.length : Math.min(6, etfs.length);
-  const liveTargets = etfs.slice(0, liveTargetCount);
-  const baselineTargets = etfs.slice(liveTargetCount);
+  const snapshotFile = await loadSnapshotQuotesFile(options?.forceRefresh);
+  const snapshotQuotes = snapshotFile?.quotes ?? {};
+  const snapshotByTicker = new Map<string, SnapshotQuoteEntry>();
 
-  for (const etf of baselineTargets) {
-    quotesById[etf.id] = buildBaselineQuote(etf);
+  for (const entry of Object.values(snapshotQuotes)) {
+    if (entry?.ticker) {
+      snapshotByTicker.set(entry.ticker.toUpperCase(), entry);
+    }
   }
 
-  const batchSize = 3;
-  for (let i = 0; i < liveTargets.length; i += batchSize) {
-    const batch = liveTargets.slice(i, i + batchSize);
-    const settled = await Promise.all(
-      batch.map(async (etf) => {
-        const quote = await fetchLiveEtfQuote(etf, options);
-        return { id: etf.id, quote };
-      })
-    );
-    for (const item of settled) {
-      quotesById[item.id] = item.quote;
+  for (const etf of etfs) {
+    const entry = snapshotQuotes[etf.id] ?? snapshotByTicker.get(etf.ticker.toUpperCase());
+    if (snapshotFile && entry) {
+      const snapQuote = buildQuoteFromSnapshot(etf, entry, snapshotFile);
+      if (snapQuote) {
+        quotesById[etf.id] = snapQuote;
+        quoteCache.set(etf.ticker.toUpperCase(), {
+          expiresAt: Date.now() + CACHE_TTL_MS,
+          quote: snapQuote,
+        });
+        continue;
+      }
     }
+    quotesById[etf.id] = buildBaselineQuote(etf);
   }
 
   return quotesById;
@@ -1077,8 +1190,8 @@ function synthesizePlausibleInstrument(cleanTicker: string): {
 /**
  * Looks up any curated or custom ETF/Stock ticker or name query (e.g., `NVDA`, `NVIDIA`,
  * `AAPL`, `AMD`, `VWCE.DE`, `ASML.AS`, `GALP.LS`).
- * Never fails for plausible tickers on static GitHub Pages thanks to multi-CORS fallback
- * + calibrated baseline synthesis.
+ * Uses curated catalog / `quotes.json` first, local Vite dev proxy in dev mode, and
+ * falls back to `POPULAR_FALLBACK_DICTIONARY` (never inventing unknown ticker curves).
  */
 export async function fetchCustomYahooEtf(
   tickerOrQuery: string
@@ -1102,9 +1215,9 @@ export async function fetchCustomYahooEtf(
     );
   }
 
-  // 2) Try live Yahoo Finance via dev proxy + multi-CORS fallback gateways
+  // 2) Try live Yahoo Finance via local Vite dev proxy (only active in DEV mode)
   try {
-    const fetchResult = await fetchYahooChartWithFallback(cleanTicker, REQUEST_TIMEOUT_MS);
+    const fetchResult = await fetchYahooChartViaDevProxy(cleanTicker, REQUEST_TIMEOUT_MS);
     const quote = parseResultToLiveQuote(cleanTicker, fetchResult.result, fetchResult.source, []);
     const meta = fetchResult.result.meta ?? {};
     const fullName = meta.longName ?? meta.shortName ?? cleanTicker;
@@ -1180,4 +1293,5 @@ export async function fetchCustomYahooEtf(
 
 export function clearMarketCache(): void {
   quoteCache.clear();
+  snapshotFileCache = null;
 }

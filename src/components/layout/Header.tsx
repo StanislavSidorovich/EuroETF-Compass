@@ -3,6 +3,7 @@ import {
   Activity,
   BookOpen,
   Calculator,
+  Calendar,
   Check,
   Copy,
   FileCode2,
@@ -82,9 +83,21 @@ export const Header: React.FC<HeaderProps> = ({
   const isLight = theme === 'light';
   const quotes = Object.values(quotesByEtfId);
   const liveProxyCount = quotes.filter((q) => q.source === 'live-yahoo-proxy').length;
-  const liveCorsCount = quotes.filter((q) => q.source === 'live-cors-fallback').length;
-  const liveCount = liveProxyCount + liveCorsCount;
-  const baselineCount = Math.max(0, totalEtfCount - liveCount);
+  const snapshotQuotes = quotes.filter((q) => q.source === 'snapshot-quotes-json');
+  const snapshotCount = snapshotQuotes.length;
+  const baselineCount = Math.max(0, totalEtfCount - liveProxyCount - snapshotCount);
+
+  const rawSnapshotDate =
+    snapshotQuotes.find((q) => Boolean(q.snapshotDate))?.snapshotDate ??
+    snapshotQuotes[0]?.lastUpdated?.slice(0, 10) ??
+    null;
+
+  const formattedSnapshotDate = (() => {
+    if (!rawSnapshotDate) return '';
+    const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(rawSnapshotDate);
+    if (!match) return rawSnapshotDate;
+    return lang === 'ru' ? `${match[3]}.${match[2]}.${match[1]}` : `${match[1]}-${match[2]}-${match[3]}`;
+  })();
 
   const tabs: Array<{
     id: AppTab;
@@ -430,11 +443,15 @@ export const Header: React.FC<HeaderProps> = ({
                 </select>
               </div>
 
-              {/* Live Connection Status Badge */}
+              {/* Market Data Status Badge */}
               <div
-                title={`Live proxy: ${liveProxyCount} | CORS fallback: ${liveCorsCount} | Verified baseline: ${baselineCount}`}
+                title={tr(
+                  lang,
+                  `Dev live proxy: ${liveProxyCount} | Daily snapshot (quotes.json): ${snapshotCount} | Built-in baseline: ${baselineCount}`,
+                  `Dev-прокси: ${liveProxyCount} | Снимок (quotes.json): ${snapshotCount} | Встроенная база: ${baselineCount}`
+                )}
                 className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-medium ${
-                  liveCount > 0
+                  liveProxyCount > 0 || snapshotCount > 0
                     ? isLight
                       ? 'border-[#b7dfd0] bg-[#eaf5ef] text-[#1b5e3f]'
                       : 'border-emerald-500/35 bg-emerald-500/15 text-emerald-200'
@@ -443,7 +460,7 @@ export const Header: React.FC<HeaderProps> = ({
                       : 'border-slate-600 bg-slate-800 text-slate-300'
                 }`}
               >
-                {liveCount > 0 ? (
+                {liveProxyCount > 0 ? (
                   <>
                     <span className="relative flex h-2 w-2">
                       <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#2d8a61] opacity-75" />
@@ -451,7 +468,24 @@ export const Header: React.FC<HeaderProps> = ({
                     </span>
                     <Wifi className="h-3.5 w-3.5" />
                     <span className="tabular-nums">
-                      {liveCount}/{totalEtfCount} Live
+                      {liveProxyCount}/{totalEtfCount} Live
+                    </span>
+                  </>
+                ) : snapshotCount > 0 ? (
+                  <>
+                    <Calendar className="h-3.5 w-3.5 shrink-0" />
+                    <span className="tabular-nums">
+                      {formattedSnapshotDate
+                        ? tr(
+                            lang,
+                            `Data as of ${formattedSnapshotDate}`,
+                            `Данные на ${formattedSnapshotDate}`
+                          )
+                        : tr(
+                            lang,
+                            `${snapshotCount}/${totalEtfCount} Snapshot`,
+                            `${snapshotCount}/${totalEtfCount} Снимок`
+                          )}
                     </span>
                   </>
                 ) : (
@@ -696,8 +730,8 @@ export const Header: React.FC<HeaderProps> = ({
               <p className="text-[11px] leading-relaxed text-slate-400">
                 {tr(
                   lang,
-                  'Live Yahoo Finance ETF feeds work automatically via /api/yahoo in Vite dev mode and fall back gracefully to CORS / verified 5-year baseline series on static GitHub Pages or Vercel deployments.',
-                  'Живые котировки Yahoo Finance работают через /api/yahoo в dev-режиме Vite и автоматически переключаются на CORS-шлюзы / проверенную 5-летнюю базу на GitHub Pages или Vercel.'
+                  'On static GitHub Pages, quotes are updated daily via a scheduled GitHub Action (public/data/quotes.json) with an offline baseline fallback. In local Vite dev mode, /api/yahoo is also available for custom tickers.',
+                  'На статическом GitHub Pages котировки ежедневно обновляет GitHub Action (public/data/quotes.json), а при его отсутствии используется встроенная база. В локальном dev-режиме Vite также доступен прокси /api/yahoo.'
                 )}
               </p>
             </div>

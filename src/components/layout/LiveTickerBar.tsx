@@ -23,6 +23,8 @@ interface LiveTickerBarProps {
 function getCurrencySymbol(currency: string): string {
   if (currency === 'USD') return '$';
   if (currency === 'GBP') return '£';
+  if (currency === 'CHF') return 'CHF ';
+  if (currency === 'DKK') return 'kr ';
   return '€';
 }
 
@@ -70,7 +72,8 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
             const dayEur = quote?.dayChangeEur ?? 0;
             const isUp = dayPct >= 0;
             const currSym = getCurrencySymbol(quote?.currency ?? etf.currency);
-            const isLive = quote && quote.source !== 'verified-baseline';
+            const isLive = quote && quote.source === 'live-yahoo-proxy';
+            const isSnapshot = quote && quote.source === 'snapshot-quotes-json';
 
             return (
               <button
@@ -87,9 +90,15 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
                 <div className="flex items-center gap-1.5">
                   <span
                     className={`h-1.5 w-1.5 rounded-full ${
-                      isLive ? 'bg-[#2d8a61]' : 'bg-slate-400'
+                      isLive || isSnapshot ? 'bg-[#2d8a61]' : 'bg-slate-400'
                     }`}
-                    title={isLive ? `Live (${quote?.source})` : 'Verified 5Y Baseline'}
+                    title={
+                      isLive
+                        ? 'Live (dev proxy)'
+                        : isSnapshot
+                          ? `quotes.json (${quote?.snapshotDate ?? quote?.lastUpdated?.slice(0, 10) ?? ''})`
+                          : 'Built-in baseline (approx.)'
+                    }
                   />
                   <span
                     className={`font-mono text-xs font-bold ${
@@ -168,7 +177,7 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
           <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <form onSubmit={handleSubmitCustom} className="flex flex-1 flex-wrap items-center gap-2">
               <label htmlFor="tickerbar-custom-input" className="text-xs font-medium text-slate-300">
-                Add Live UCITS ETF via Yahoo Finance:
+                {tr(lang, 'Add ETF / Stock by ticker or name:', 'Добавить ETF / акцию по тикеру или названию:')}
               </label>
               <input
                 id="tickerbar-custom-input"
