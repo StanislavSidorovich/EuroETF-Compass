@@ -555,6 +555,9 @@ export function InvestmentCalculator({
         <ForecastSection
           calculation={calculation}
           selectedCountry={selectedCountry}
+          etfs={etfs}
+          allocations={allocations}
+          onChangeAllocations={setAllocations}
           selectedHorizonYears={selectedHorizonYears}
           onSelectHorizonYears={setSelectedHorizonYears}
           theme={theme}

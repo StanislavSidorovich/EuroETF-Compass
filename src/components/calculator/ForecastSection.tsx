@@ -2,7 +2,9 @@ import { Info, ShieldAlert } from 'lucide-react';
 import { tr, useAppPreferences } from '../../utils/i18n';
 import type {
   CountryTaxRule,
+  ETFInstrument,
   FullCalculationOutput,
+  PortfolioAllocationItem,
   ThemeMode,
 } from '../../types';
 import { formatEur } from './calculatorHelpers';
@@ -11,6 +13,9 @@ import { type ForecastHorizonOption, PerformanceChart } from './PerformanceChart
 export interface ForecastSectionProps {
   calculation: FullCalculationOutput;
   selectedCountry: CountryTaxRule;
+  etfs: ETFInstrument[];
+  allocations: PortfolioAllocationItem[];
+  onChangeAllocations: (next: PortfolioAllocationItem[]) => void;
   selectedHorizonYears: ForecastHorizonOption;
   onSelectHorizonYears: (years: ForecastHorizonOption) => void;
   theme?: ThemeMode;
@@ -21,6 +26,9 @@ export interface ForecastSectionProps {
 export function ForecastSection({
   calculation,
   selectedCountry,
+  etfs,
+  allocations,
+  onChangeAllocations,
   selectedHorizonYears,
   onSelectHorizonYears,
   theme,
@@ -35,6 +43,9 @@ export function ForecastSection({
       <PerformanceChart
         timelineSeries={calculation.timelineSeries}
         country={selectedCountry}
+        etfs={etfs}
+        allocations={allocations}
+        onChangeAllocations={onChangeAllocations}
         historicalCagr5YPct={calculation.blendedHistoricalCagr5YPct}
         historicalCagr3YPct={calculation.blendedHistoricalCagr3YPct}
         volatilityPct={calculation.blendedVolatilityPct}

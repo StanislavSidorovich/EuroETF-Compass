@@ -1,13 +1,29 @@
 import { useMemo, useRef, useState } from 'react';
-import { Eye, EyeOff, ShieldAlert, TrendingUp } from 'lucide-react';
+import { BarChart3, Eye, EyeOff, ShieldAlert, TrendingUp } from 'lucide-react';
 import { tr, useAppPreferences } from '../../utils/i18n';
-import type { ChartTimelinePoint, CountryTaxRule, LanguageMode, ThemeMode } from '../../types';
+import type {
+  ChartTimelinePoint,
+  CountryTaxRule,
+  ETFInstrument,
+  LanguageMode,
+  PortfolioAllocationItem,
+  ThemeMode,
+} from '../../types';
+import {
+  PORTFOLIO_PRESET_SPECS,
+  getInstrumentType,
+  isPresetMatch,
+  resolveCandidateAsset,
+} from './etfSelectorHelpers';
 
 export type ForecastHorizonOption = 3 | 5 | 10 | 15 | 20;
 
 export interface PerformanceChartProps {
   timelineSeries: ChartTimelinePoint[];
   country: CountryTaxRule;
+  etfs?: ETFInstrument[];
+  allocations?: PortfolioAllocationItem[];
+  onChangeAllocations?: (next: PortfolioAllocationItem[]) => void;
   historicalCagr5YPct: number;
   historicalCagr3YPct: number;
   volatilityPct: number;
@@ -18,14 +34,62 @@ export interface PerformanceChartProps {
 
 const HORIZON_OPTIONS: ForecastHorizonOption[] = [3, 5, 10, 15, 20];
 
-const SVG_WIDTH = 960;
+const SVG_WIDTH = 1040;
 const SVG_HEIGHT = 435;
-const PAD_LEFT = 76;
-const PAD_RIGHT = 32;
+const PAD_LEFT = 74;
+const PAD_RIGHT = 178;
 const PAD_TOP = 54;
 const PAD_BOTTOM = 44;
 const PLOT_WIDTH = SVG_WIDTH - PAD_LEFT - PAD_RIGHT;
 const PLOT_HEIGHT = SVG_HEIGHT - PAD_TOP - PAD_BOTTOM;
+
+interface RightEndpointLabelInput {
+  id: string;
+  rawY: number;
+  label: string;
+  valueText: string;
+  color: string;
+  bold?: boolean;
+}
+
+interface RightEndpointLabelLayout extends RightEndpointLabelInput {
+  labelY: number;
+}
+
+/**
+ * Resolves vertical overlap among right-edge line labels while keeping each
+ * label inside [minY, maxY] and preserving top-to-bottom ordering.
+ */
+function resolveEndpointLabelPositions(
+  items: RightEndpointLabelInput[],
+  minY: number,
+  maxY: number,
+  minGap = 16
+): RightEndpointLabelLayout[] {
+  if (items.length === 0) return [];
+  const sorted = [...items].sort((a, b) => a.rawY - b.rawY);
+  const ys = sorted.map((item) => Math.max(minY, Math.min(maxY, item.rawY)));
+
+  for (let i = 1; i < ys.length; i += 1) {
+    if (ys[i] - ys[i - 1] < minGap) {
+      ys[i] = ys[i - 1] + minGap;
+    }
+  }
+
+  if (ys[ys.length - 1] > maxY) {
+    ys[ys.length - 1] = maxY;
+    for (let i = ys.length - 2; i >= 0; i -= 1) {
+      if (ys[i + 1] - ys[i] < minGap) {
+        ys[i] = ys[i + 1] - minGap;
+      }
+    }
+  }
+
+  return sorted.map((item, idx) => ({
+    ...item,
+    labelY: Math.max(minY, Math.min(maxY, ys[idx])),
+  }));
+}
 
 function formatEurCompact(val: number): string {
   if (Math.abs(val) >= 1_000_000) {
@@ -91,6 +155,9 @@ function formatYearOffsetLabel(yearOffset: number, lang: LanguageMode): string {
 export function PerformanceChart({
   timelineSeries,
   country,
+  etfs = [],
+  allocations = [],
+  onChangeAllocations,
   historicalCagr5YPct,
   historicalCagr3YPct,
   volatilityPct,
@@ -337,7 +404,85 @@ export function PerformanceChart({
   const hoveredX = hoveredPoint ? xScale(hoveredPoint.yearOffset) : 0;
   const flipTooltipLeft = hoveredX > SVG_WIDTH * 0.56;
 
-  const todayBadgeX = Math.max(PAD_LEFT + 68, Math.min(SVG_WIDTH - PAD_RIGHT - 68, todayX));
+  const todayBadgeX = Math.max(PAD_LEFT + 72, Math.min(SVG_WIDTH - PAD_RIGHT - 72, todayX));
+
+  const etfById = useMemo(() => new Map(etfs.map((e) => [e.id, e])), [etfs]);
+
+  const activeHoldings = useMemo(() => {
+    const valid = allocations
+      .map((a) => {
+        const etf = etfById.get(a.etfId);
+        if (!etf || a.weightPct <= 0) return null;
+        return { etf, rawWeight: a.weightPct };
+      })
+      .filter((x): x is { etf: ETFInstrument; rawWeight: number } => x !== null);
+
+    if (valid.length === 0 && etfs.length > 0) {
+      return [{ etf: etfs[0], pct: 100 }];
+    }
+    const sum = valid.reduce((acc, x) => acc + x.rawWeight, 0) || 1;
+    return valid.map((x) => ({
+      etf: x.etf,
+      pct: Math.round((x.rawWeight / sum) * 100),
+    }));
+  }, [allocations, etfById, etfs]);
+
+  const resolvedPresets = useMemo(
+    () =>
+      PORTFOLIO_PRESET_SPECS.map((spec) => {
+        const items = spec.items
+          .map((item) => {
+            const found = resolveCandidateAsset(etfs, item.candidates);
+            return found ? { etfId: found.id, weightPct: item.weightPct } : null;
+          })
+          .filter((x): x is PortfolioAllocationItem => x !== null);
+        return { spec, items };
+      }).filter((entry) => entry.items.length === entry.spec.items.length),
+    [etfs]
+  );
+
+  const etfOptions = useMemo(
+    () => etfs.filter((e) => getInstrumentType(e) === 'ETF'),
+    [etfs]
+  );
+  const stockOptions = useMemo(
+    () => etfs.filter((e) => getInstrumentType(e) === 'Stock'),
+    [etfs]
+  );
+
+  const currentSelectValue = useMemo(() => {
+    for (const preset of resolvedPresets) {
+      if (isPresetMatch(preset.items, allocations)) {
+        return `preset:${preset.spec.id}`;
+      }
+    }
+    if (activeHoldings.length === 1) {
+      return `asset:${activeHoldings[0].etf.id}`;
+    }
+    return 'custom';
+  }, [resolvedPresets, allocations, activeHoldings]);
+
+  const handleQuickPortfolioSelect = (value: string) => {
+    if (!onChangeAllocations) return;
+    if (value.startsWith('preset:')) {
+      const presetId = value.slice('preset:'.length);
+      const found = resolvedPresets.find((p) => p.spec.id === presetId);
+      if (found) onChangeAllocations(found.items);
+      return;
+    }
+    if (value.startsWith('asset:')) {
+      const etfId = value.slice('asset:'.length);
+      if (etfById.has(etfId)) {
+        onChangeAllocations([{ etfId, weightPct: 100 }]);
+      }
+    }
+  };
+
+  const singleChartEtf = activeHoldings.length === 1 ? activeHoldings[0].etf : null;
+  const activeMixLabel =
+    activeHoldings.length === 1
+      ? `${activeHoldings[0].etf.ticker} · ${activeHoldings[0].etf.shortName}`
+      : activeHoldings.map((h) => `${h.pct}% ${h.etf.ticker}`).join(' + ');
 
   return (
     <div
@@ -380,7 +525,78 @@ export function PerformanceChart({
                 {country.flag} {country.name} · {tr(lang, 'Tax Model', 'Налоги')}
               </span>
             </div>
-            <p className={`mt-1 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+
+            {/* Active Index / Portfolio Badge + Inline Switcher */}
+            {etfs.length > 0 && (
+              <div className="mt-2 flex flex-wrap items-center gap-2">
+                <div
+                  className={`inline-flex items-center gap-1.5 rounded-lg border px-2.5 py-1 text-xs font-semibold ${
+                    isLight
+                      ? 'border-[#2d8a61]/35 bg-[#eaf5ef] text-[#1b5e3f]'
+                      : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0]'
+                  }`}
+                >
+                  <BarChart3 className="h-3.5 w-3.5 shrink-0" />
+                  <span>
+                    {tr(lang, 'Based on:', 'Основа графика:')} {activeMixLabel}
+                  </span>
+                </div>
+
+                {singleChartEtf && (
+                  <span className={`text-[11px] ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                    {tr(lang, 'Index:', 'Индекс:')} {singleChartEtf.indexTracked}
+                  </span>
+                )}
+
+                {onChangeAllocations && (
+                  <select
+                    aria-label={tr(
+                      lang,
+                      'Switch ETF, index, or portfolio preset for chart',
+                      'Выбрать ETF, индекс или готовый портфель для графика'
+                    )}
+                    value={currentSelectValue}
+                    onChange={(e) => handleQuickPortfolioSelect(e.target.value)}
+                    className={`max-w-[270px] cursor-pointer rounded-lg border px-2 py-1 text-xs font-medium outline-none transition ${
+                      isLight
+                        ? 'border-slate-300 bg-white text-slate-800 hover:border-[#2d8a61] focus:border-[#2d8a61]'
+                        : 'border-slate-700 bg-slate-900 text-slate-100 hover:border-[#3b9b72] focus:border-[#3b9b72]'
+                    }`}
+                  >
+                    {currentSelectValue === 'custom' && (
+                      <option value="custom" disabled>
+                        {tr(lang, `Custom mix: ${activeMixLabel}`, `Свой микс: ${activeMixLabel}`)}
+                      </option>
+                    )}
+                    <optgroup label={tr(lang, 'Portfolio Presets', 'Готовые портфели')}>
+                      {resolvedPresets.map((p) => (
+                        <option key={p.spec.id} value={`preset:${p.spec.id}`}>
+                          {tr(lang, p.spec.labelEn, p.spec.labelRu)}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label={tr(lang, 'Single UCITS ETF (by Index)', 'Отдельный UCITS ETF (по индексу)')}>
+                      {etfOptions.map((e) => (
+                        <option key={e.id} value={`asset:${e.id}`}>
+                          {e.ticker} · {e.shortName} ({e.distributionPolicy})
+                        </option>
+                      ))}
+                    </optgroup>
+                    {stockOptions.length > 0 && (
+                      <optgroup label={tr(lang, 'Single Stock', 'Отдельная акция')}>
+                        {stockOptions.map((s) => (
+                          <option key={s.id} value={`asset:${s.id}`}>
+                            {s.ticker} · {s.shortName}
+                          </option>
+                        ))}
+                      </optgroup>
+                    )}
+                  </select>
+                )}
+              </div>
+            )}
+
+            <p className={`mt-1.5 text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
               {tr(lang, 'Annualized CAGR:', 'Среднегодовая доходность (CAGR):')}{' '}
               <span
                 className={`font-mono font-semibold ${
@@ -842,7 +1058,7 @@ export function PerformanceChart({
             </g>
           )}
 
-          {/* Vertical "TODAY (Live Price)" Divider Line */}
+          {/* Vertical "TODAY (Snapshot)" Divider Line */}
           <g>
             <line
               x1={todayX}
@@ -855,9 +1071,9 @@ export function PerformanceChart({
               opacity={0.8}
             />
             <rect
-              x={todayBadgeX - 64}
+              x={todayBadgeX - 68}
               y={8}
-              width={128}
+              width={136}
               height={20}
               rx={999}
               fill={dotInnerFill}
@@ -873,7 +1089,7 @@ export function PerformanceChart({
               fontWeight="700"
               letterSpacing="0.03em"
             >
-              {tr(lang, 'TODAY (Live Price)', 'СЕГОДНЯ (Рынок)')}
+              {tr(lang, 'TODAY (Snapshot)', 'СЕГОДНЯ (Снимок)')}
             </text>
             {todayPoint && (
               <circle
@@ -887,10 +1103,65 @@ export function PerformanceChart({
             )}
           </g>
 
-          {/* End-of-Horizon Endpoints */}
+          {/* End-of-Horizon Endpoints & Direct Right-Edge Labels */}
           {forecastPoints.length > 0 && (() => {
             const endPt = forecastPoints[forecastPoints.length - 1];
             const endX = xScale(endPt.yearOffset);
+
+            const rawLabels: RightEndpointLabelInput[] = [];
+            if (typeof endPt.forecastOptimisticEur === 'number') {
+              rawLabels.push({
+                id: 'opt',
+                rawY: yScale(endPt.forecastOptimisticEur),
+                label: tr(lang, 'Optimistic (+σ)', 'Оптимист. (+σ)'),
+                valueText: formatEurCompact(endPt.forecastOptimisticEur),
+                color: forecastLabelColor,
+              });
+            }
+            if (typeof endPt.forecastBaseEur === 'number') {
+              rawLabels.push({
+                id: 'base',
+                rawY: yScale(endPt.forecastBaseEur),
+                label: tr(lang, 'Base (CAGR)', 'База (CAGR)'),
+                valueText: formatEurCompact(endPt.forecastBaseEur),
+                color: forecastLabelColor,
+                bold: true,
+              });
+            }
+            if (showPostTax && typeof endPt.forecastPostTaxBaseEur === 'number') {
+              rawLabels.push({
+                id: 'net',
+                rawY: yScale(endPt.forecastPostTaxBaseEur),
+                label: tr(lang, `After Tax (${country.code})`, `После налога (${country.code})`),
+                valueText: formatEurCompact(endPt.forecastPostTaxBaseEur),
+                color: postTaxColor,
+                bold: true,
+              });
+            }
+            if (typeof endPt.forecastConservativeEur === 'number') {
+              rawLabels.push({
+                id: 'cons',
+                rawY: yScale(endPt.forecastConservativeEur),
+                label: tr(lang, 'Conserv. (-σ)', 'Консерват. (-σ)'),
+                valueText: formatEurCompact(endPt.forecastConservativeEur),
+                color: axisTextColor,
+              });
+            }
+            rawLabels.push({
+              id: 'invested',
+              rawY: yScale(endPt.totalInvestedEur),
+              label: tr(lang, 'Invested', 'Вложено'),
+              valueText: formatEurCompact(endPt.totalInvestedEur),
+              color: investedColor,
+            });
+
+            const laidOutLabels = resolveEndpointLabelPositions(
+              rawLabels,
+              PAD_TOP + 18,
+              baselineY - 4,
+              16
+            );
+
             return (
               <g>
                 {typeof endPt.forecastOptimisticEur === 'number' && (
@@ -929,6 +1200,38 @@ export function PerformanceChart({
                     fill={axisMutedColor}
                   />
                 )}
+                <circle
+                  cx={endX}
+                  cy={yScale(endPt.totalInvestedEur)}
+                  r={3}
+                  fill={investedColor}
+                />
+
+                {laidOutLabels.map((item) => (
+                  <g key={item.id} pointerEvents="none">
+                    <line
+                      x1={endX + 5}
+                      y1={item.rawY}
+                      x2={endX + 13}
+                      y2={item.labelY}
+                      stroke={item.color}
+                      strokeOpacity={0.55}
+                      strokeWidth={1}
+                    />
+                    <text
+                      x={endX + 16}
+                      y={item.labelY + 3.5}
+                      fill={item.color}
+                      fontSize="10.5"
+                      fontWeight={item.bold ? '700' : '600'}
+                    >
+                      {item.label}:{' '}
+                      <tspan fontFamily="var(--font-mono)" fontWeight="700">
+                        {item.valueText}
+                      </tspan>
+                    </text>
+                  </g>
+                ))}
               </g>
             );
           })()}
