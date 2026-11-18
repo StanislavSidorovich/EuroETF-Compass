@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
+import { Suspense, lazy, useCallback, useEffect, useState } from 'react';
 import { CURATED_ETFS } from './data/etfs';
 import { EUROPEAN_COUNTRY_TAXES } from './data/countryTaxes';
-import { EUROPEAN_BROKERS } from './data/europeanPortals';
 import {
   buildBaselineQuote,
   fetchAllLiveEtfQuotes,
@@ -20,10 +19,18 @@ import { LiveTickerBar } from './components/layout/LiveTickerBar';
 import { InvestorWisdomBanner } from './components/layout/InvestorWisdomBanner';
 import { DisclaimerBanner } from './components/layout/DisclaimerBanner';
 import { InvestmentCalculator } from './components/calculator/InvestmentCalculator';
-import { CountryTaxExplorer } from './components/taxes/CountryTaxExplorer';
-import { EuropeanPortalsHub } from './components/ecosystem/EuropeanPortalsHub';
-import { BrokerComparison } from './components/ecosystem/BrokerComparison';
-import { CarefulInvestingAcademy } from './components/academy/CarefulInvestingAcademy';
+
+const CountryTaxExplorer = lazy(() =>
+  import('./components/taxes/CountryTaxExplorer').then((m) => ({ default: m.CountryTaxExplorer }))
+);
+const EcosystemTab = lazy(() =>
+  import('./components/ecosystem/EcosystemTab').then((m) => ({ default: m.EcosystemTab }))
+);
+const CarefulInvestingAcademy = lazy(() =>
+  import('./components/academy/CarefulInvestingAcademy').then((m) => ({
+    default: m.CarefulInvestingAcademy,
+  }))
+);
 
 function buildInitialQuotes(etfs: ETFInstrument[]): Record<string, LiveQuoteData> {
   const initial: Record<string, LiveQuoteData> = {};
@@ -218,41 +225,46 @@ export function App() {
       <main className="mx-auto w-full max-w-7xl flex-1 space-y-4 px-4 py-4 sm:px-6">
         <DisclaimerBanner />
 
-        {activeTab === 'calculator' && (
-          <InvestmentCalculator
-            etfs={etfs}
-            quotesByEtfId={quotesByEtfId}
-            countries={EUROPEAN_COUNTRY_TAXES}
-            selectedCountryCode={selectedCountryCode}
-            onSelectCountry={setSelectedCountryCode}
-            onAddCustomTicker={handleAddCustomTicker}
-            isFetchingCustomTicker={isFetchingCustomTicker}
-            customTickerError={customTickerError}
-            theme={theme}
-          />
-        )}
+        <Suspense
+          fallback={
+            <div className="fintech-card rounded-2xl p-8 text-center text-sm ui-text-muted">
+              {tr(lang, 'Loading section...', 'Загрузка раздела...')}
+            </div>
+          }
+        >
+          {activeTab === 'calculator' && (
+            <InvestmentCalculator
+              etfs={etfs}
+              quotesByEtfId={quotesByEtfId}
+              countries={EUROPEAN_COUNTRY_TAXES}
+              selectedCountryCode={selectedCountryCode}
+              onSelectCountry={setSelectedCountryCode}
+              onAddCustomTicker={handleAddCustomTicker}
+              isFetchingCustomTicker={isFetchingCustomTicker}
+              customTickerError={customTickerError}
+              theme={theme}
+            />
+          )}
 
-        {activeTab === 'taxes' && (
-          <CountryTaxExplorer
-            countries={EUROPEAN_COUNTRY_TAXES}
-            selectedCountryCode={selectedCountryCode}
-            onSelectCountry={setSelectedCountryCode}
-          />
-        )}
-
-        {activeTab === 'ecosystem' && (
-          <div className="space-y-6">
-            <EuropeanPortalsHub etfs={etfs} selectedCountryCode={selectedCountryCode} />
-            <BrokerComparison
-              brokers={EUROPEAN_BROKERS}
+          {activeTab === 'taxes' && (
+            <CountryTaxExplorer
               countries={EUROPEAN_COUNTRY_TAXES}
               selectedCountryCode={selectedCountryCode}
               onSelectCountry={setSelectedCountryCode}
             />
-          </div>
-        )}
+          )}
 
-        {activeTab === 'academy' && <CarefulInvestingAcademy />}
+          {activeTab === 'ecosystem' && (
+            <EcosystemTab
+              etfs={etfs}
+              countries={EUROPEAN_COUNTRY_TAXES}
+              selectedCountryCode={selectedCountryCode}
+              onSelectCountry={setSelectedCountryCode}
+            />
+          )}
+
+          {activeTab === 'academy' && <CarefulInvestingAcademy />}
+        </Suspense>
       </main>
 
       <footer className="border-t ui-border-subtle ui-surface-deep py-6 text-xs ui-text-muted">

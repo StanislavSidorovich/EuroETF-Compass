@@ -88,4 +88,4 @@
 - [x] **Shorter first screen:** collapse the quote banner (`InvestorWisdomBanner`) and "Power of Time" block by default, persisted in `localStorage`, and tighten vertical spacing so Step 1 (Budget & Country) is visible on `1366x768` without scrolling.
 - [x] **Replace `!important` light-theme overrides** in `src/index.css` with CSS custom properties (`--ui-*` surfaces, borders, text, accents, chart tokens) and semantic `.ui-*` classes; verified before/after screenshots for both themes across all 4 tabs.
 - [ ] **Verify tax data** (PT holding-period discounts, Anexo J, DE Vorabpauschale, NL Box 3) against official sources (AT, BZSt, Belastingdienst) before presenting as guidance.
-- [ ] Split 60-70 KB components (`EtfSelector`, `InvestmentCalculator`, `TaxFilingToolkit`); `React.lazy` tabs to cut the >500 KB bundle.
+- [x] Split 60-70 KB components (`EtfSelector`, `InvestmentCalculator`, `TaxFilingToolkit`) into modular sub-components and helpers; `React.lazy` tabs (`CountryTaxExplorer`, `EcosystemTab`, `CarefulInvestingAcademy`) reduced the main bundle from ~600 kB to `453.42 kB` (`134.95 kB` gzip).
