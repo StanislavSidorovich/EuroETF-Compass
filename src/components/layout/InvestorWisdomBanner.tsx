@@ -168,6 +168,28 @@ function computeFutureValue(monthlyEur: number, years: number, annualRate = 0.08
   return Math.round(monthlyEur * ((Math.pow(1 + r, months) - 1) / r));
 }
 
+const QUOTE_COLLAPSED_KEY = 'euroetf_quote_collapsed_v1';
+const HABITS_COLLAPSED_KEY = 'euroetf_habits_collapsed_v1';
+
+function readCollapsedPref(key: string): boolean {
+  try {
+    const saved = localStorage.getItem(key);
+    if (saved === 'false') return false;
+    if (saved === 'true') return true;
+  } catch {
+    // ignore storage errors
+  }
+  return true;
+}
+
+function writeCollapsedPref(key: string, collapsed: boolean): void {
+  try {
+    localStorage.setItem(key, collapsed ? 'true' : 'false');
+  } catch {
+    // ignore storage errors
+  }
+}
+
 export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
   theme = 'light',
   onNavigateTab,
@@ -175,7 +197,22 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
   const { lang } = useAppPreferences();
   const [quoteIdx, setQuoteIdx] = useState(0);
   const [selectedHabitIdx, setSelectedHabitIdx] = useState(1);
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const [quoteCollapsed, setQuoteCollapsed] = useState<boolean>(() =>
+    readCollapsedPref(QUOTE_COLLAPSED_KEY)
+  );
+  const [habitsCollapsed, setHabitsCollapsed] = useState<boolean>(() =>
+    readCollapsedPref(HABITS_COLLAPSED_KEY)
+  );
+
+  const toggleQuoteCollapsed = (next: boolean) => {
+    setQuoteCollapsed(next);
+    writeCollapsedPref(QUOTE_COLLAPSED_KEY, next);
+  };
+
+  const toggleHabitsCollapsed = (next: boolean) => {
+    setHabitsCollapsed(next);
+    writeCollapsedPref(HABITS_COLLAPSED_KEY, next);
+  };
 
   const currentQuote = INVESTOR_QUOTES[quoteIdx];
   const currentHabit = HABIT_PRESETS[selectedHabitIdx];
@@ -185,6 +222,7 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
   const pureGrowth15Y = total15Y - invested15Y;
 
   const isLight = theme === 'light';
+  const bothCollapsed = quoteCollapsed && habitsCollapsed;
 
   const handlePrev = () => {
     setQuoteIdx((prev) => (prev === 0 ? INVESTOR_QUOTES.length - 1 : prev - 1));
@@ -202,12 +240,12 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
           : 'bg-gradient-to-r from-slate-900/95 via-[#0f241c]/80 to-slate-900/95 border-slate-800/80'
       }`}
     >
-      <div className={`max-w-7xl mx-auto px-4 sm:px-6 ${isCollapsed ? 'py-2' : 'py-3.5'}`}>
-        {isCollapsed ? (
+      <div className={`max-w-7xl mx-auto px-4 sm:px-6 ${bothCollapsed ? 'py-1.5' : 'py-3'}`}>
+        {bothCollapsed ? (
           <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <div className="flex items-center gap-2 min-w-0">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
               <span
-                className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold ${
+                className={`inline-flex shrink-0 items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] font-semibold ${
                   isLight
                     ? 'bg-[#e3f1ea] text-[#1f6e4b] border border-[#b8decb]'
                     : 'bg-emerald-950/80 text-emerald-300 border border-emerald-800/60'
@@ -219,51 +257,79 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
               <span className={`truncate italic ${isLight ? 'text-slate-700' : 'text-slate-300'}`}>
                 {tr(lang, currentQuote.quoteEn, currentQuote.quoteRu)}
               </span>
-              <span className="hidden md:inline-flex shrink-0 items-center gap-1 rounded-md border border-amber-500/30 bg-amber-500/10 px-2 py-0.5 text-[11px] font-semibold text-amber-500">
-                €{currentHabit.monthlyEur}/{tr(lang, 'mo', 'мес')} → €{total15Y.toLocaleString('en-US')} (15Y)
-              </span>
             </div>
 
-            <button
-              type="button"
-              onClick={() => setIsCollapsed(false)}
-              className={`inline-flex shrink-0 items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition ${
-                isLight
-                  ? 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
-                  : 'border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800'
-              }`}
-            >
-              <span>
-                {tr(
-                  lang,
-                  'Show investor wisdom & habit builder',
-                  'Показать мудрость инвесторов и тренажёр привычек'
-                )}
-              </span>
-              <ChevronDown className="w-3.5 h-3.5" />
-            </button>
-          </div>
-        ) : (
-          <div className="space-y-2.5">
-            <div className="flex items-center justify-end">
+            <div className="flex flex-wrap items-center gap-1.5 shrink-0">
               <button
                 type="button"
-                onClick={() => setIsCollapsed(true)}
+                onClick={() => toggleQuoteCollapsed(false)}
                 className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition ${
                   isLight
-                    ? 'border-slate-300 bg-white/80 text-slate-600 hover:bg-white'
-                    : 'border-slate-700/80 bg-slate-900/70 text-slate-300 hover:bg-slate-800'
+                    ? 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                    : 'border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800'
                 }`}
               >
-                <span>{tr(lang, 'Collapse quotes', 'Свернуть цитаты')}</span>
-                <ChevronUp className="w-3.5 h-3.5" />
+                <Quote className="w-3 h-3 text-[#2d8a61]" />
+                <span>{tr(lang, 'Quotes', 'Цитата')}</span>
+                <ChevronDown className="w-3.5 h-3.5" />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => toggleHabitsCollapsed(false)}
+                className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition ${
+                  isLight
+                    ? 'border-amber-300/80 bg-amber-50/90 text-amber-900 hover:bg-amber-100/80'
+                    : 'border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20'
+                }`}
+              >
+                <Clock className="w-3 h-3" />
+                <span>
+                  {tr(lang, 'Power of Time', 'Сила времени')}: €{currentHabit.monthlyEur}/
+                  {tr(lang, 'mo', 'мес')} → €{total15Y.toLocaleString('en-US')}
+                </span>
+                <ChevronDown className="w-3.5 h-3.5" />
               </button>
             </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
-              {/* Left 7 Cols: Rotating Investor Wisdom & Practical Meaning */}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-3 items-stretch">
+            {/* Left: Rotating Investor Wisdom & Practical Meaning */}
+            {quoteCollapsed ? (
               <div
-                className={`lg:col-span-7 rounded-xl p-4 border flex flex-col justify-between transition-all ${
+                className={`lg:col-span-12 rounded-xl px-3 py-2 border flex flex-wrap items-center justify-between gap-2 text-xs ${
+                  isLight
+                    ? 'bg-white/95 border-slate-200/90 shadow-xs'
+                    : 'bg-slate-900/90 border-slate-800/90'
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <Quote className="w-3.5 h-3.5 text-[#2d8a61] shrink-0" />
+                  <span className="font-semibold text-[#2d8a61] shrink-0">
+                    {tr(lang, currentQuote.authorEn, currentQuote.authorRu)}:
+                  </span>
+                  <span className={`truncate italic ${isLight ? 'text-slate-700' : 'text-slate-300'}`}>
+                    {tr(lang, currentQuote.quoteEn, currentQuote.quoteRu)}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleQuoteCollapsed(false)}
+                  className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition ${
+                    isLight
+                      ? 'border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
+                      : 'border-slate-700 bg-slate-900 text-slate-200 hover:bg-slate-800'
+                  }`}
+                >
+                  <span>{tr(lang, 'Show quote', 'Показать цитату')}</span>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div
+                className={`${
+                  habitsCollapsed ? 'lg:col-span-12' : 'lg:col-span-7'
+                } rounded-xl p-4 border flex flex-col justify-between transition-all ${
                   isLight
                     ? 'bg-white/95 border-slate-200/90 shadow-xs'
                     : 'bg-slate-900/90 border-slate-800/90'
@@ -320,6 +386,19 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
                         <span>{tr(lang, 'Next quote', 'Ещё мысль')}</span>
                         <ChevronRight className="w-3.5 h-3.5" />
                       </button>
+                      <button
+                        type="button"
+                        onClick={() => toggleQuoteCollapsed(true)}
+                        title={tr(lang, 'Collapse quote', 'Свернуть цитату')}
+                        className={`inline-flex items-center gap-1 px-2 py-1 rounded-lg border text-[11px] font-semibold transition-colors ${
+                          isLight
+                            ? 'border-slate-200 hover:bg-slate-100 text-slate-600'
+                            : 'border-slate-700 hover:bg-slate-800 text-slate-300'
+                        }`}
+                      >
+                        <span className="hidden sm:inline">{tr(lang, 'Hide', 'Свернуть')}</span>
+                        <ChevronUp className="w-3.5 h-3.5" />
+                      </button>
                     </div>
                   </div>
 
@@ -362,10 +441,45 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
                   </div>
                 </div>
               </div>
+            )}
 
-              {/* Right 5 Cols: Interactive "Habit to Capital" Engagement Micro-Widget */}
+            {/* Right: Interactive "Habit to Capital" Engagement Micro-Widget */}
+            {habitsCollapsed ? (
               <div
-                className={`lg:col-span-5 rounded-xl p-4 border flex flex-col justify-between ${
+                className={`lg:col-span-12 rounded-xl px-3 py-2 border flex flex-wrap items-center justify-between gap-2 text-xs ${
+                  isLight
+                    ? 'bg-white/95 border-slate-200/90 shadow-xs'
+                    : 'bg-slate-900/90 border-slate-800/90'
+                }`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <Clock className="w-3.5 h-3.5 text-[#2d8a61] shrink-0" />
+                  <span className="font-semibold text-[#2d8a61]">
+                    {tr(lang, 'Power of Time & Habits', 'Сила времени и дисциплины')}:
+                  </span>
+                  <span className={isLight ? 'text-slate-700' : 'text-slate-300'}>
+                    €{currentHabit.monthlyEur}/{tr(lang, 'mo', 'мес')} → €
+                    {total15Y.toLocaleString('en-US')} (15Y)
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => toggleHabitsCollapsed(false)}
+                  className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-[11px] font-semibold transition ${
+                    isLight
+                      ? 'border-amber-300/80 bg-amber-50/90 text-amber-900 hover:bg-amber-100/80'
+                      : 'border-amber-500/30 bg-amber-500/10 text-amber-300 hover:bg-amber-500/20'
+                  }`}
+                >
+                  <span>{tr(lang, 'Show calculator', 'Развернуть')}</span>
+                  <ChevronDown className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            ) : (
+              <div
+                className={`${
+                  quoteCollapsed ? 'lg:col-span-12' : 'lg:col-span-5'
+                } rounded-xl p-4 border flex flex-col justify-between ${
                   isLight
                     ? 'bg-white/95 border-slate-200/90 shadow-xs'
                     : 'bg-slate-900/90 border-slate-800/90'
@@ -377,9 +491,24 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
                       <Clock className="w-3.5 h-3.5" />
                       {tr(lang, 'Power of Time & Habits', 'Сила времени и дисциплины')}
                     </span>
-                    <span className="text-[11px] text-slate-400">
-                      {tr(lang, '15-Year Horizon (~8.8% CAGR)', 'Горизонт 15 лет (при ~8.8% CAGR)')}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[11px] text-slate-400">
+                        {tr(lang, '15Y (~8.8% CAGR)', '15 лет (~8.8% CAGR)')}
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => toggleHabitsCollapsed(true)}
+                        title={tr(lang, 'Collapse block', 'Свернуть блок')}
+                        className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-lg border text-[11px] font-semibold transition-colors ${
+                          isLight
+                            ? 'border-slate-200 hover:bg-slate-100 text-slate-600'
+                            : 'border-slate-700 hover:bg-slate-800 text-slate-300'
+                        }`}
+                      >
+                        <span className="hidden sm:inline">{tr(lang, 'Hide', 'Свернуть')}</span>
+                        <ChevronUp className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
 
                   {/* 3 Habit Selector Buttons */}
@@ -478,7 +607,7 @@ export const InvestorWisdomBanner: React.FC<InvestorWisdomBannerProps> = ({
                   )}
                 </div>
               </div>
-            </div>
+            )}
           </div>
         )}
       </div>

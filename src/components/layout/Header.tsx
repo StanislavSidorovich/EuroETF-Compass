@@ -174,7 +174,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {/* Top Brand + Controls Row */}
           <div
-            className={`flex flex-wrap items-center justify-between gap-3 border-b py-2.5 ${
+            className={`flex flex-wrap items-center justify-between gap-3 border-b py-2 ${
               isLight ? 'border-slate-200/80' : 'border-slate-700/70'
             }`}
           >
@@ -536,7 +536,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* 4 Distinct Beginner-Friendly Navigation Feature Cards */}
           <nav
             aria-label={tr(lang, 'Primary sections', 'Основные разделы')}
-            className="grid grid-cols-2 gap-2.5 py-2.5 lg:grid-cols-4"
+            className="grid grid-cols-2 gap-2 py-2 lg:grid-cols-4"
           >
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -546,7 +546,7 @@ export const Header: React.FC<HeaderProps> = ({
                   type="button"
                   onClick={() => onSelectTab(tab.id)}
                   aria-current={isActive ? 'page' : undefined}
-                  className={`group relative flex flex-col justify-between rounded-xl border p-2.5 text-left transition-all sm:p-3 ${
+                  className={`group relative flex flex-col justify-between rounded-xl border p-2 text-left transition-all sm:p-2.5 ${
                     isActive
                       ? isLight
                         ? 'border-[#2d8a61] bg-[#eaf5ef] shadow-xs ring-1 ring-[#2d8a61]/30'

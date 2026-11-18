@@ -215,7 +215,7 @@ export function App() {
 
       <InvestorWisdomBanner theme={theme} onNavigateTab={setActiveTab} />
 
-      <main className="mx-auto w-full max-w-7xl flex-1 space-y-6 px-4 py-6 sm:px-6">
+      <main className="mx-auto w-full max-w-7xl flex-1 space-y-4 px-4 py-4 sm:px-6">
         <DisclaimerBanner />
 
         {activeTab === 'calculator' && (
