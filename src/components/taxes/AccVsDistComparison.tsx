@@ -221,22 +221,22 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
 
   return (
     <div className="fintech-card rounded-2xl p-5">
-      <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 border-b ui-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <Scale className="h-5 w-5 text-emerald-400" />
-            <h3 className="text-base font-bold text-white sm:text-lg">
+            <Scale className="h-5 w-5 ui-text-sage" />
+            <h3 className="text-base font-bold ui-text-primary sm:text-lg">
               {country.flag} Accumulating (Acc) vs. Distributing (Dist) Tax Simulator —{' '}
               {country.name}
             </h3>
           </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs ui-text-muted">
             Interactive compounding &amp; tax-drag illustration (assumes 7.5%/yr gross return: 5.65%
             price growth + 1.85% dividend yield).
           </p>
         </div>
 
-        <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-xs font-semibold text-emerald-300">
+        <span className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-full border border-emerald-500/35 bg-emerald-500/10 px-3 py-1 text-xs font-semibold ui-text-sage">
           <Award className="h-3.5 w-3.5" />
           {country.verdict === 'DIST_UP_TO_ALLOWANCE_THEN_ACC'
             ? 'Hybrid: Dist up to €1k, then Acc'
@@ -247,14 +247,14 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
       </div>
 
       {/* Interactive Controls */}
-      <div className="mt-4 grid gap-4 rounded-xl border border-slate-800/90 bg-slate-950/70 p-4 md:grid-cols-2">
+      <div className="mt-4 grid gap-4 rounded-xl border ui-border-subtle ui-surface-deep p-4 md:grid-cols-2">
         <div>
           <div className="mb-2 flex items-center justify-between text-xs">
-            <span className="inline-flex items-center gap-1.5 font-semibold text-slate-300">
-              <SlidersHorizontal className="h-3.5 w-3.5 text-cyan-400" />
+            <span className="inline-flex items-center gap-1.5 font-semibold ui-text-body">
+              <SlidersHorizontal className="h-3.5 w-3.5 ui-text-cool" />
               Simulated Portfolio Size
             </span>
-            <span className="font-mono text-sm font-bold tabular-nums text-white">
+            <span className="font-mono text-sm font-bold tabular-nums ui-text-primary">
               {formatEur(portfolioSize)}
             </span>
           </div>
@@ -266,9 +266,9 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
             step={5000}
             value={portfolioSize}
             onChange={(e) => setPortfolioSize(Number(e.target.value))}
-            className="h-2 w-full cursor-pointer appearance-none rounded-lg bg-slate-800 accent-emerald-400"
+            className="h-2 w-full cursor-pointer appearance-none rounded-lg ui-surface-elevated accent-emerald-400"
           />
-          <div className="mt-1.5 flex justify-between font-mono text-[10px] text-slate-500">
+          <div className="mt-1.5 flex justify-between font-mono text-[10px] ui-text-subtle">
             <span>€10,000</span>
             <span>€25,000</span>
             <span>€50,000</span>
@@ -277,7 +277,7 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
         </div>
 
         <div>
-          <span className="mb-2 block text-xs font-semibold text-slate-300">
+          <span className="mb-2 block text-xs font-semibold ui-text-body">
             Holding Horizon (Tests Holding-Period Discounts &amp; Compounding)
           </span>
           <div className="flex flex-wrap gap-1.5">
@@ -290,8 +290,8 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
                   onClick={() => setHoldingYears(yr)}
                   className={`rounded-xl px-3 py-1.5 font-mono text-xs font-bold transition ${
                     active
-                      ? 'bg-emerald-500 text-slate-950 shadow-md shadow-emerald-500/20'
-                      : 'border border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500 hover:text-white'
+                      ? 'bg-emerald-500 text-white shadow-md shadow-emerald-500/20'
+                      : 'border ui-border-default ui-surface-card ui-text-body ui-hover-elevated hover:text-[var(--ui-text-primary)]'
                   }`}
                 >
                   {yr}Y
@@ -299,46 +299,46 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
               );
             })}
           </div>
-          <p className="mt-2 text-[11px] text-cyan-300/90">{sim.countrySpecificMechanism}</p>
+          <p className="mt-2 text-[11px] ui-text-cool">{sim.countrySpecificMechanism}</p>
         </div>
       </div>
 
       {/* Visual Bar Comparison */}
-      <div className="mt-4 space-y-3 rounded-xl border border-slate-800 bg-slate-900/60 p-4">
+      <div className="mt-4 space-y-3 rounded-xl border ui-border-subtle ui-surface-card p-4">
         {[
           {
             label: 'Gross Portfolio (0% Tax Theoretical Benchmark)',
             value: sim.grossFinalEur,
             taxText: '€0 tax',
-            barClass: 'bg-slate-600',
-            textClass: 'text-slate-300',
+            barClass: 'bg-slate-500',
+            textClass: 'ui-text-body',
           },
           {
             label: `Accumulating (Acc) — Net After ${country.name} Tax`,
             value: sim.netAccEur,
             taxText: `Est. tax: ${formatEur(sim.taxPaidAccEur)}`,
             barClass: 'bg-gradient-to-r from-emerald-500 to-teal-400',
-            textClass: 'text-emerald-300',
+            textClass: 'ui-text-sage',
           },
           {
             label: `Distributing (Dist) — Net After ${country.name} Tax (Reinvested)`,
             value: sim.netDistEur,
             taxText: `Est. tax: ${formatEur(sim.taxPaidDistEur)}`,
-            barClass: 'bg-gradient-to-r from-amber-500 to-orange-400',
-            textClass: 'text-amber-300',
+            barClass: 'bg-gradient-to-r from-amber-500 to-amber-400',
+            textClass: 'ui-text-sand',
           },
         ].map((row) => {
           const widthPct = Math.max(8, Math.round((row.value / maxBar) * 100));
           return (
             <div key={row.label} className="space-y-1">
               <div className="flex flex-wrap items-center justify-between gap-2 text-xs">
-                <span className="font-medium text-slate-200">{row.label}</span>
+                <span className="font-medium ui-text-secondary">{row.label}</span>
                 <div className="flex items-center gap-3 font-mono tabular-nums">
-                  <span className="text-[11px] text-slate-400">{row.taxText}</span>
+                  <span className="text-[11px] ui-text-muted">{row.taxText}</span>
                   <span className={`font-bold ${row.textClass}`}>{formatEur(row.value)}</span>
                 </div>
               </div>
-              <div className="h-3 w-full overflow-hidden rounded-full bg-slate-950">
+              <div className="h-3 w-full overflow-hidden rounded-full ui-surface-elevated">
                 <div
                   className={`h-full rounded-full transition-all duration-300 ${row.barClass}`}
                   style={{ width: `${widthPct}%` }}
@@ -348,27 +348,27 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
           );
         })}
 
-        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t border-slate-800/80 pt-3 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-300">
-            <TrendingUp className="h-4 w-4 text-emerald-400" />
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2 border-t ui-border-subtle pt-3 text-xs">
+          <div className="flex items-center gap-1.5 ui-text-body">
+            <TrendingUp className="h-4 w-4 ui-text-sage" />
             <span>
-              Applied Exit Tax Rate at <strong className="text-white">{holdingYears}Y</strong>:{' '}
-              <strong className="font-mono text-emerald-300">
+              Applied Exit Tax Rate at <strong className="ui-text-primary">{holdingYears}Y</strong>:{' '}
+              <strong className="font-mono ui-text-sage">
                 {sim.appliedExitRatePct.toFixed(2)}%
               </strong>
             </span>
           </div>
           <div className="font-mono text-xs font-bold tabular-nums">
             {sim.accAdvantageEur > 0 ? (
-              <span className="text-emerald-300">
+              <span className="ui-text-sage">
                 Acc Extra Net Wealth Kept: +{formatEur(sim.accAdvantageEur)}
               </span>
             ) : sim.accAdvantageEur < 0 ? (
-              <span className="text-amber-300">
+              <span className="ui-text-sand">
                 Dist Allowance Edge: +{formatEur(Math.abs(sim.accAdvantageEur))}
               </span>
             ) : (
-              <span className="text-cyan-300">
+              <span className="ui-text-cool">
                 Tax Parity (Acc preferred for €0 fee auto-reinvestment)
               </span>
             )}
@@ -378,39 +378,39 @@ export const AccVsDistComparison: React.FC<AccVsDistComparisonProps> = ({ countr
 
       {/* Side-by-Side Statutory Rules */}
       <div className="mt-4 grid gap-4 md:grid-cols-2">
-        <div className="rounded-xl border border-emerald-500/30 bg-emerald-950/15 p-4">
+        <div className="rounded-xl border border-emerald-500/30 ui-tint-sage p-4">
           <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-emerald-300">
+            <span className="inline-flex items-center gap-1.5 text-sm font-bold ui-text-sage">
               <PiggyBank className="h-4 w-4" />
               Accumulating (Acc) Rule in {country.name}
             </span>
-            <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold uppercase text-emerald-300">
+            <span className="rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold uppercase ui-text-sage">
               Auto-Reinvested
             </span>
           </div>
-          <p className="mt-2.5 text-xs leading-relaxed text-slate-200">
+          <p className="mt-2.5 text-xs leading-relaxed ui-text-secondary">
             {country.accumulatingTaxRule}
           </p>
-          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-medium text-emerald-300/90">
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-medium ui-text-sage">
             <CheckCircle2 className="h-3.5 w-3.5 shrink-0" />
             <span>Zero broker commission or bid-ask spread on dividend reinvestment</span>
           </div>
         </div>
 
-        <div className="rounded-xl border border-amber-500/30 bg-amber-950/15 p-4">
+        <div className="rounded-xl border border-amber-500/30 ui-tint-sand p-4">
           <div className="flex items-center justify-between">
-            <span className="inline-flex items-center gap-1.5 text-sm font-bold text-amber-300">
+            <span className="inline-flex items-center gap-1.5 text-sm font-bold ui-text-sand">
               <Coins className="h-4 w-4" />
               Distributing (Dist) Rule in {country.name}
             </span>
-            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold uppercase text-amber-300">
+            <span className="rounded-full bg-amber-500/20 px-2 py-0.5 text-[10px] font-bold uppercase ui-text-sand">
               Cash Payouts
             </span>
           </div>
-          <p className="mt-2.5 text-xs leading-relaxed text-slate-200">
+          <p className="mt-2.5 text-xs leading-relaxed ui-text-secondary">
             {country.distributingTaxRule}
           </p>
-          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-medium text-amber-300/90">
+          <div className="mt-3 flex items-center gap-1.5 text-[11px] font-medium ui-text-sand">
             <ArrowRight className="h-3.5 w-3.5 shrink-0" />
             <span>
               Dividends paid as cash; manual reinvestment required outside automated DRIP

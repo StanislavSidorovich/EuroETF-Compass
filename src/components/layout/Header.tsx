@@ -621,21 +621,21 @@ export const Header: React.FC<HeaderProps> = ({
           aria-modal="true"
           aria-labelledby="github-ready-title"
         >
-          <div className="w-full max-w-xl rounded-2xl border border-slate-700/80 bg-slate-900 p-5 shadow-2xl">
-            <div className="flex items-start justify-between gap-3 border-b border-slate-800 pb-3.5">
+          <div className="w-full max-w-xl rounded-2xl border ui-border-default ui-surface-card-solid p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-3 border-b ui-border-subtle pb-3.5">
               <div className="flex items-center gap-2.5">
-                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/15 text-purple-300 ring-1 ring-purple-500/30">
+                <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-purple-500/15 ui-text-cool ring-1 ring-purple-500/30">
                   <GitBranch className="h-5 w-5" />
                 </div>
                 <div>
-                  <h2 id="github-ready-title" className="text-base font-bold text-white">
+                  <h2 id="github-ready-title" className="text-base font-bold ui-text-primary">
                     {tr(
                       lang,
                       'GitHub-Ready Repository & Architecture Docs',
                       'Репозиторий для GitHub и Архитектура проекта'
                     )}
                   </h2>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs ui-text-muted">
                     Vite + React 18 + TypeScript + Tailwind CSS (Static &amp; Vercel/Pages ready)
                   </p>
                 </div>
@@ -644,15 +644,15 @@ export const Header: React.FC<HeaderProps> = ({
                 type="button"
                 onClick={() => setShowGithubModal(false)}
                 aria-label={tr(lang, 'Close modal', 'Закрыть окно')}
-                className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                className="rounded-lg p-1.5 ui-text-muted transition ui-hover-elevated"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
-            <div className="mt-4 space-y-4 text-xs text-slate-300">
-              <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-3.5">
-                <div className="mb-2 flex items-center gap-1.5 font-semibold text-emerald-300">
+            <div className="mt-4 space-y-4 text-xs ui-text-body">
+              <div className="rounded-xl border ui-border-subtle ui-surface-deep p-3.5">
+                <div className="mb-2 flex items-center gap-1.5 font-semibold ui-text-sage">
                   <FileCode2 className="h-4 w-4" />
                   <span>
                     {tr(
@@ -662,9 +662,9 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </span>
                 </div>
-                <ul className="space-y-1.5 text-slate-300">
+                <ul className="space-y-1.5 ui-text-body">
                   <li>
-                    <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-emerald-300">
+                    <code className="rounded ui-surface-elevated px-1.5 py-0.5 font-mono ui-text-sage">
                       GEMINI.md
                     </code>{' '}
                     —{' '}
@@ -675,7 +675,7 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </li>
                   <li>
-                    <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-cyan-300">
+                    <code className="rounded ui-surface-elevated px-1.5 py-0.5 font-mono ui-text-cool">
                       MEMORY.md
                     </code>{' '}
                     —{' '}
@@ -686,7 +686,7 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </li>
                   <li>
-                    <code className="rounded bg-slate-800 px-1.5 py-0.5 font-mono text-purple-300">
+                    <code className="rounded ui-surface-elevated px-1.5 py-0.5 font-mono ui-text-cool">
                       ROADMAP.md
                     </code>{' '}
                     —{' '}
@@ -701,18 +701,18 @@ export const Header: React.FC<HeaderProps> = ({
 
               <div>
                 <div className="mb-1.5 flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 font-semibold text-slate-200">
-                    <Activity className="h-3.5 w-3.5 text-cyan-400" />
+                  <span className="flex items-center gap-1.5 font-semibold ui-text-secondary">
+                    <Activity className="h-3.5 w-3.5 ui-text-cool" />
                     {tr(lang, 'Push to Your GitHub Repository', 'Отправка в ваш GitHub репозиторий')}
                   </span>
                   <button
                     type="button"
                     onClick={handleCopyGit}
-                    className="inline-flex items-center gap-1 rounded-lg border border-slate-700 bg-slate-800 px-2 py-1 text-[11px] font-medium text-slate-200 transition hover:bg-slate-700"
+                    className="inline-flex items-center gap-1 rounded-lg border ui-border-default ui-surface-elevated px-2 py-1 text-[11px] font-medium ui-text-secondary transition ui-hover-elevated"
                   >
                     {copiedGit ? (
                       <>
-                        <Check className="h-3 w-3 text-emerald-400" />{' '}
+                        <Check className="h-3 w-3 ui-text-sage" />{' '}
                         {tr(lang, 'Copied', 'Скопировано')}
                       </>
                     ) : (
@@ -722,12 +722,12 @@ export const Header: React.FC<HeaderProps> = ({
                     )}
                   </button>
                 </div>
-                <pre className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-cyan-200">
+                <pre className="overflow-x-auto rounded-xl border ui-border-subtle ui-surface-deep-solid p-3 font-mono text-[11px] leading-relaxed ui-text-cool">
                   {GIT_PUSH_SNIPPET}
                 </pre>
               </div>
 
-              <p className="text-[11px] leading-relaxed text-slate-400">
+              <p className="text-[11px] leading-relaxed ui-text-muted">
                 {tr(
                   lang,
                   'On static GitHub Pages, quotes are updated daily via a scheduled GitHub Action (public/data/quotes.json) with an offline baseline fallback. In local Vite dev mode, /api/yahoo is also available for custom tickers.',

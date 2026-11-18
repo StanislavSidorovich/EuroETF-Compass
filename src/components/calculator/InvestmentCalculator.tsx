@@ -344,7 +344,7 @@ export function InvestmentCalculator({
             </span>
           </a>
 
-          <span className="text-slate-400">→</span>
+          <span className="ui-text-muted">→</span>
 
           <a
             href="#step-2-portfolio"
@@ -367,7 +367,7 @@ export function InvestmentCalculator({
             </span>
           </a>
 
-          <span className="text-slate-400">→</span>
+          <span className="ui-text-muted">→</span>
 
           <a
             href="#step-3-results"
@@ -567,7 +567,7 @@ export function InvestmentCalculator({
                       active
                         ? isLight
                           ? 'bg-sky-600 text-white'
-                          : 'bg-sky-500 text-slate-950'
+                          : 'bg-sky-500 text-white'
                         : isLight
                           ? 'border border-slate-300 bg-white text-slate-700 hover:border-sky-400'
                           : 'border border-slate-700/80 bg-slate-900 text-slate-300 hover:border-sky-500/50'
@@ -607,7 +607,7 @@ export function InvestmentCalculator({
                         active
                           ? isLight
                             ? 'bg-violet-600 text-white'
-                            : 'bg-violet-500 text-slate-950'
+                            : 'bg-violet-500 text-white'
                           : isLight
                             ? 'border border-slate-300 bg-white text-slate-700 hover:border-violet-400'
                             : 'border border-slate-700 bg-slate-900 text-slate-300 hover:border-violet-400/60'
@@ -1202,7 +1202,7 @@ export function InvestmentCalculator({
                           isActive
                             ? isLight
                               ? 'bg-sky-600 text-white'
-                              : 'bg-sky-500 text-slate-950'
+                              : 'bg-sky-500 text-white'
                             : isLight
                               ? 'bg-slate-100 text-slate-800'
                               : 'bg-slate-800 text-slate-200'

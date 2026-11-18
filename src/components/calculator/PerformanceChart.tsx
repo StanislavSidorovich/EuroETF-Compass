@@ -108,7 +108,7 @@ export function PerformanceChart({
   const svgRef = useRef<SVGSVGElement | null>(null);
 
   // Refined sage/forest green palette & theme-adaptive chart tokens
-  const histColor = isLight ? '#2d8a61' : '#3b9b72';
+  const histColor = 'var(--ui-chart-sage-stroke)';
   const histLabelColor = isLight ? '#1f6e4b' : '#86d6b0';
   const histBadgeBg = isLight ? 'rgba(45, 138, 97, 0.11)' : 'rgba(59, 155, 114, 0.16)';
   const histBadgeStroke = isLight ? 'rgba(45, 138, 97, 0.42)' : 'rgba(59, 155, 114, 0.45)';
@@ -118,7 +118,7 @@ export function PerformanceChart({
   const distColor = isLight ? '#94702e' : '#b3893a';
   const investedColor = isLight ? '#64748b' : '#94a3b8';
   const axisTextColor = isLight ? '#334155' : '#cbd5e1';
-  const axisMutedColor = isLight ? '#475569' : '#94a3b8';
+  const axisMutedColor = 'var(--ui-chart-text-muted)';
   const dotInnerFill = isLight ? '#ffffff' : '#0f172a';
   const dotOuterStroke = isLight ? '#ffffff' : '#f8fafc';
   const gridStroke = isLight ? 'rgba(51, 65, 85, 0.14)' : 'rgba(203, 213, 225, 0.14)';
@@ -430,7 +430,7 @@ export function PerformanceChart({
                     active
                       ? isLight
                         ? 'bg-[#2d8a61] text-white shadow-sm'
-                        : 'bg-sky-500 text-slate-950 shadow-sm shadow-sky-500/30'
+                        : 'bg-sky-500 text-white shadow-sm shadow-sky-500/30'
                       : isLight
                         ? 'border border-slate-300 bg-white text-slate-700 hover:border-[#2d8a61]/60 hover:text-[#1f6e4b]'
                         : 'border border-slate-700 bg-slate-900/80 text-slate-300 hover:border-sky-500/50 hover:text-sky-200'
@@ -586,7 +586,7 @@ export function PerformanceChart({
             y={PAD_TOP}
             width={Math.max(0, SVG_WIDTH - PAD_RIGHT - todayX)}
             height={PLOT_HEIGHT}
-            fill={isLight ? 'rgba(2, 132, 199, 0.035)' : 'rgba(56, 189, 248, 0.035)'}
+            fill={isLight ? 'rgba(72, 97, 120, 0.045)' : 'rgba(119, 146, 171, 0.045)'}
           />
 
           {/* Phase Region Top Labels */}
@@ -663,7 +663,7 @@ export function PerformanceChart({
                   x={x}
                   y={baselineY + 21}
                   textAnchor="middle"
-                  fill={isToday ? (isLight ? '#0f172a' : '#f8fafc') : axisTextColor}
+                  fill={isToday ? 'var(--ui-chart-text-primary)' : axisTextColor}
                   fontSize="11"
                   fontWeight={isToday ? '700' : '500'}
                   fontFamily="var(--font-mono)"
@@ -809,7 +809,7 @@ export function PerformanceChart({
                 y1={yScale(entry3YPoint.historicalValueEur ?? 0)}
                 x2={xScale(entry3YPoint.yearOffset)}
                 y2={baselineY}
-                stroke={isLight ? 'rgba(2, 132, 199, 0.35)' : 'rgba(56, 189, 248, 0.4)'}
+                stroke={isLight ? 'rgba(72, 97, 120, 0.35)' : 'rgba(119, 146, 171, 0.4)'}
                 strokeDasharray="2 3"
               />
               <circle
@@ -826,8 +826,8 @@ export function PerformanceChart({
                 width={66}
                 height={18}
                 rx={5}
-                fill={isLight ? 'rgba(2, 132, 199, 0.1)' : 'rgba(56, 189, 248, 0.15)'}
-                stroke={isLight ? 'rgba(2, 132, 199, 0.4)' : 'rgba(56, 189, 248, 0.45)'}
+                fill={isLight ? 'rgba(72, 97, 120, 0.1)' : 'rgba(119, 146, 171, 0.16)'}
+                stroke={isLight ? 'rgba(72, 97, 120, 0.4)' : 'rgba(119, 146, 171, 0.45)'}
               />
               <text
                 x={xScale(entry3YPoint.yearOffset) + 35}
@@ -868,7 +868,7 @@ export function PerformanceChart({
               x={todayBadgeX}
               y={21.5}
               textAnchor="middle"
-              fill={isLight ? '#0f172a' : '#f8fafc'}
+              fill="var(--ui-chart-text-primary)"
               fontSize="10"
               fontWeight="700"
               letterSpacing="0.03em"

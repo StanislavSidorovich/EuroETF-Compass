@@ -98,29 +98,165 @@
   --color-amber-950: #271d0f;
 }
 
+/* ============================================================================
+   Theme CSS Variables (Dark Default & Light Theme via html.theme-light)
+   ============================================================================ */
+:root {
+  color-scheme: dark;
+
+  /* Surfaces */
+  --ui-bg-app: #090d16;
+  --ui-bg-grid-line: rgba(148, 163, 184, 0.04);
+  --ui-bg-card: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(11, 17, 32, 0.96) 100%);
+  --ui-border-card: rgba(51, 65, 85, 0.55);
+  --ui-shadow-card: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+
+  --ui-surface-app: rgba(9, 13, 22, 0.92);
+  --ui-surface-deep: rgba(2, 6, 23, 0.65);
+  --ui-surface-deep-solid: #020617;
+  --ui-surface-card: rgba(15, 23, 42, 0.85);
+  --ui-surface-card-solid: #0f172a;
+  --ui-surface-elevated: rgba(30, 41, 59, 0.8);
+  --ui-surface-elevated-solid: #1e293b;
+  --ui-surface-hover: #334155;
+
+  /* Tinted Accent Surfaces */
+  --ui-tint-sage: rgba(10, 37, 27, 0.35);
+  --ui-tint-cool: rgba(22, 31, 41, 0.35);
+  --ui-tint-sand: rgba(39, 29, 15, 0.35);
+  --ui-disclaimer-bg: linear-gradient(
+    to right,
+    rgba(39, 29, 15, 0.45),
+    rgba(15, 23, 42, 0.9),
+    rgba(15, 23, 42, 0.95)
+  );
+
+  /* Borders */
+  --ui-border-subtle: rgba(30, 41, 59, 0.9);
+  --ui-border-default: rgba(51, 65, 85, 0.85);
+  --ui-border-input: #334155;
+
+  /* Text */
+  --ui-text-primary: #f1f5f9;
+  --ui-text-secondary: #e2e8f0;
+  --ui-text-body: #cbd5e1;
+  --ui-text-muted: #94a3b8;
+  --ui-text-subtle: #64748b;
+
+  /* Accents (Sage Green, Steel Blue #486178 ramp, Sand, Rose) */
+  --ui-accent-sage: #2d8a61;
+  --ui-accent-sage-text: #6fc09b;
+  --ui-accent-sage-soft: #b5dec9;
+  --ui-accent-cool: #486178;
+  --ui-accent-cool-text: #9fb3c6;
+  --ui-accent-sand: #b3893a;
+  --ui-accent-sand-text: #d9bd76;
+  --ui-accent-rose-text: #fda4af;
+
+  /* Form Controls */
+  --ui-input-bg: #020617;
+  --ui-input-text: #f1f5f9;
+  --ui-input-placeholder: #64748b;
+
+  /* Scrollbars */
+  --ui-scrollbar-track: #0b1120;
+  --ui-scrollbar-thumb: #1e293b;
+  --ui-scrollbar-thumb-hover: #334155;
+
+  /* SVG Chart Tokens */
+  --ui-chart-text-primary: #f8fafc;
+  --ui-chart-text-muted: #94a3b8;
+  --ui-chart-sage-stroke: #3b9b72;
+}
+
+html.theme-light,
+html[data-theme='light'] {
+  color-scheme: light;
+
+  /* Surfaces */
+  --ui-bg-app: #f4f7f5;
+  --ui-bg-grid-line: rgba(31, 122, 83, 0.045);
+  --ui-bg-card: #ffffff;
+  --ui-border-card: #cbd5e1;
+  --ui-shadow-card: 0 6px 22px -10px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.05);
+
+  --ui-surface-app: rgba(255, 255, 255, 0.94);
+  --ui-surface-deep: #f8fafc;
+  --ui-surface-deep-solid: #f8fafc;
+  --ui-surface-card: #ffffff;
+  --ui-surface-card-solid: #ffffff;
+  --ui-surface-elevated: #f1f5f9;
+  --ui-surface-elevated-solid: #f1f5f9;
+  --ui-surface-hover: #e2e8f0;
+
+  /* Tinted Accent Surfaces */
+  --ui-tint-sage: #ecfdf5;
+  --ui-tint-cool: #f2f5f8;
+  --ui-tint-sand: #faf6ec;
+  --ui-disclaimer-bg: linear-gradient(to right, #f3ead2, #faf6ec, #ffffff);
+
+  /* Borders */
+  --ui-border-subtle: #cbd5e1;
+  --ui-border-default: #cbd5e1;
+  --ui-border-input: #cbd5e1;
+
+  /* Text */
+  --ui-text-primary: #0f172a;
+  --ui-text-secondary: #1e293b;
+  --ui-text-body: #334155;
+  --ui-text-muted: #475569;
+  --ui-text-subtle: #64748b;
+
+  /* Accents */
+  --ui-accent-sage: #2d8a61;
+  --ui-accent-sage-text: #1b6646;
+  --ui-accent-sage-soft: #1b6646;
+  --ui-accent-cool: #486178;
+  --ui-accent-cool-text: #3b4f63;
+  --ui-accent-sand: #94702e;
+  --ui-accent-sand-text: #735626;
+  --ui-accent-rose-text: #be123c;
+
+  /* Form Controls */
+  --ui-input-bg: #ffffff;
+  --ui-input-text: #0f172a;
+  --ui-input-placeholder: #94a3b8;
+
+  /* Scrollbars */
+  --ui-scrollbar-track: #e9efec;
+  --ui-scrollbar-thumb: #94a3b8;
+  --ui-scrollbar-thumb-hover: #64748b;
+
+  /* SVG Chart Tokens */
+  --ui-chart-text-primary: #0f172a;
+  --ui-chart-text-muted: #475569;
+  --ui-chart-sage-stroke: #2d8a61;
+}
+
 @layer base {
   html {
     font-family: var(--font-sans);
     scroll-behavior: smooth;
-    color-scheme: dark;
   }
 
   body {
-    background-color: #090d16;
-    color: #f1f5f9;
+    background-color: var(--ui-bg-app);
+    color: var(--ui-text-primary);
     overflow-x: hidden;
     transition: background-color 0.2s ease, color 0.2s ease;
   }
 
-  html.theme-light,
-  html[data-theme='light'] {
-    color-scheme: light;
+  input,
+  select,
+  textarea {
+    background-color: var(--ui-input-bg);
+    color: var(--ui-input-text);
+    border-color: var(--ui-border-input);
   }
 
-  html.theme-light body,
-  html[data-theme='light'] body {
-    background-color: #f4f7f5;
-    color: #0f172a;
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--ui-input-placeholder);
   }
 }
 
@@ -162,7 +298,7 @@ html.font-size-xl {
 }
 
 /* ============================================================================
-   Scrollbars (Dark & Light)
+   Scrollbars (CSS Variable Powered)
    ============================================================================ */
 ::-webkit-scrollbar {
   width: 8px;
@@ -170,53 +306,140 @@ html.font-size-xl {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b1120;
+  background: var(--ui-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e293b;
+  background: var(--ui-scrollbar-thumb);
   border-radius: 9999px;
-  border: 2px solid #0b1120;
+  border: 2px solid var(--ui-scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #334155;
-}
-
-html.theme-light ::-webkit-scrollbar-track,
-[data-theme='light'] ::-webkit-scrollbar-track {
-  background: #e9efec;
-}
-
-html.theme-light ::-webkit-scrollbar-thumb,
-[data-theme='light'] ::-webkit-scrollbar-thumb {
-  background: #94a3b8;
-  border: 2px solid #e9efec;
-}
-
-html.theme-light ::-webkit-scrollbar-thumb:hover,
-[data-theme='light'] ::-webkit-scrollbar-thumb:hover {
-  background: #64748b;
+  background: var(--ui-scrollbar-thumb-hover);
 }
 
 /* ============================================================================
-   Financial typography & surface utilities
+   Financial typography & CSS-variable surface / text utilities
    ============================================================================ */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
 .fintech-card {
-  background: linear-gradient(180deg, rgba(17, 24, 39, 0.92) 0%, rgba(11, 17, 32, 0.96) 100%);
-  border: 1px solid rgba(51, 65, 85, 0.55);
-  box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.55);
+  background: var(--ui-bg-card);
+  border: 1px solid var(--ui-border-card);
+  box-shadow: var(--ui-shadow-card);
 }
 
 .fintech-grid-bg {
+  background-color: var(--ui-bg-app);
   background-image:
-    linear-gradient(to right, rgba(148, 163, 184, 0.04) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+    linear-gradient(to right, var(--ui-bg-grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--ui-bg-grid-line) 1px, transparent 1px);
   background-size: 32px 32px;
+}
+
+.ui-surface-app {
+  background-color: var(--ui-surface-app);
+}
+
+.ui-surface-deep {
+  background-color: var(--ui-surface-deep);
+}
+
+.ui-surface-deep-solid {
+  background-color: var(--ui-surface-deep-solid);
+}
+
+.ui-surface-card {
+  background-color: var(--ui-surface-card);
+}
+
+.ui-surface-card-solid {
+  background-color: var(--ui-surface-card-solid);
+}
+
+.ui-surface-elevated {
+  background-color: var(--ui-surface-elevated);
+}
+
+.ui-surface-elevated-solid {
+  background-color: var(--ui-surface-elevated-solid);
+}
+
+.ui-hover-elevated:hover {
+  background-color: var(--ui-surface-hover);
+}
+
+.ui-tint-sage {
+  background-color: var(--ui-tint-sage);
+}
+
+.ui-tint-cool {
+  background-color: var(--ui-tint-cool);
+}
+
+.ui-tint-sand {
+  background-color: var(--ui-tint-sand);
+}
+
+.ui-disclaimer {
+  background: var(--ui-disclaimer-bg);
+}
+
+.ui-border-subtle {
+  border-color: var(--ui-border-subtle);
+}
+
+.ui-border-default {
+  border-color: var(--ui-border-default);
+}
+
+.ui-text-primary {
+  color: var(--ui-text-primary);
+}
+
+.ui-text-secondary {
+  color: var(--ui-text-secondary);
+}
+
+.ui-text-body {
+  color: var(--ui-text-body);
+}
+
+.ui-text-muted {
+  color: var(--ui-text-muted);
+}
+
+.ui-text-subtle {
+  color: var(--ui-text-subtle);
+}
+
+.ui-text-sage {
+  color: var(--ui-accent-sage-text);
+}
+
+.ui-text-sage-soft {
+  color: var(--ui-accent-sage-soft);
+}
+
+.ui-text-cool {
+  color: var(--ui-accent-cool-text);
+}
+
+.ui-text-sand {
+  color: var(--ui-accent-sand-text);
+}
+
+.ui-text-rose {
+  color: var(--ui-accent-rose-text);
+}
+
+.ui-input {
+  background-color: var(--ui-input-bg);
+  color: var(--ui-input-text);
+  border-color: var(--ui-border-input);
 }
 
 /* Hide horizontal scrollbar in ticker strips while keeping touch/wheel scroll */
@@ -227,275 +450,4 @@ html.theme-light ::-webkit-scrollbar-thumb:hover,
 .no-scrollbar {
   -ms-overflow-style: none;
   scrollbar-width: none;
-}
-
-/* ============================================================================
-   Full Light Mode Overrides (html.theme-light / [data-theme="light"])
-   Clean alabaster/sage surfaces (#f4f7f5 / #ffffff) & high-contrast dark slate
-   ============================================================================ */
-html.theme-light .fintech-grid-bg,
-[data-theme='light'] .fintech-grid-bg {
-  background-color: #f4f7f5 !important;
-  background-image:
-    linear-gradient(to right, rgba(31, 122, 83, 0.045) 1px, transparent 1px),
-    linear-gradient(to bottom, rgba(31, 122, 83, 0.045) 1px, transparent 1px);
-  background-size: 32px 32px;
-}
-
-html.theme-light .fintech-card,
-[data-theme='light'] .fintech-card {
-  background: #ffffff !important;
-  border: 1px solid #cbd5e1 !important;
-  box-shadow: 0 6px 22px -10px rgba(15, 23, 42, 0.1), 0 1px 3px rgba(15, 23, 42, 0.05) !important;
-}
-
-/* Light Mode — Dark Background Class Remapping */
-html.theme-light .bg-\[\#090d16\],
-html.theme-light .bg-\[\#090d16\]\/90,
-[data-theme='light'] .bg-\[\#090d16\],
-[data-theme='light'] .bg-\[\#090d16\]\/90 {
-  background-color: rgba(255, 255, 255, 0.94) !important;
-}
-
-html.theme-light .bg-slate-950,
-html.theme-light .bg-slate-950\/95,
-html.theme-light .bg-slate-950\/90,
-html.theme-light .bg-slate-950\/85,
-html.theme-light .bg-slate-950\/80,
-html.theme-light .bg-slate-950\/75,
-html.theme-light .bg-slate-950\/70,
-html.theme-light .bg-slate-950\/60,
-html.theme-light .bg-slate-950\/50,
-[data-theme='light'] .bg-slate-950,
-[data-theme='light'] .bg-slate-950\/95,
-[data-theme='light'] .bg-slate-950\/90,
-[data-theme='light'] .bg-slate-950\/85,
-[data-theme='light'] .bg-slate-950\/80,
-[data-theme='light'] .bg-slate-950\/75,
-[data-theme='light'] .bg-slate-950\/70,
-[data-theme='light'] .bg-slate-950\/60,
-[data-theme='light'] .bg-slate-950\/50 {
-  background-color: #f8fafc !important;
-}
-
-html.theme-light .bg-slate-900,
-html.theme-light .bg-slate-900\/95,
-html.theme-light .bg-slate-900\/90,
-html.theme-light .bg-slate-900\/85,
-html.theme-light .bg-slate-900\/80,
-html.theme-light .bg-slate-900\/75,
-html.theme-light .bg-slate-900\/70,
-html.theme-light .bg-slate-900\/60,
-html.theme-light .bg-slate-900\/50,
-[data-theme='light'] .bg-slate-900,
-[data-theme='light'] .bg-slate-900\/95,
-[data-theme='light'] .bg-slate-900\/90,
-[data-theme='light'] .bg-slate-900\/85,
-[data-theme='light'] .bg-slate-900\/80,
-[data-theme='light'] .bg-slate-900\/75,
-[data-theme='light'] .bg-slate-900\/70,
-[data-theme='light'] .bg-slate-900\/60,
-[data-theme='light'] .bg-slate-900\/50 {
-  background-color: #ffffff !important;
-}
-
-html.theme-light .bg-slate-800,
-html.theme-light .bg-slate-800\/90,
-html.theme-light .bg-slate-800\/80,
-html.theme-light .bg-slate-800\/70,
-html.theme-light .bg-slate-800\/60,
-[data-theme='light'] .bg-slate-800,
-[data-theme='light'] .bg-slate-800\/90,
-[data-theme='light'] .bg-slate-800\/80,
-[data-theme='light'] .bg-slate-800\/70,
-[data-theme='light'] .bg-slate-800\/60 {
-  background-color: #f1f5f9 !important;
-}
-
-html.theme-light .hover\:bg-slate-800:hover,
-html.theme-light .hover\:bg-slate-800\/90:hover,
-html.theme-light .hover\:bg-slate-700:hover,
-[data-theme='light'] .hover\:bg-slate-800:hover,
-[data-theme='light'] .hover\:bg-slate-800\/90:hover,
-[data-theme='light'] .hover\:bg-slate-700:hover {
-  background-color: #e2e8f0 !important;
-}
-
-/* Light Mode — Tinted Alert & Highlight Surfaces */
-html.theme-light .bg-emerald-950\/20,
-html.theme-light .bg-emerald-950\/30,
-html.theme-light .bg-emerald-950\/40,
-[data-theme='light'] .bg-emerald-950\/20,
-[data-theme='light'] .bg-emerald-950\/30,
-[data-theme='light'] .bg-emerald-950\/40 {
-  background-color: #ecfdf5 !important;
-}
-
-html.theme-light .bg-cyan-950\/20,
-html.theme-light .bg-cyan-950\/30,
-[data-theme='light'] .bg-cyan-950\/20,
-[data-theme='light'] .bg-cyan-950\/30 {
-  background-color: #f2f5f8 !important;
-}
-
-html.theme-light .bg-amber-950\/10,
-html.theme-light .bg-amber-950\/20,
-html.theme-light .bg-amber-950\/30,
-html.theme-light .bg-amber-950\/40,
-[data-theme='light'] .bg-amber-950\/10,
-[data-theme='light'] .bg-amber-950\/20,
-[data-theme='light'] .bg-amber-950\/30,
-[data-theme='light'] .bg-amber-950\/40 {
-  background-color: #faf6ec !important;
-}
-
-html.theme-light .from-amber-950\/45,
-[data-theme='light'] .from-amber-950\/45 {
-  --tw-gradient-from: #f3ead2 !important;
-  --tw-gradient-via: #faf6ec !important;
-  --tw-gradient-to: #ffffff !important;
-}
-
-/* Light Mode — Borders */
-html.theme-light .border-slate-800,
-html.theme-light .border-slate-800\/90,
-html.theme-light .border-slate-800\/80,
-html.theme-light .border-slate-800\/70,
-html.theme-light .border-slate-700,
-html.theme-light .border-slate-700\/80,
-html.theme-light .border-slate-700\/70,
-[data-theme='light'] .border-slate-800,
-[data-theme='light'] .border-slate-800\/90,
-[data-theme='light'] .border-slate-800\/80,
-[data-theme='light'] .border-slate-800\/70,
-[data-theme='light'] .border-slate-700,
-[data-theme='light'] .border-slate-700\/80,
-[data-theme='light'] .border-slate-700\/70 {
-  border-color: #cbd5e1 !important;
-}
-
-/* Light Mode — High-Contrast Text Adaptation */
-html.theme-light .text-white,
-html.theme-light .text-slate-100,
-[data-theme='light'] .text-white,
-[data-theme='light'] .text-slate-100 {
-  color: #0f172a !important;
-}
-
-html.theme-light .text-slate-200,
-[data-theme='light'] .text-slate-200 {
-  color: #1e293b !important;
-}
-
-html.theme-light .text-slate-300,
-[data-theme='light'] .text-slate-300 {
-  color: #334155 !important;
-}
-
-html.theme-light .text-slate-400,
-[data-theme='light'] .text-slate-400 {
-  color: #475569 !important;
-}
-
-html.theme-light .text-slate-500,
-[data-theme='light'] .text-slate-500 {
-  color: #64748b !important;
-}
-
-/* Keep solid accent buttons crisp white text in Light Mode */
-html.theme-light .bg-emerald-500,
-html.theme-light .bg-emerald-600,
-[data-theme='light'] .bg-emerald-500,
-[data-theme='light'] .bg-emerald-600 {
-  color: #ffffff !important;
-}
-
-html.theme-light .bg-cyan-500,
-[data-theme='light'] .bg-cyan-500 {
-  color: #ffffff !important;
-}
-
-/* Light Mode — Semantic Accent Text Contrast */
-html.theme-light .text-emerald-200,
-html.theme-light .text-emerald-200\/80,
-html.theme-light .text-emerald-200\/75,
-html.theme-light .text-emerald-300,
-html.theme-light .text-emerald-400,
-[data-theme='light'] .text-emerald-200,
-[data-theme='light'] .text-emerald-200\/80,
-[data-theme='light'] .text-emerald-200\/75,
-[data-theme='light'] .text-emerald-300,
-[data-theme='light'] .text-emerald-400 {
-  color: #1b6646 !important;
-}
-
-html.theme-light .text-cyan-200,
-html.theme-light .text-cyan-300,
-html.theme-light .text-cyan-400,
-[data-theme='light'] .text-cyan-200,
-[data-theme='light'] .text-cyan-300,
-[data-theme='light'] .text-cyan-400 {
-  color: #3b4f63 !important;
-}
-
-html.theme-light .text-amber-100,
-html.theme-light .text-amber-100\/90,
-html.theme-light .text-amber-200,
-html.theme-light .text-amber-300,
-html.theme-light .text-amber-400,
-[data-theme='light'] .text-amber-100,
-[data-theme='light'] .text-amber-100\/90,
-[data-theme='light'] .text-amber-200,
-[data-theme='light'] .text-amber-300,
-[data-theme='light'] .text-amber-400 {
-  color: #735626 !important;
-}
-
-html.theme-light .text-indigo-300,
-html.theme-light .text-purple-300,
-html.theme-light .text-purple-400,
-[data-theme='light'] .text-indigo-300,
-[data-theme='light'] .text-purple-300,
-[data-theme='light'] .text-purple-400 {
-  color: #3b4f63 !important;
-}
-
-html.theme-light .text-rose-300,
-html.theme-light .text-rose-400,
-[data-theme='light'] .text-rose-300,
-[data-theme='light'] .text-rose-400 {
-  color: #be123c !important;
-}
-
-/* Light Mode — SVG Chart Readability */
-html.theme-light svg text[fill="#f8fafc"],
-[data-theme='light'] svg text[fill="#f8fafc"] {
-  fill: #0f172a !important;
-}
-
-html.theme-light svg text[fill="#94a3b8"],
-[data-theme='light'] svg text[fill="#94a3b8"] {
-  fill: #475569 !important;
-}
-
-html.theme-light svg path[stroke="#10b981"],
-[data-theme='light'] svg path[stroke="#10b981"] {
-  stroke: #2d8a61 !important;
-}
-
-/* Light Mode — Form Inputs & Selects */
-html.theme-light input,
-html.theme-light select,
-html.theme-light textarea,
-[data-theme='light'] input,
-[data-theme='light'] select,
-[data-theme='light'] textarea {
-  background-color: #ffffff !important;
-  color: #0f172a !important;
-  border-color: #cbd5e1 !important;
-}
-
-html.theme-light input::placeholder,
-[data-theme='light'] input::placeholder {
-  color: #94a3b8 !important;
 }

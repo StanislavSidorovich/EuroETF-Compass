@@ -147,7 +147,7 @@ function getRegimeColors(archetype: TaxArchetype, lang: LanguageMode): {
         fillSelected: 'rgba(45, 138, 97, 0.62)',
         stroke: '#3b9b72',
         badgeBg: 'border-emerald-500/40 bg-emerald-500/15',
-        badgeText: 'text-emerald-300',
+        badgeText: 'ui-text-sage',
         label: tr(
           lang,
           'Tax Deferral: Acc ETFs Win',
@@ -157,31 +157,31 @@ function getRegimeColors(archetype: TaxArchetype, lang: LanguageMode): {
       };
     case 'IMPUTED_ANNUAL_TAX_HYBRID':
       return {
-        fill: 'rgba(59, 130, 246, 0.24)',
-        fillSelected: 'rgba(37, 99, 235, 0.54)',
+        fill: 'rgba(90, 119, 144, 0.24)',
+        fillSelected: 'rgba(72, 97, 120, 0.56)',
         stroke: '#5a7790',
-        badgeBg: 'border-blue-500/40 bg-blue-500/15',
-        badgeText: 'text-blue-300',
+        badgeBg: 'border-cyan-500/40 bg-cyan-500/15',
+        badgeText: 'ui-text-cool',
         label: tr(
           lang,
           'Annual Imputed / Hybrid (DE, AT, CH, GB)',
           'Ежегодный учёт / гибрид (DE, AT, CH, GB)'
         ),
-        dotColor: '#5a7790',
+        dotColor: '#486178',
       };
     case 'WEALTH_OR_DEEMED_DISPOSAL':
       return {
-        fill: 'rgba(217, 119, 6, 0.24)',
-        fillSelected: 'rgba(217, 119, 6, 0.54)',
-        stroke: '#d97706',
+        fill: 'rgba(179, 137, 58, 0.24)',
+        fillSelected: 'rgba(179, 137, 58, 0.54)',
+        stroke: '#b3893a',
         badgeBg: 'border-amber-500/40 bg-amber-500/15',
-        badgeText: 'text-amber-300',
+        badgeText: 'ui-text-sand',
         label: tr(
           lang,
           'Wealth Tax / 8-Yr Deemed Disposal (NL, IE, SE)',
           'Налог на капитал / 8-летний цикл (NL, IE, SE)'
         ),
-        dotColor: '#d97706',
+        dotColor: '#b3893a',
       };
   }
 }
@@ -215,11 +215,11 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
       aria-label={tr(lang, 'Interactive European ETF Tax Map', 'Интерактивная карта налоговых режимов ETF в Европе')}
       className="fintech-card rounded-2xl p-5 sm:p-6"
     >
-      <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b ui-border-subtle pb-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="flex items-center gap-2">
-            <MapPin className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-lg font-bold text-white">
+            <MapPin className="h-5 w-5 ui-text-sage" />
+            <h2 className="text-lg font-bold ui-text-primary">
               {tr(
                 lang,
                 `Interactive European ETF Tax Map (${countries.length} Countries)`,
@@ -227,7 +227,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
               )}
             </h2>
           </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs ui-text-muted">
             {tr(
               lang,
               'Hover or click any country on the map to inspect its effective UCITS ETF tax rate and switch the entire calculator to that jurisdiction.',
@@ -238,16 +238,16 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
 
         {/* Color Legend */}
         <div className="flex flex-wrap items-center gap-2 text-[11px]">
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2.5 py-1 font-semibold text-emerald-300">
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-500/35 bg-emerald-500/10 px-2.5 py-1 font-semibold ui-text-sage">
             <span className="h-2.5 w-2.5 rounded-full bg-[#2d8a61]" />
             {tr(lang, 'Tax Deferral (Acc wins)', 'Отложенный налог (Acc wins)')}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-blue-500/35 bg-blue-500/10 px-2.5 py-1 font-semibold text-blue-300">
-            <span className="h-2.5 w-2.5 rounded-full bg-blue-500" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-cyan-500/35 bg-cyan-500/10 px-2.5 py-1 font-semibold ui-text-cool">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#486178]" />
             {tr(lang, 'Annual Tax / ISA', 'Годовой расчёт / ISA')}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 py-1 font-semibold text-amber-300">
-            <span className="h-2.5 w-2.5 rounded-full bg-amber-500" />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-500/35 bg-amber-500/10 px-2.5 py-1 font-semibold ui-text-sand">
+            <span className="h-2.5 w-2.5 rounded-full bg-[#b3893a]" />
             Box 3 / ISK / 8-Yr Deemed
           </span>
         </div>
@@ -255,7 +255,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
 
       <div className="mt-5 grid gap-5 lg:grid-cols-12">
         {/* SVG Continental Canvas */}
-        <div className="relative overflow-hidden rounded-2xl border border-slate-800 bg-slate-950/70 p-3 lg:col-span-8">
+        <div className="relative overflow-hidden rounded-2xl border ui-border-subtle ui-surface-deep p-3 lg:col-span-8">
           <svg
             viewBox="0 0 800 520"
             role="img"
@@ -264,7 +264,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
           >
             <defs>
               <radialGradient id="europeOceanGlow" cx="45%" cy="48%" r="65%">
-                <stop offset="0%" stopColor="rgba(56, 189, 248, 0.09)" />
+                <stop offset="0%" stopColor="rgba(90, 119, 144, 0.11)" />
                 <stop offset="100%" stopColor="rgba(15, 23, 42, 0)" />
               </radialGradient>
             </defs>
@@ -278,7 +278,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
                 y1={yLine}
                 x2="780"
                 y2={yLine}
-                stroke="rgba(148,163,184,0.08)"
+                stroke="rgba(148,163,184,0.12)"
                 strokeDasharray="4 6"
               />
             ))}
@@ -289,7 +289,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
                 y1="20"
                 x2={xLine}
                 y2="500"
-                stroke="rgba(148,163,184,0.08)"
+                stroke="rgba(148,163,184,0.12)"
                 strokeDasharray="4 6"
               />
             ))}
@@ -306,13 +306,13 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
             </g>
 
             {/* Sea Labels */}
-            <text x="52" y="128" fill="rgba(148,163,184,0.45)" fontSize="10" fontWeight="600" letterSpacing="0.14em">
+            <text x="52" y="128" fill="var(--ui-chart-text-muted)" opacity="0.6" fontSize="10" fontWeight="600" letterSpacing="0.14em">
               ATLANTIC OCEAN
             </text>
-            <text x="242" y="484" fill="rgba(148,163,184,0.45)" fontSize="10" fontWeight="600" letterSpacing="0.14em">
+            <text x="242" y="484" fill="var(--ui-chart-text-muted)" opacity="0.6" fontSize="10" fontWeight="600" letterSpacing="0.14em">
               MEDITERRANEAN SEA
             </text>
-            <text x="275" y="135" fill="rgba(148,163,184,0.42)" fontSize="9" fontWeight="600" letterSpacing="0.12em">
+            <text x="275" y="135" fill="var(--ui-chart-text-muted)" opacity="0.55" fontSize="9" fontWeight="600" letterSpacing="0.12em">
               NORTH SEA
             </text>
 
@@ -346,7 +346,7 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
                   <path
                     d={node.territoryPath}
                     fill={isSelected || isHovered ? colors.fillSelected : colors.fill}
-                    stroke={isSelected ? '#ffffff' : colors.stroke}
+                    stroke={isSelected ? 'var(--ui-chart-text-primary)' : colors.stroke}
                     strokeWidth={isSelected ? 2.4 : isHovered ? 2 : 1.25}
                     strokeLinejoin="round"
                     style={{ transition: 'all 180ms ease' }}
@@ -403,17 +403,17 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
         </div>
 
         {/* Live Hover / Selected Country Inspector Card */}
-        <div className="flex flex-col justify-between gap-4 rounded-2xl border border-slate-800 bg-slate-950/75 p-4 lg:col-span-4">
+        <div className="flex flex-col justify-between gap-4 rounded-2xl border ui-border-subtle ui-surface-deep p-4 lg:col-span-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between gap-2">
-              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-slate-400">
-                <Compass className="h-3.5 w-3.5 text-emerald-400" />
+              <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider ui-text-muted">
+                <Compass className="h-3.5 w-3.5 ui-text-sage" />
                 {hoveredCode
                   ? tr(lang, 'Country Preview', 'Предпросмотр страны')
                   : tr(lang, 'Selected Jurisdiction', 'Выбранная юрисдикция')}
               </span>
               {inspectedCountry.code === selectedCountryCode && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold text-emerald-300">
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/20 px-2 py-0.5 text-[10px] font-bold ui-text-sage">
                   <ShieldCheck className="h-3 w-3" /> {tr(lang, 'Active', 'Активна')}
                 </span>
               )}
@@ -422,10 +422,10 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
             <div className="flex items-center gap-3">
               <span className="text-4xl">{inspectedCountry.flag}</span>
               <div>
-                <h3 className="text-lg font-extrabold text-white">
+                <h3 className="text-lg font-extrabold ui-text-primary">
                   {inspectedCountry.name} ({inspectedCountry.code})
                 </h3>
-                <p className="text-xs text-slate-400">{inspectedCountry.regionGroup}</p>
+                <p className="text-xs ui-text-muted">{inspectedCountry.regionGroup}</p>
               </div>
             </div>
 
@@ -434,38 +434,38 @@ export const EuropeTaxMap: React.FC<EuropeTaxMapProps> = ({
             </div>
 
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
-                <span className="text-[11px] text-slate-400">
+              <div className="rounded-xl border ui-border-subtle ui-surface-card p-3">
+                <span className="text-[11px] ui-text-muted">
                   {tr(lang, 'Effective ETF Rate', 'Эфф. ставка ETF')}
                 </span>
-                <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums text-emerald-300">
+                <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums ui-text-sage">
                   {inspectedCountry.effectiveEquityEtfTaxRatePct}%
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-900/80 p-3">
-                <span className="text-[11px] text-slate-400">
+              <div className="rounded-xl border ui-border-subtle ui-surface-card p-3">
+                <span className="text-[11px] ui-text-muted">
                   {tr(lang, 'Dividend Tax', 'Налог на дивиденды')}
                 </span>
-                <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums text-amber-300">
+                <p className="mt-0.5 font-mono text-xl font-extrabold tabular-nums ui-text-sand">
                   {inspectedCountry.dividendTaxRatePct}%
                 </p>
               </div>
             </div>
 
-            <div className="rounded-xl border border-slate-800 bg-slate-900/70 p-3">
-              <p className="text-xs font-bold text-white">{inspectedCountry.verdictTitle}</p>
-              <p className="mt-1.5 text-[11px] leading-relaxed text-slate-300">
+            <div className="rounded-xl border ui-border-subtle ui-surface-card p-3">
+              <p className="text-xs font-bold ui-text-primary">{inspectedCountry.verdictTitle}</p>
+              <p className="mt-1.5 text-[11px] leading-relaxed ui-text-body">
                 {inspectedCountry.verdictSummary}
               </p>
             </div>
           </div>
 
-          <div className="space-y-2 border-t border-slate-800 pt-3">
-            <div className="flex items-start gap-2 text-[11px] text-slate-400">
-              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" />
+          <div className="space-y-2 border-t ui-border-subtle pt-3">
+            <div className="flex items-start gap-2 text-[11px] ui-text-muted">
+              <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 ui-text-cool" />
               <span>
                 {tr(lang, 'Tax Form:', 'Декларация:')}{' '}
-                <strong className="text-slate-200">{inspectedCountry.taxDeclarationForm}</strong>
+                <strong className="ui-text-secondary">{inspectedCountry.taxDeclarationForm}</strong>
               </span>
             </div>
             {inspectedCountry.code !== selectedCountryCode && (

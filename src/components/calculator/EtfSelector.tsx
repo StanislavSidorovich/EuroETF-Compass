@@ -1154,7 +1154,7 @@ export function EtfSelector({
                     addMode === 'replace'
                       ? isLight
                         ? 'bg-sky-600 text-white shadow-2xs'
-                        : 'bg-sky-500 text-slate-950 shadow-2xs'
+                        : 'bg-sky-500 text-white shadow-2xs'
                       : isLight
                         ? 'text-slate-600 hover:text-slate-900'
                         : 'text-slate-400 hover:text-slate-200'
@@ -1396,7 +1396,7 @@ export function EtfSelector({
               </div>
 
               <div className="relative w-full lg:w-64">
-                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+                <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 ui-text-muted" />
                 <input
                   type="text"
                   value={drawerSearch}
@@ -1417,7 +1417,7 @@ export function EtfSelector({
                     type="button"
                     onClick={() => setDrawerSearch('')}
                     aria-label={tr(lang, 'Clear search', 'Очистить')}
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 ui-text-muted hover:opacity-80"
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -1668,7 +1668,7 @@ export function EtfSelector({
                               {etf.taxEfficiencyNotes}
                             </p>
                             <div className="flex flex-wrap items-center gap-2 pt-1">
-                              <span className="inline-flex items-center gap-1 text-slate-500">
+                              <span className="inline-flex items-center gap-1 ui-text-subtle">
                                 <Globe2 className="h-3 w-3" />
                                 {tr(lang, 'Verify:', 'Проверить:')}
                               </span>
@@ -1688,7 +1688,9 @@ export function EtfSelector({
                                   href={l.href}
                                   target="_blank"
                                   rel="noopener noreferrer"
-                                  className="inline-flex items-center gap-0.5 text-sky-600 hover:underline dark:text-sky-400"
+                                  className={`inline-flex items-center gap-0.5 hover:underline ${
+                                    isLight ? 'text-sky-700' : 'text-sky-300'
+                                  }`}
                                 >
                                   {l.label}
                                   <ExternalLink className="h-2.5 w-2.5" />

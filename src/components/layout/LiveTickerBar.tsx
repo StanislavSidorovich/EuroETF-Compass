@@ -173,10 +173,10 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
 
       {/* Inline Custom Ticker Drawer */}
       {showCustomInput && (
-        <div className="border-t border-slate-800/80 bg-slate-900/95 px-4 py-2.5 sm:px-6">
+        <div className="border-t ui-border-subtle ui-surface-card px-4 py-2.5 sm:px-6">
           <div className="mx-auto flex max-w-7xl flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
             <form onSubmit={handleSubmitCustom} className="flex flex-1 flex-wrap items-center gap-2">
-              <label htmlFor="tickerbar-custom-input" className="text-xs font-medium text-slate-300">
+              <label htmlFor="tickerbar-custom-input" className="text-xs font-medium ui-text-body">
                 {tr(lang, 'Add ETF / Stock by ticker or name:', 'Добавить ETF / акцию по тикеру или названию:')}
               </label>
               <input
@@ -185,12 +185,12 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
                 value={tickerInput}
                 onChange={(e) => setTickerInput(e.target.value)}
                 placeholder="e.g. VUAA.DE, EMIM.AS, CSPX.L, SPYI.DE"
-                className="w-60 rounded-lg border border-slate-700 bg-slate-950 px-3 py-1.5 font-mono text-xs text-white placeholder-slate-500 outline-none focus:border-emerald-500"
+                className="ui-input w-60 rounded-lg border px-3 py-1.5 font-mono text-xs outline-none focus:border-emerald-500"
               />
               <button
                 type="submit"
                 disabled={isFetchingCustomTicker || !tickerInput.trim()}
-                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-slate-950 transition hover:bg-emerald-400 disabled:opacity-50"
+                className="inline-flex items-center gap-1.5 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-emerald-600 disabled:opacity-50"
               >
                 {isFetchingCustomTicker ? (
                   <>
@@ -203,14 +203,14 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
               <button
                 type="button"
                 onClick={() => setShowCustomInput(false)}
-                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white"
+                className="rounded-lg p-1.5 ui-text-muted ui-hover-elevated"
                 aria-label="Close custom ticker bar"
               >
                 <X className="h-4 w-4" />
               </button>
             </form>
             {customTickerError && (
-              <p className="text-xs font-medium text-rose-400">{customTickerError}</p>
+              <p className="text-xs font-medium ui-text-rose">{customTickerError}</p>
             )}
           </div>
         </div>
@@ -224,27 +224,27 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
           aria-modal="true"
           aria-labelledby="inspected-etf-title"
         >
-          <div className="w-full max-w-lg rounded-2xl border border-slate-700/80 bg-slate-900 p-5 shadow-2xl">
-            <div className="flex items-start justify-between gap-3 border-b border-slate-800 pb-3">
+          <div className="w-full max-w-lg rounded-2xl border ui-border-default ui-surface-card-solid p-5 shadow-2xl">
+            <div className="flex items-start justify-between gap-3 border-b ui-border-subtle pb-3">
               <div>
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-mono text-sm font-bold text-emerald-300">
+                  <span className="font-mono text-sm font-bold ui-text-sage">
                     {inspectedEtf.ticker}
                   </span>
                   <span
                     className={`rounded px-1.5 py-0.5 text-[10px] font-bold uppercase ${
                       inspectedEtf.distributionPolicy === 'Acc'
-                        ? 'bg-emerald-500/15 text-emerald-300'
-                        : 'bg-amber-500/15 text-amber-300'
+                        ? 'bg-emerald-500/15 ui-text-sage'
+                        : 'bg-amber-500/15 ui-text-sand'
                     }`}
                   >
                     {inspectedEtf.distributionPolicy === 'Acc' ? 'Accumulating' : 'Distributing'}
                   </span>
-                  <span className="rounded bg-slate-800 px-2 py-0.5 font-mono text-[10px] text-slate-300">
+                  <span className="rounded ui-surface-elevated px-2 py-0.5 font-mono text-[10px] ui-text-body">
                     ISIN: {inspectedEtf.isin}
                   </span>
                 </div>
-                <h3 id="inspected-etf-title" className="mt-1 text-sm font-bold text-white">
+                <h3 id="inspected-etf-title" className="mt-1 text-sm font-bold ui-text-primary">
                   {inspectedEtf.name}
                 </h3>
               </div>
@@ -252,43 +252,43 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
                 type="button"
                 onClick={() => setInspectedEtf(null)}
                 aria-label="Close ETF inspector"
-                className="rounded-lg p-1.5 text-slate-400 transition hover:bg-slate-800 hover:text-white"
+                className="rounded-lg p-1.5 ui-text-muted transition ui-hover-elevated"
               >
                 <X className="h-4 w-4" />
               </button>
             </div>
 
             <div className="mt-4 grid grid-cols-3 gap-2.5 text-xs">
-              <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-2.5">
-                <span className="text-[11px] text-slate-400">Price</span>
-                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums text-white">
+              <div className="rounded-xl border ui-border-subtle ui-surface-deep p-2.5">
+                <span className="text-[11px] ui-text-muted">Price</span>
+                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums ui-text-primary">
                   {getCurrencySymbol(inspectedQuote?.currency ?? inspectedEtf.currency)}
                   {(inspectedQuote?.currentPrice ?? 0).toFixed(2)}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-2.5">
-                <span className="text-[11px] text-slate-400">TER / Domicile</span>
-                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums text-cyan-300">
+              <div className="rounded-xl border ui-border-subtle ui-surface-deep p-2.5">
+                <span className="text-[11px] ui-text-muted">TER / Domicile</span>
+                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums ui-text-cool">
                   {inspectedEtf.ter.toFixed(2)}% • {inspectedEtf.domicile.split(' ')[0]}
                 </p>
               </div>
-              <div className="rounded-xl border border-slate-800 bg-slate-950/70 p-2.5">
-                <span className="text-[11px] text-slate-400">Fund Size / WKN</span>
-                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums text-slate-200">
+              <div className="rounded-xl border ui-border-subtle ui-surface-deep p-2.5">
+                <span className="text-[11px] ui-text-muted">Fund Size / WKN</span>
+                <p className="mt-0.5 font-mono text-sm font-bold tabular-nums ui-text-secondary">
                   €{inspectedEtf.fundSizeBillionsEur.toFixed(1)}B • {inspectedEtf.wkn}
                 </p>
               </div>
             </div>
 
-            <div className="mt-3 rounded-xl border border-slate-800 bg-slate-950/60 p-3 text-xs text-slate-300">
+            <div className="mt-3 rounded-xl border ui-border-subtle ui-surface-deep p-3 text-xs ui-text-body">
               <div className="flex items-start gap-2">
-                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 text-cyan-400" />
+                <Info className="mt-0.5 h-3.5 w-3.5 shrink-0 ui-text-cool" />
                 <p className="leading-relaxed">{inspectedEtf.taxEfficiencyNotes}</p>
               </div>
             </div>
 
             <div className="mt-4">
-              <p className="mb-2 text-xs font-semibold text-slate-300">
+              <p className="mb-2 text-xs font-semibold ui-text-body">
                 Inspect Live Profile on European Portals
               </p>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
@@ -305,7 +305,7 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
                     href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center justify-between rounded-xl border border-slate-700/80 bg-slate-800/70 px-3 py-2 text-xs font-semibold text-slate-200 transition hover:border-emerald-500/50 hover:bg-slate-800 hover:text-emerald-300"
+                    className="inline-flex items-center justify-between rounded-xl border ui-border-default ui-surface-elevated px-3 py-2 text-xs font-semibold ui-text-secondary transition hover:border-emerald-500/50 ui-hover-elevated"
                   >
                     <span>{link.label}</span>
                     <ExternalLink className="h-3.5 w-3.5 shrink-0 opacity-75" />

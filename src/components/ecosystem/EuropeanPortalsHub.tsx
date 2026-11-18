@@ -115,15 +115,15 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
     <div className="space-y-6">
       {/* Direct ISIN & Ticker Deep-Linker */}
       <section className="fintech-card rounded-2xl p-5 sm:p-6">
-        <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 border-b ui-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <Link2 className="h-5 w-5 text-emerald-400" />
-              <h2 className="text-lg font-bold text-white">
+              <Link2 className="h-5 w-5 ui-text-sage" />
+              <h2 className="text-lg font-bold ui-text-primary">
                 Direct European ETF &amp; ISIN Deep-Linker
               </h2>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs ui-text-muted">
               Select any curated UCITS ETF or enter a custom ISIN / Ticker to open its live profile
               directly on justETF, extraETF, Finanzfluss, Curvo, OeKB, and Yahoo Finance.
             </p>
@@ -134,8 +134,8 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
             onClick={() => setUseCustomInput((prev) => !prev)}
             className={`inline-flex shrink-0 items-center gap-1.5 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
               useCustomInput
-                ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
-                : 'border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500'
+                ? 'border-cyan-500/60 bg-cyan-500/15 ui-text-cool'
+                : 'ui-border-default ui-surface-card ui-text-body hover:border-slate-500'
             }`}
           >
             <Search className="h-3.5 w-3.5" />
@@ -156,16 +156,16 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
                     onClick={() => setSelectedEtfId(etf.id)}
                     className={`inline-flex items-center gap-2 rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
                       active
-                        ? 'border-emerald-400 bg-emerald-500/15 text-emerald-200 ring-1 ring-emerald-500/35'
-                        : 'border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-600 hover:text-white'
+                        ? 'border-emerald-400 bg-emerald-500/15 ui-text-sage ring-1 ring-emerald-500/35'
+                        : 'ui-border-subtle ui-surface-card ui-text-body hover:border-slate-500'
                     }`}
                   >
                     <span className="font-mono">{etf.ticker}</span>
                     <span
                       className={`rounded px-1.5 py-0.5 text-[10px] font-bold ${
                         etf.distributionPolicy === 'Acc'
-                          ? 'bg-emerald-500/20 text-emerald-300'
-                          : 'bg-amber-500/20 text-amber-300'
+                          ? 'bg-emerald-500/20 ui-text-sage'
+                          : 'bg-amber-500/20 ui-text-sand'
                       }`}
                     >
                       {etf.distributionPolicy}
@@ -176,11 +176,11 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
             </div>
 
             {activeEtf && (
-              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 rounded-xl border border-slate-800 bg-slate-950/70 px-4 py-2.5 text-xs">
-                <span className="font-semibold text-white">{activeEtf.name}</span>
-                <span className="font-mono text-cyan-300">ISIN: {activeEtf.isin}</span>
-                <span className="font-mono text-slate-300">WKN: {activeEtf.wkn}</span>
-                <span className="font-mono text-emerald-300">
+              <div className="flex flex-wrap items-center gap-x-5 gap-y-1.5 rounded-xl border ui-border-subtle ui-surface-deep px-4 py-2.5 text-xs">
+                <span className="font-semibold ui-text-primary">{activeEtf.name}</span>
+                <span className="font-mono ui-text-cool">ISIN: {activeEtf.isin}</span>
+                <span className="font-mono ui-text-body">WKN: {activeEtf.wkn}</span>
+                <span className="font-mono ui-text-sage">
                   TER: {activeEtf.ter.toFixed(2)}% • {activeEtf.domicile}
                 </span>
               </div>
@@ -191,7 +191,7 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
             <div>
               <label
                 htmlFor="portal-custom-isin"
-                className="mb-1 block text-xs font-semibold text-slate-300"
+                className="mb-1 block text-xs font-semibold ui-text-body"
               >
                 UCITS ETF ISIN (12 chars, e.g. IE00BK5BQT80)
               </label>
@@ -201,13 +201,13 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
                 value={customIsin}
                 onChange={(e) => setCustomIsin(e.target.value.toUpperCase())}
                 placeholder="IE00BK5BQT80"
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-emerald-500"
+                className="ui-input w-full rounded-xl border px-3 py-2 font-mono text-xs outline-none focus:border-emerald-500"
               />
             </div>
             <div>
               <label
                 htmlFor="portal-custom-ticker"
-                className="mb-1 block text-xs font-semibold text-slate-300"
+                className="mb-1 block text-xs font-semibold ui-text-body"
               >
                 Yahoo / Exchange Ticker (e.g. VWCE.DE, IWDA.AS)
               </label>
@@ -217,7 +217,7 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
                 value={customTicker}
                 onChange={(e) => setCustomTicker(e.target.value.toUpperCase())}
                 placeholder="VWCE.DE"
-                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-3 py-2 font-mono text-xs text-white outline-none focus:border-emerald-500"
+                className="ui-input w-full rounded-xl border px-3 py-2 font-mono text-xs outline-none focus:border-emerald-500"
               />
             </div>
           </div>
@@ -231,20 +231,20 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
               href={card.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group flex items-center justify-between rounded-xl border border-slate-800 bg-slate-900/90 p-3 transition hover:border-emerald-500/50 hover:bg-slate-800/90"
+              className="group flex items-center justify-between rounded-xl border ui-border-subtle ui-surface-card p-3 transition hover:border-emerald-500/50 ui-hover-elevated"
             >
               <div>
                 <div className="flex items-center gap-1.5">
-                  <span className="text-xs font-bold text-white group-hover:text-emerald-300">
+                  <span className="text-xs font-bold ui-text-primary group-hover:text-emerald-500">
                     {card.name}
                   </span>
-                  <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] font-medium text-cyan-300">
+                  <span className="rounded ui-surface-elevated px-1.5 py-0.5 text-[10px] font-medium ui-text-cool">
                     {card.badge}
                   </span>
                 </div>
-                <p className="mt-0.5 text-[11px] text-slate-400">{card.subtitle}</p>
+                <p className="mt-0.5 text-[11px] ui-text-muted">{card.subtitle}</p>
               </div>
-              <ExternalLink className="h-4 w-4 shrink-0 text-slate-400 transition group-hover:text-emerald-300" />
+              <ExternalLink className="h-4 w-4 shrink-0 ui-text-muted transition group-hover:text-emerald-500" />
             </a>
           ))}
         </div>
@@ -252,15 +252,15 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
 
       {/* Filterable European Portals Directory */}
       <section className="fintech-card rounded-2xl p-5 sm:p-6">
-        <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-col gap-3 border-b ui-border-subtle pb-4 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex items-center gap-2">
-              <Globe2 className="h-5 w-5 text-cyan-400" />
-              <h2 className="text-lg font-bold text-white">
+              <Globe2 className="h-5 w-5 ui-text-cool" />
+              <h2 className="text-lg font-bold ui-text-primary">
                 European ETF Research, Tax &amp; Official Portal Directory
               </h2>
             </div>
-            <p className="mt-1 text-xs text-slate-400">
+            <p className="mt-1 text-xs ui-text-muted">
               Trusted European ETF screeners, tax calculators, and official government registries.
             </p>
           </div>
@@ -270,8 +270,8 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
             onClick={() => setOnlyMyCountry((prev) => !prev)}
             className={`inline-flex items-center gap-1.5 self-start rounded-xl border px-3 py-1.5 text-xs font-semibold transition ${
               onlyMyCountry
-                ? 'border-emerald-400 bg-emerald-500/15 text-emerald-300'
-                : 'border-slate-700 bg-slate-900 text-slate-300 hover:border-slate-500'
+                ? 'border-emerald-400 bg-emerald-500/15 ui-text-sage'
+                : 'ui-border-default ui-surface-card ui-text-body hover:border-slate-500'
             }`}
           >
             <Filter className="h-3.5 w-3.5" />
@@ -292,8 +292,8 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
                 onClick={() => setCategoryFilter(cat)}
                 className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
                   active
-                    ? 'bg-cyan-500 text-slate-950'
-                    : 'border border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-600'
+                    ? 'bg-cyan-600 text-white'
+                    : 'border ui-border-subtle ui-surface-card ui-text-body hover:border-slate-500'
                 }`}
               >
                 {cat}
@@ -313,35 +313,35 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
             return (
               <div
                 key={portal.id}
-                className="flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-slate-600"
+                className="flex flex-col justify-between rounded-xl border ui-border-subtle ui-surface-deep p-4 transition hover:border-slate-500"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <span className="inline-block rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-semibold text-cyan-300">
+                      <span className="inline-block rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 text-[10px] font-semibold ui-text-cool">
                         {portal.category}
                       </span>
-                      <h3 className="mt-1.5 text-sm font-bold text-white">{portal.name}</h3>
-                      <span className="font-mono text-[11px] text-slate-400">
+                      <h3 className="mt-1.5 text-sm font-bold ui-text-primary">{portal.name}</h3>
+                      <span className="font-mono text-[11px] ui-text-muted">
                         {portal.domain}
                       </span>
                     </div>
-                    <Compass className="h-4 w-4 shrink-0 text-slate-500" />
+                    <Compass className="h-4 w-4 shrink-0 ui-text-subtle" />
                   </div>
 
-                  <p className="mt-2.5 text-xs leading-relaxed text-slate-300">
+                  <p className="mt-2.5 text-xs leading-relaxed ui-text-body">
                     {portal.description}
                   </p>
 
-                  <div className="mt-3 rounded-lg border border-slate-800/80 bg-slate-900/70 p-2.5 text-[11px] leading-relaxed text-slate-300">
-                    <span className="font-semibold text-emerald-300">Why use it: </span>
+                  <div className="mt-3 rounded-lg border ui-border-subtle ui-surface-card p-2.5 text-[11px] leading-relaxed ui-text-body">
+                    <span className="font-semibold ui-text-sage">Why use it: </span>
                     {portal.whyUseIt}
                   </div>
                 </div>
 
-                <div className="mt-4 flex items-center justify-between gap-2 border-t border-slate-800/80 pt-3">
-                  <div className="flex items-center gap-1 text-[10px] text-slate-400">
-                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-400" />
+                <div className="mt-4 flex items-center justify-between gap-2 border-t ui-border-subtle pt-3">
+                  <div className="flex items-center gap-1 text-[10px] ui-text-muted">
+                    <ShieldCheck className="h-3.5 w-3.5 ui-text-sage" />
                     <span>
                       {portal.supportedCountries.length >= 12
                         ? 'Pan-European'
@@ -353,7 +353,7 @@ export const EuropeanPortalsHub: React.FC<EuropeanPortalsHubProps> = ({
                     href={targetUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs font-semibold text-emerald-300 transition hover:bg-emerald-500 hover:text-slate-950"
+                    className="inline-flex items-center gap-1 rounded-lg ui-surface-elevated px-2.5 py-1.5 text-xs font-semibold ui-text-sage transition hover:bg-emerald-500 hover:text-white"
                   >
                     <span>
                       {portal.buildIsinDeepLink ? `Open (${effectiveTicker})` : 'Visit Portal'}

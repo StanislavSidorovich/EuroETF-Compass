@@ -189,7 +189,7 @@ export function App() {
     >
       <div
         data-theme={theme}
-        className="min-h-screen bg-[#090d16] fintech-grid-bg text-slate-100 flex flex-col font-theme-inter"
+        className="min-h-screen fintech-grid-bg ui-text-primary flex flex-col font-theme-inter"
       >
         <Header
           activeTab={activeTab}
@@ -255,17 +255,17 @@ export function App() {
         {activeTab === 'academy' && <CarefulInvestingAcademy />}
       </main>
 
-      <footer className="border-t border-slate-800/80 bg-slate-950/90 py-6 text-xs text-slate-400">
+      <footer className="border-t ui-border-subtle ui-surface-deep py-6 text-xs ui-text-muted">
         <div className="mx-auto flex max-w-7xl flex-col gap-3 px-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
           <div>
-            <p className="font-semibold text-slate-200">
+            <p className="font-semibold ui-text-secondary">
               {tr(
                 lang,
                 'EuroETF Compass — Careful UCITS ETF Investing & European Tax Intelligence',
                 'EuroETF Compass — Разумные инвестиции в UCITS ETF и Налоговый гид по Европе'
               )}
             </p>
-            <p className="mt-0.5 text-[11px] text-slate-500">
+            <p className="mt-0.5 text-[11px] ui-text-subtle">
               {tr(
                 lang,
                 'Educational platform only. Historical performance and backtests do not guarantee future returns. Verify ISIN KIDs and national tax filings with licensed advisors.',

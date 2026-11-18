@@ -13,13 +13,13 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
   return (
     <section
       aria-label={tr(lang, 'Regulatory and Educational Disclaimer', 'Правовое и образовательное предупреждение')}
-      className="rounded-xl border border-amber-500/35 bg-gradient-to-r from-amber-950/45 via-slate-900/90 to-slate-900/95 px-3.5 py-2 text-xs text-amber-100/90 shadow-sm"
+      className="ui-disclaimer rounded-xl border border-amber-500/35 px-3.5 py-2 text-xs ui-text-sand shadow-sm"
     >
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2 min-w-0">
-          <AlertTriangle className="h-4 w-4 shrink-0 text-amber-400" />
+          <AlertTriangle className="h-4 w-4 shrink-0 ui-text-sand" />
           <p className="truncate text-[11px] sm:text-xs">
-            <span className="font-semibold text-amber-300">
+            <span className="font-semibold ui-text-sand">
               {tr(lang, 'Educational Notice:', 'Важное предупреждение:')}
             </span>{' '}
             {tr(
@@ -34,7 +34,7 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
           <button
             type="button"
             onClick={() => setExpanded((prev) => !prev)}
-            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-medium text-amber-200 transition hover:bg-amber-500/20"
+            className="inline-flex shrink-0 items-center gap-1 rounded-lg border border-amber-500/30 bg-amber-500/10 px-2.5 py-1 text-[11px] font-medium ui-text-sand transition hover:bg-amber-500/20"
           >
             {expanded ? (
               <>
@@ -52,8 +52,8 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
       </div>
 
       {expanded && !compact && (
-        <div className="mt-2.5 space-y-2.5 border-t border-amber-500/20 pt-2.5 text-[11px] leading-relaxed text-slate-300">
-          <p className="text-slate-200">
+        <div className="mt-2.5 space-y-2.5 border-t border-amber-500/20 pt-2.5 text-[11px] leading-relaxed ui-text-body">
+          <p className="ui-text-secondary">
             {tr(
               lang,
               'Past performance and historical investment ratings (3Y / 5Y backtests) are not promised or reliable indicators of future results. Future projections are mathematical models for educational illustration only, and European country tax summaries do not constitute personalized financial, legal, or tax advice.',
@@ -61,13 +61,13 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
             )}
           </p>
           <div className="grid gap-2.5 md:grid-cols-3">
-            <div className="flex items-start gap-2 rounded-lg bg-slate-950/50 p-2.5">
-              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+            <div className="flex items-start gap-2 rounded-lg ui-surface-deep p-2.5">
+              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 ui-text-sand" />
               <div>
-                <p className="font-semibold text-slate-100">
+                <p className="font-semibold ui-text-primary">
                   {tr(lang, 'Market Risk & Drawdowns', 'Рыночный риск и просадки')}
                 </p>
-                <p className="mt-0.5 text-slate-400">
+                <p className="mt-0.5 ui-text-muted">
                   {tr(
                     lang,
                     'UCITS equity ETFs fluctuate daily and can experience 20%–45% temporary drawdowns. Capital invested is at risk and returns may be lower than modeled scenarios.',
@@ -76,13 +76,13 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-2 rounded-lg bg-slate-950/50 p-2.5">
-              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+            <div className="flex items-start gap-2 rounded-lg ui-surface-deep p-2.5">
+              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 ui-text-sand" />
               <div>
-                <p className="font-semibold text-slate-100">
+                <p className="font-semibold ui-text-primary">
                   {tr(lang, 'Live Market Feed & Currency', 'Живые котировки и валюта')}
                 </p>
-                <p className="mt-0.5 text-slate-400">
+                <p className="mt-0.5 ui-text-muted">
                   {tr(
                     lang,
                     'Live prices use delayed/real-time Yahoo Finance European exchange feeds (fallback to verified 5Y baseline snapshots when offline). Always verify KIDs & ISINs on justETF before trading.',
@@ -91,13 +91,13 @@ export const DisclaimerBanner: React.FC<DisclaimerBannerProps> = ({ compact = fa
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-2 rounded-lg bg-slate-950/50 p-2.5">
-              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-400" />
+            <div className="flex items-start gap-2 rounded-lg ui-surface-deep p-2.5">
+              <ShieldAlert className="mt-0.5 h-3.5 w-3.5 shrink-0 ui-text-sand" />
               <div>
-                <p className="font-semibold text-slate-100">
+                <p className="font-semibold ui-text-primary">
                   {tr(lang, 'Tax Residency & Legislation', 'Налоговое резидентство')}
                 </p>
-                <p className="mt-0.5 text-slate-400">
+                <p className="mt-0.5 ui-text-muted">
                   {tr(
                     lang,
                     'Tax laws (e.g., Portugal Lei n.º 31/2024, Netherlands Box 3, Germany Vorabpauschale, Austria Meldefonds) evolve regularly. Consult a licensed local tax advisor for official filings.',

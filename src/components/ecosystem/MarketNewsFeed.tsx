@@ -267,11 +267,11 @@ export const MarketNewsFeed: React.FC = () => {
       )}
       className="fintech-card rounded-2xl p-5 sm:p-6"
     >
-      <div className="flex flex-col gap-3 border-b border-slate-800 pb-4 lg:flex-row lg:items-center lg:justify-between">
+      <div className="flex flex-col gap-3 border-b ui-border-subtle pb-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
-            <Newspaper className="h-5 w-5 text-emerald-400" />
-            <h2 className="text-lg font-bold text-white">
+            <Newspaper className="h-5 w-5 ui-text-sage" />
+            <h2 className="text-lg font-bold ui-text-primary">
               {tr(
                 lang,
                 'Financial News, Market Insights & European Tax Updates',
@@ -279,18 +279,18 @@ export const MarketNewsFeed: React.FC = () => {
               )}
             </h2>
             {liveItems.length > 0 ? (
-              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold text-emerald-300">
+              <span className="inline-flex items-center gap-1 rounded-full border border-emerald-500/35 bg-emerald-500/15 px-2.5 py-0.5 text-[10px] font-bold ui-text-sage">
                 <Radio className="h-3 w-3" />
                 Live RSS ({liveItems.length}){lastUpdated ? ` • ${lastUpdated}` : ''}
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 rounded-full border border-slate-700 bg-slate-800 px-2.5 py-0.5 text-[10px] font-semibold text-slate-300">
-                <TrendingUp className="h-3 w-3 text-cyan-400" />
+              <span className="inline-flex items-center gap-1 rounded-full border ui-border-default ui-surface-elevated px-2.5 py-0.5 text-[10px] font-semibold ui-text-body">
+                <TrendingUp className="h-3 w-3 ui-text-cool" />
                 {tr(lang, 'Verified EU Briefs + Portals', 'Проверенная сводка ЕС + Порталы')}
               </span>
             )}
           </div>
-          <p className="mt-1 text-xs text-slate-400">
+          <p className="mt-1 text-xs ui-text-muted">
             {tr(
               lang,
               'Live headlines from Yahoo Finance / CNBC Europe (when online) combined with key briefs on UCITS ETFs, ECB rates, tech stocks, and European tax law.',
@@ -303,7 +303,7 @@ export const MarketNewsFeed: React.FC = () => {
           type="button"
           onClick={() => void fetchLiveNews()}
           disabled={isLoadingLive}
-          className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border border-cyan-500/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold text-cyan-200 transition hover:bg-cyan-500/20 disabled:opacity-60"
+          className="inline-flex shrink-0 items-center gap-1.5 self-start rounded-xl border border-cyan-500/35 bg-cyan-500/10 px-3 py-1.5 text-xs font-semibold ui-text-cool transition hover:bg-cyan-500/20 disabled:opacity-60"
         >
           <RefreshCw className={`h-3.5 w-3.5 ${isLoadingLive ? 'animate-spin' : ''}`} />
           <span>
@@ -316,7 +316,7 @@ export const MarketNewsFeed: React.FC = () => {
 
       {/* Tag Filter Pills */}
       <div className="mt-4 flex flex-wrap items-center gap-1.5">
-        <Tag className="mr-1 h-3.5 w-3.5 text-slate-400" />
+        <Tag className="mr-1 h-3.5 w-3.5 ui-text-muted" />
         {NEWS_TAGS.map((tag) => {
           const active = selectedTagId === tag.id;
           return (
@@ -327,7 +327,7 @@ export const MarketNewsFeed: React.FC = () => {
               className={`rounded-xl px-3 py-1.5 text-xs font-semibold transition ${
                 active
                   ? 'bg-emerald-500 text-white'
-                  : 'border border-slate-800 bg-slate-900/80 text-slate-300 hover:border-slate-600'
+                  : 'border ui-border-subtle ui-surface-card ui-text-body hover:border-slate-500'
               }`}
             >
               {tr(lang, tag.labelEn, tag.labelRu)}
@@ -344,31 +344,31 @@ export const MarketNewsFeed: React.FC = () => {
             href={item.url}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-col justify-between rounded-xl border border-slate-800 bg-slate-950/70 p-4 transition hover:border-emerald-500/50 hover:bg-slate-900"
+            className="group flex flex-col justify-between rounded-xl border ui-border-subtle ui-surface-deep p-4 transition hover:border-emerald-500/50 ui-hover-elevated"
           >
             <div>
               <div className="flex flex-wrap items-center justify-between gap-2 text-[10px]">
-                <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-semibold text-cyan-300">
+                <span className="rounded-full border border-cyan-500/30 bg-cyan-500/10 px-2 py-0.5 font-semibold ui-text-cool">
                   {getTagLabel(item.tagId)}
                 </span>
-                <span className="font-mono text-slate-400">
+                <span className="font-mono ui-text-muted">
                   {item.isLive ? 'LIVE • ' : ''}
                   {tr(lang, item.publishedAtEn, item.publishedAtRu)}
                 </span>
               </div>
 
-              <h3 className="mt-2 text-xs leading-snug font-bold text-white group-hover:text-emerald-300 sm:text-sm">
+              <h3 className="mt-2 text-xs leading-snug font-bold ui-text-primary group-hover:text-emerald-500 sm:text-sm">
                 {tr(lang, item.titleEn, item.titleRu)}
               </h3>
 
-              <p className="mt-1.5 text-[11px] leading-relaxed text-slate-400">
+              <p className="mt-1.5 text-[11px] leading-relaxed ui-text-muted">
                 {tr(lang, item.summaryEn, item.summaryRu)}
               </p>
             </div>
 
-            <div className="mt-3 flex items-center justify-between border-t border-slate-800/80 pt-2.5 text-[11px]">
-              <span className="font-semibold text-slate-300">{item.source}</span>
-              <span className="inline-flex items-center gap-1 font-semibold text-emerald-300">
+            <div className="mt-3 flex items-center justify-between border-t ui-border-subtle pt-2.5 text-[11px]">
+              <span className="font-semibold ui-text-body">{item.source}</span>
+              <span className="inline-flex items-center gap-1 font-semibold ui-text-sage">
                 {tr(lang, 'Read', 'Читать')} <ExternalLink className="h-3 w-3" />
               </span>
             </div>
@@ -377,8 +377,8 @@ export const MarketNewsFeed: React.FC = () => {
       </div>
 
       {/* Trusted European Financial News Portals */}
-      <div className="mt-5 rounded-xl border border-slate-800 bg-slate-950/60 p-3.5">
-        <p className="mb-2 text-xs font-bold text-slate-200">
+      <div className="mt-5 rounded-xl border ui-border-subtle ui-surface-deep p-3.5">
+        <p className="mb-2 text-xs font-bold ui-text-secondary">
           {tr(
             lang,
             'Direct links to trusted European financial & ETF news portals:',
@@ -392,13 +392,13 @@ export const MarketNewsFeed: React.FC = () => {
               href={portal.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-xl border border-slate-700 bg-slate-900 px-3 py-1.5 text-xs font-semibold text-slate-200 transition hover:border-emerald-500/50 hover:text-emerald-300"
+              className="inline-flex items-center gap-1.5 rounded-xl border ui-border-default ui-surface-card px-3 py-1.5 text-xs font-semibold ui-text-secondary transition hover:border-emerald-500/50 ui-hover-elevated"
             >
               <span>{portal.name}</span>
-              <span className="rounded bg-slate-800 px-1.5 py-0.5 text-[10px] text-slate-400">
+              <span className="rounded ui-surface-elevated px-1.5 py-0.5 text-[10px] ui-text-muted">
                 {portal.region}
               </span>
-              <ExternalLink className="h-3 w-3 text-slate-400" />
+              <ExternalLink className="h-3 w-3 ui-text-muted" />
             </a>
           ))}
         </div>
