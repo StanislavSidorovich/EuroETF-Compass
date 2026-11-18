@@ -12,6 +12,7 @@ import {
   Globe2,
   Landmark,
   Moon,
+  Palette,
   RefreshCw,
   Sun,
   Wifi,
@@ -40,6 +41,8 @@ interface HeaderProps {
   isRefreshing: boolean;
   theme: ThemeMode;
   onToggleTheme: () => void;
+  onOpenThemeStudio?: () => void;
+  hasCustomTheme?: boolean;
 }
 
 const FEATURED_CODES = ['PT', 'NL', 'DE'] as const;
@@ -75,6 +78,8 @@ export const Header: React.FC<HeaderProps> = ({
   isRefreshing,
   theme,
   onToggleTheme,
+  onOpenThemeStudio,
+  hasCustomTheme = false,
 }) => {
   const { lang, setLang, fontSize, setFontSize } = useAppPreferences();
   const [showGithubModal, setShowGithubModal] = useState(false);
@@ -165,19 +170,13 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header
-        className={`relative z-40 border-b transition-colors ${
-          isLight
-            ? 'border-slate-200/90 bg-[#f7faf8]/95 text-slate-900 shadow-xs'
-            : 'border-slate-700/80 bg-[#162231]/95 text-slate-100'
+        className={`ui-header relative z-40 border-b transition-colors ${
+          isLight ? 'shadow-xs' : ''
         }`}
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6">
           {/* Top Brand + Controls Row */}
-          <div
-            className={`flex flex-wrap items-center justify-between gap-3 border-b py-2 ${
-              isLight ? 'border-slate-200/80' : 'border-slate-700/70'
-            }`}
-          >
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b ui-border-subtle py-2">
             {/* Brand Identity */}
             <div className="flex items-center gap-3 group">
               <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105">
@@ -256,11 +255,7 @@ export const Header: React.FC<HeaderProps> = ({
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <h1
-                    className={`text-base font-bold tracking-tight sm:text-lg ${
-                      isLight ? 'text-slate-900' : 'text-white'
-                    }`}
-                  >
+                  <h1 className="text-base font-bold tracking-tight sm:text-lg ui-text-primary">
                     EuroETF Compass
                   </h1>
                   <span
@@ -273,7 +268,7 @@ export const Header: React.FC<HeaderProps> = ({
                     {tr(lang, 'Wealth & Tax Club', 'Клуб ETF и Налогов')}
                   </span>
                 </div>
-                <p className={`text-[11px] sm:text-xs ${isLight ? 'text-slate-600' : 'text-slate-300'}`}>
+                <p className="text-[11px] sm:text-xs ui-text-muted">
                   {tr(
                     lang,
                     'Careful ETF & Stock Investing • EU Taxes • 3Y/5Y History & Forecast',
@@ -312,10 +307,8 @@ export const Header: React.FC<HeaderProps> = ({
                       onClick={() => setLang(code)}
                       className={`rounded-lg px-2 py-1 text-[11px] font-bold uppercase transition ${
                         isActive
-                          ? 'bg-[#2d8a61] text-white shadow-xs'
-                          : isLight
-                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                          ? 'ui-selected-pill shadow-xs'
+                          : 'ui-text-body ui-hover-elevated'
                       }`}
                     >
                       {code.toUpperCase()}
@@ -344,12 +337,8 @@ export const Header: React.FC<HeaderProps> = ({
                       title={`${tr(lang, opt.enTitle, opt.ruTitle)} (${opt.pct})`}
                       className={`rounded-lg px-2 py-1 text-[11px] font-bold transition ${
                         isActive
-                          ? isLight
-                            ? 'bg-[#e3f2eb] text-[#1b5e3f] ring-1 ring-[#2d8a61]/40'
-                            : 'bg-emerald-500/25 text-emerald-200 ring-1 ring-emerald-500/50'
-                          : isLight
-                            ? 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
-                            : 'text-slate-300 hover:bg-slate-700 hover:text-white'
+                          ? 'ui-soft-pill border'
+                          : 'ui-text-body ui-hover-elevated'
                       }`}
                     >
                       {opt.label}
@@ -386,6 +375,33 @@ export const Header: React.FC<HeaderProps> = ({
                   </>
                 )}
               </button>
+
+              {/* Theme & Color Studio Trigger */}
+              {onOpenThemeStudio && (
+                <button
+                  type="button"
+                  onClick={onOpenThemeStudio}
+                  title={tr(
+                    lang,
+                    'Customize colors, tabs, text, borders & brightness',
+                    'Настроить цвета, вкладки, шрифт, границы и яркость'
+                  )}
+                  className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1.5 text-xs font-semibold transition ${
+                    hasCustomTheme
+                      ? 'ui-soft-pill'
+                      : 'ui-border-default ui-surface-card ui-text-secondary ui-hover-elevated'
+                  }`}
+                >
+                  <Palette className="h-3.5 w-3.5" />
+                  <span>{tr(lang, 'Colors', 'Палитра')}</span>
+                  {hasCustomTheme && (
+                    <span
+                      className="h-1.5 w-1.5 rounded-full"
+                      style={{ backgroundColor: 'var(--ui-accent-primary)' }}
+                    />
+                  )}
+                </button>
+              )}
 
               {/* Quick Country Switcher */}
               <div
@@ -547,13 +563,7 @@ export const Header: React.FC<HeaderProps> = ({
                   onClick={() => onSelectTab(tab.id)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`group relative flex flex-col justify-between rounded-xl border p-2 text-left transition-all sm:p-2.5 ${
-                    isActive
-                      ? isLight
-                        ? 'border-[#2d8a61] bg-[#eaf5ef] shadow-xs ring-1 ring-[#2d8a61]/30'
-                        : 'border-emerald-500 bg-emerald-500/15 shadow-sm ring-1 ring-emerald-500/35'
-                      : isLight
-                        ? 'border-slate-200/90 bg-white hover:border-[#2d8a61]/50 hover:bg-[#f3f8f5] shadow-2xs'
-                        : 'border-slate-700 bg-slate-800/80 hover:border-emerald-500/45 hover:bg-slate-700/80'
+                    isActive ? 'ui-tab-card-active' : 'ui-tab-card'
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2">
@@ -561,37 +571,34 @@ export const Header: React.FC<HeaderProps> = ({
                       <span
                         className={`inline-flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-xs font-extrabold transition ${
                           isActive
-                            ? 'bg-[#2d8a61] text-white'
-                            : isLight
-                              ? 'bg-slate-100 text-slate-700 group-hover:bg-[#e3f2eb] group-hover:text-[#1b5e3f]'
-                              : 'bg-slate-700 text-slate-200 group-hover:bg-emerald-500/20 group-hover:text-emerald-200'
+                            ? 'text-white'
+                            : 'ui-surface-elevated ui-text-secondary'
                         }`}
+                        style={
+                          isActive
+                            ? { backgroundColor: 'var(--ui-tab-active-badge-bg)' }
+                            : undefined
+                        }
                       >
                         {tab.num}
                       </span>
                       <span
-                        className={`shrink-0 ${
-                          isActive
-                            ? isLight
-                              ? 'text-[#1b5e3f]'
-                              : 'text-emerald-300'
-                            : isLight
-                              ? 'text-slate-500 group-hover:text-[#2d8a61]'
-                              : 'text-slate-400 group-hover:text-emerald-300'
-                        }`}
+                        className="shrink-0"
+                        style={{
+                          color: isActive
+                            ? 'var(--ui-tab-active-icon)'
+                            : 'var(--ui-text-muted)',
+                        }}
                       >
                         {tab.icon}
                       </span>
                       <span
-                        className={`truncate text-xs font-bold sm:text-sm ${
-                          isActive
-                            ? isLight
-                              ? 'text-[#164e35]'
-                              : 'text-emerald-200'
-                            : isLight
-                              ? 'text-slate-800'
-                              : 'text-white'
-                        }`}
+                        className="truncate text-xs font-bold sm:text-sm"
+                        style={{
+                          color: isActive
+                            ? 'var(--ui-tab-active-text)'
+                            : 'var(--ui-text-primary)',
+                        }}
                       >
                         {tab.title}
                       </span>
@@ -599,11 +606,7 @@ export const Header: React.FC<HeaderProps> = ({
 
                   </div>
 
-                  <p
-                    className={`mt-1 line-clamp-1 pl-8 text-[11px] ${
-                      isLight ? 'text-slate-500' : 'text-slate-300'
-                    }`}
-                  >
+                  <p className="mt-1 line-clamp-1 pl-8 text-[11px] ui-text-muted">
                     {tab.subtitle}
                   </p>
                 </button>

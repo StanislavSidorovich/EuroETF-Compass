@@ -502,12 +502,8 @@ export function EtfSelector({
                 }}
                 className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-xs font-semibold transition ${
                   active
-                    ? isLight
-                      ? 'border-[#2d8a61] bg-[#2d8a61] text-white shadow-xs'
-                      : 'border-[#3b9b72] bg-[#3b9b72] text-slate-950 shadow-xs'
-                    : isLight
-                      ? 'border-slate-200 bg-slate-50 text-slate-700 hover:border-[#2d8a61]/60 hover:bg-white hover:text-[#1f6e4b]'
-                      : 'border-slate-700/80 bg-slate-900/75 text-slate-200 hover:border-[#3b9b72]/60 hover:bg-slate-800 hover:text-[#86d6b0]'
+                    ? 'ui-selected-pill shadow-xs'
+                    : 'ui-border-default ui-surface-deep ui-text-body hover:border-emerald-500/60 ui-hover-elevated'
                 }`}
               >
                 <span>{label}</span>

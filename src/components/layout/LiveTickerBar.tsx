@@ -55,13 +55,7 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
     : null;
 
   return (
-    <div
-      className={`border-b transition-colors ${
-        isLight
-          ? 'border-slate-200/90 bg-[#f0f5f2]'
-          : 'border-slate-700/80 bg-[#1a2636]'
-      }`}
-    >
+    <div className="ui-ticker-bar border-b transition-colors">
       <div className="mx-auto flex max-w-7xl items-center gap-2 px-4 py-1.5 sm:px-6">
         {/* Scrollable Ticker Strip */}
         <div className="flex flex-1 items-center gap-2 overflow-x-auto no-scrollbar">
@@ -160,11 +154,7 @@ export const LiveTickerBar: React.FC<LiveTickerBarProps> = ({
         <button
           type="button"
           onClick={() => setShowCustomInput((prev) => !prev)}
-          className={`inline-flex shrink-0 items-center gap-1 rounded-xl border px-2.5 py-1 text-xs font-semibold transition ${
-            isLight
-              ? 'border-[#b7dfd0] bg-[#eaf5ef] text-[#1b5e3f] hover:bg-[#daf0e4]'
-              : 'border-emerald-500/35 bg-emerald-500/15 text-emerald-200 hover:bg-emerald-500/25'
-          }`}
+          className="ui-soft-pill inline-flex shrink-0 items-center gap-1 rounded-xl border px-2.5 py-1 text-xs font-semibold transition"
         >
           <Plus className="h-3.5 w-3.5" />
           <span className="hidden sm:inline">{tr(lang, '+ Ticker', '+ Тикер')}</span>

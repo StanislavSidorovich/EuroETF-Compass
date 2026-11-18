@@ -135,6 +135,12 @@
   --ui-border-subtle: rgba(30, 41, 59, 0.9);
   --ui-border-default: rgba(51, 65, 85, 0.85);
   --ui-border-input: #334155;
+  --ui-border-width: 1px;
+  --ui-border-style: solid;
+
+  /* Header & Ticker */
+  --ui-header-bg: rgba(22, 34, 49, 0.95);
+  --ui-ticker-bg: #1a2636;
 
   /* Text */
   --ui-text-primary: #f1f5f9;
@@ -144,9 +150,22 @@
   --ui-text-subtle: #64748b;
 
   /* Accents (Sage Green, Steel Blue #486178 ramp, Sand, Rose) */
+  --ui-accent-primary: #2d8a61;
+  --ui-accent-primary-hover: #1f7a53;
+  --ui-accent-primary-soft: rgba(45, 138, 97, 0.16);
+  --ui-accent-primary-border: rgba(59, 155, 114, 0.45);
+  --ui-accent-primary-text: #86d6b0;
   --ui-accent-sage: #2d8a61;
   --ui-accent-sage-text: #6fc09b;
   --ui-accent-sage-soft: #b5dec9;
+  --ui-tab-active-bg: rgba(45, 138, 97, 0.15);
+  --ui-tab-active-border: #2d8a61;
+  --ui-tab-active-ring: rgba(45, 138, 97, 0.35);
+  --ui-tab-active-badge-bg: #2d8a61;
+  --ui-tab-active-text: #b5dec9;
+  --ui-tab-active-icon: #6fc09b;
+  --ui-step-bg: #3b9b72;
+  --ui-step-text: #090d16;
   --ui-accent-cool: #486178;
   --ui-accent-cool-text: #9fb3c6;
   --ui-accent-sand: #b3893a;
@@ -199,6 +218,12 @@ html[data-theme='light'] {
   --ui-border-subtle: #cbd5e1;
   --ui-border-default: #cbd5e1;
   --ui-border-input: #cbd5e1;
+  --ui-border-width: 1px;
+  --ui-border-style: solid;
+
+  /* Header & Ticker */
+  --ui-header-bg: rgba(247, 250, 248, 0.95);
+  --ui-ticker-bg: #f0f5f2;
 
   /* Text */
   --ui-text-primary: #0f172a;
@@ -208,9 +233,22 @@ html[data-theme='light'] {
   --ui-text-subtle: #64748b;
 
   /* Accents */
+  --ui-accent-primary: #2d8a61;
+  --ui-accent-primary-hover: #1f7a53;
+  --ui-accent-primary-soft: #eaf5ef;
+  --ui-accent-primary-border: rgba(45, 138, 97, 0.4);
+  --ui-accent-primary-text: #1b5e3f;
   --ui-accent-sage: #2d8a61;
   --ui-accent-sage-text: #1b6646;
   --ui-accent-sage-soft: #1b6646;
+  --ui-tab-active-bg: #eaf5ef;
+  --ui-tab-active-border: #2d8a61;
+  --ui-tab-active-ring: rgba(45, 138, 97, 0.3);
+  --ui-tab-active-badge-bg: #2d8a61;
+  --ui-tab-active-text: #164e35;
+  --ui-tab-active-icon: #1b5e3f;
+  --ui-step-bg: #2d8a61;
+  --ui-step-text: #ffffff;
   --ui-accent-cool: #486178;
   --ui-accent-cool-text: #3b4f63;
   --ui-accent-sand: #94702e;
@@ -328,8 +366,61 @@ html.font-size-xl {
 
 .fintech-card {
   background: var(--ui-bg-card);
-  border: 1px solid var(--ui-border-card);
+  border-width: var(--ui-border-width);
+  border-style: var(--ui-border-style);
+  border-color: var(--ui-border-card);
   box-shadow: var(--ui-shadow-card);
+}
+
+html.has-custom-borders .rounded-xl.border,
+html.has-custom-borders .rounded-2xl.border {
+  border-width: var(--ui-border-width);
+  border-style: var(--ui-border-style);
+}
+
+.ui-header {
+  background-color: var(--ui-header-bg);
+  border-color: var(--ui-border-subtle);
+  color: var(--ui-text-primary);
+}
+
+.ui-ticker-bar {
+  background-color: var(--ui-ticker-bg);
+  border-color: var(--ui-border-subtle);
+}
+
+.ui-tab-card {
+  border-color: var(--ui-border-default);
+  background-color: var(--ui-surface-card);
+  color: var(--ui-text-primary);
+}
+
+.ui-tab-card:hover {
+  border-color: var(--ui-tab-active-border);
+  background-color: var(--ui-surface-elevated);
+}
+
+.ui-tab-card-active {
+  border-color: var(--ui-tab-active-border);
+  background-color: var(--ui-tab-active-bg);
+  box-shadow: 0 0 0 1px var(--ui-tab-active-ring);
+}
+
+.ui-step-badge {
+  background-color: var(--ui-step-bg);
+  color: var(--ui-step-text);
+}
+
+.ui-selected-pill {
+  background-color: var(--ui-accent-primary);
+  border-color: var(--ui-accent-primary);
+  color: #ffffff;
+}
+
+.ui-soft-pill {
+  background-color: var(--ui-accent-primary-soft);
+  border-color: var(--ui-accent-primary-border);
+  color: var(--ui-accent-primary-text);
 }
 
 .fintech-grid-bg {

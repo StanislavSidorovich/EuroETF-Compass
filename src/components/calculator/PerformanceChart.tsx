@@ -176,20 +176,20 @@ export function PerformanceChart({
 
   // Refined sage/forest green palette & theme-adaptive chart tokens
   const histColor = 'var(--ui-chart-sage-stroke)';
-  const histLabelColor = isLight ? '#1f6e4b' : '#86d6b0';
-  const histBadgeBg = isLight ? 'rgba(45, 138, 97, 0.11)' : 'rgba(59, 155, 114, 0.16)';
-  const histBadgeStroke = isLight ? 'rgba(45, 138, 97, 0.42)' : 'rgba(59, 155, 114, 0.45)';
-  const forecastColor = isLight ? '#486178' : '#7792ab';
-  const forecastLabelColor = isLight ? '#3b4f63' : '#9fb3c6';
+  const histLabelColor = 'var(--ui-accent-primary-text)';
+  const histBadgeBg = 'var(--ui-accent-primary-soft)';
+  const histBadgeStroke = 'var(--ui-accent-primary-border)';
+  const forecastColor = isLight ? 'var(--ui-accent-cool)' : 'var(--ui-accent-cool-text)';
+  const forecastLabelColor = 'var(--ui-accent-cool-text)';
   const postTaxColor = isLight ? '#8a6d3b' : '#c8a04e';
   const distColor = isLight ? '#94702e' : '#b3893a';
-  const investedColor = isLight ? '#64748b' : '#94a3b8';
-  const axisTextColor = isLight ? '#334155' : '#cbd5e1';
+  const investedColor = 'var(--ui-text-subtle)';
+  const axisTextColor = 'var(--ui-text-body)';
   const axisMutedColor = 'var(--ui-chart-text-muted)';
-  const dotInnerFill = isLight ? '#ffffff' : '#0f172a';
+  const dotInnerFill = 'var(--ui-surface-card-solid)';
   const dotOuterStroke = isLight ? '#ffffff' : '#f8fafc';
   const gridStroke = isLight ? 'rgba(51, 65, 85, 0.14)' : 'rgba(203, 213, 225, 0.14)';
-  const todayLineStroke = isLight ? '#334155' : '#cbd5e1';
+  const todayLineStroke = 'var(--ui-text-body)';
 
   const horizonYears = selectedHorizonYears ?? internalHorizon;
   const setHorizonYears = (h: ForecastHorizonOption) => {
@@ -485,19 +485,9 @@ export function PerformanceChart({
       : activeHoldings.map((h) => `${h.pct}% ${h.etf.ticker}`).join(' + ');
 
   return (
-    <div
-      className={`overflow-hidden rounded-2xl border transition-colors ${
-        isLight
-          ? 'border-slate-200 bg-white shadow-sm'
-          : 'border-slate-700/60 bg-slate-900/90 shadow-xl'
-      }`}
-    >
+    <div className="fintech-card overflow-hidden rounded-2xl transition-colors">
       {/* Header & Horizon Controls */}
-      <div
-        className={`border-b p-4 sm:p-5 ${
-          isLight ? 'border-slate-200 bg-white' : 'border-slate-800/90 bg-slate-900/60'
-        }`}
-      >
+      <div className="border-b ui-border-subtle ui-surface-card p-4 sm:p-5">
         <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <div className="flex flex-wrap items-center gap-2">
@@ -745,11 +735,7 @@ export function PerformanceChart({
       </div>
 
       {/* Responsive Interactive SVG Canvas */}
-      <div
-        className={`relative w-full select-none px-2 pb-2 pt-3 sm:px-4 ${
-          isLight ? 'bg-[#f8fafc]' : 'bg-[#0f172a]'
-        }`}
-      >
+      <div className="ui-surface-deep relative w-full select-none px-2 pb-2 pt-3 sm:px-4">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${SVG_WIDTH} ${SVG_HEIGHT}`}

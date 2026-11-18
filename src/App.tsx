@@ -8,12 +8,20 @@ import {
 } from './services/marketService';
 import type {
   ETFInstrument,
+  FontFamilyOption,
   FontSizeOption,
   LanguageMode,
   LiveQuoteData,
   ThemeMode,
 } from './types';
 import { AppPreferencesContext, tr } from './utils/i18n';
+import {
+  type ThemeStudioState,
+  applyCustomThemeToDocument,
+  isModeConfigDefault,
+  loadThemeStudioState,
+  saveThemeStudioState,
+} from './utils/themeCustomizer';
 import { Header, type AppTab } from './components/layout/Header';
 import { LiveTickerBar } from './components/layout/LiveTickerBar';
 import { InvestorWisdomBanner } from './components/layout/InvestorWisdomBanner';
@@ -31,6 +39,11 @@ const CarefulInvestingAcademy = lazy(() =>
     default: m.CarefulInvestingAcademy,
   }))
 );
+const ThemeCustomizerDrawer = lazy(() =>
+  import('./components/layout/ThemeCustomizerDrawer').then((m) => ({
+    default: m.ThemeCustomizerDrawer,
+  }))
+);
 
 function buildInitialQuotes(etfs: ETFInstrument[]): Record<string, LiveQuoteData> {
   const initial: Record<string, LiveQuoteData> = {};
@@ -42,6 +55,7 @@ function buildInitialQuotes(etfs: ETFInstrument[]): Record<string, LiveQuoteData
 
 const THEME_STORAGE_KEY = 'euroetf_theme_v1';
 const FONT_SIZE_STORAGE_KEY = 'euroetf_fontsize_v1';
+const FONT_FAMILY_STORAGE_KEY = 'euroetf_fontfamily_v1';
 const LANG_STORAGE_KEY = 'euroetf_lang_v1';
 
 export function App() {
@@ -74,6 +88,19 @@ export function App() {
     }
     return 'normal';
   });
+
+  const [fontFamily, setFontFamily] = useState<FontFamilyOption>(() => {
+    try {
+      const saved = localStorage.getItem(FONT_FAMILY_STORAGE_KEY);
+      if (saved === 'inter' || saved === 'jakarta' || saved === 'serif') return saved;
+    } catch {
+      // ignore storage errors
+    }
+    return 'inter';
+  });
+
+  const [studioState, setStudioState] = useState<ThemeStudioState>(() => loadThemeStudioState());
+  const [showThemeStudio, setShowThemeStudio] = useState(false);
 
   const [etfs, setEtfs] = useState<ETFInstrument[]>(CURATED_ETFS);
   const [quotesByEtfId, setQuotesByEtfId] = useState<Record<string, LiveQuoteData>>(() =>
@@ -122,6 +149,24 @@ export function App() {
     }
     document.documentElement.lang = lang;
   }, [lang]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(FONT_FAMILY_STORAGE_KEY, fontFamily);
+    } catch {
+      // ignore storage errors
+    }
+  }, [fontFamily]);
+
+  useEffect(() => {
+    saveThemeStudioState(studioState);
+    applyCustomThemeToDocument(theme, studioState);
+  }, [theme, studioState]);
+
+  const hasCustomTheme = !isModeConfigDefault(
+    theme === 'light' ? studioState.light : studioState.dark,
+    theme
+  );
 
   const handleToggleTheme = useCallback(() => {
     setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
@@ -196,7 +241,7 @@ export function App() {
     >
       <div
         data-theme={theme}
-        className="min-h-screen fintech-grid-bg ui-text-primary flex flex-col font-theme-inter"
+        className={`min-h-screen fintech-grid-bg ui-text-primary flex flex-col font-theme-${fontFamily}`}
       >
         <Header
           activeTab={activeTab}
@@ -210,6 +255,8 @@ export function App() {
           isRefreshing={isRefreshing}
           theme={theme}
           onToggleTheme={handleToggleTheme}
+          onOpenThemeStudio={() => setShowThemeStudio((prev) => !prev)}
+          hasCustomTheme={hasCustomTheme}
         />
 
       <LiveTickerBar
@@ -318,6 +365,21 @@ export function App() {
         </div>
       </footer>
       </div>
+
+      {showThemeStudio && (
+        <Suspense fallback={null}>
+          <ThemeCustomizerDrawer
+            isOpen={showThemeStudio}
+            onClose={() => setShowThemeStudio(false)}
+            theme={theme}
+            onToggleTheme={handleToggleTheme}
+            studioState={studioState}
+            onChangeStudioState={setStudioState}
+            fontFamily={fontFamily}
+            onChangeFontFamily={setFontFamily}
+          />
+        </Suspense>
+      )}
     </AppPreferencesContext.Provider>
   );
 }

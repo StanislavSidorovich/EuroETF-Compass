@@ -63,13 +63,9 @@ export function InvestmentCalculator({
   ]);
   const [selectedHorizonYears, setSelectedHorizonYears] = useState<ForecastHorizonOption>(10);
 
-  const cardSurface = isLight ? 'border border-slate-200 bg-white shadow-sm' : 'fintech-card';
-  const subSurface = isLight
-    ? 'border border-slate-200 bg-slate-50/90'
-    : 'border border-slate-800 bg-slate-900/65';
-  const inputSurface = isLight
-    ? 'border border-slate-300 bg-white text-slate-900'
-    : 'border border-slate-700 bg-slate-950 text-slate-100';
+  const cardSurface = 'fintech-card';
+  const subSurface = 'border ui-border-default ui-surface-deep';
+  const inputSurface = 'border ui-border-default ui-input';
 
   const etfById = useMemo(() => new Map(etfs.map((e) => [e.id, e])), [etfs]);
 
@@ -157,21 +153,13 @@ export function InvestmentCalculator({
         <div className="flex flex-wrap items-center gap-2">
           <a
             href="#step-1-budget"
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
-              isLight
-                ? 'border-slate-200 bg-slate-50 text-slate-800 hover:border-[#2d8a61]'
-                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]'
-            }`}
+            className="inline-flex items-center gap-1.5 rounded-xl border ui-border-default ui-surface-deep px-2.5 py-1 font-semibold ui-text-secondary transition hover:border-emerald-500"
           >
-            <span
-              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
-                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-              }`}
-            >
+            <span className="ui-step-badge inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold">
               1
             </span>
             <span>{tr(lang, 'Budget & Country', 'Бюджет и Страна')}</span>
-            <span className={`hidden font-mono text-[11px] sm:inline ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className="hidden font-mono text-[11px] ui-text-muted sm:inline">
               ({formatEur(initialBudgetEur)} · {selectedCountry.flag} {selectedCountry.code})
             </span>
           </a>
@@ -180,21 +168,13 @@ export function InvestmentCalculator({
 
           <a
             href="#step-2-portfolio"
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
-              isLight
-                ? 'border-slate-200 bg-slate-50 text-slate-800 hover:border-[#2d8a61]'
-                : 'border-slate-700 bg-slate-900 text-slate-200 hover:border-[#3b9b72]'
-            }`}
+            className="inline-flex items-center gap-1.5 rounded-xl border ui-border-default ui-surface-deep px-2.5 py-1 font-semibold ui-text-secondary transition hover:border-emerald-500"
           >
-            <span
-              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
-                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-              }`}
-            >
+            <span className="ui-step-badge inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold">
               2
             </span>
             <span>{tr(lang, 'Choose ETF / Stocks', 'Выбор ETF и Акций')}</span>
-            <span className={`hidden font-mono text-[11px] md:inline ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+            <span className="hidden font-mono text-[11px] ui-text-muted md:inline">
               ({activeCompositionPills.map((p) => `${p.pct}% ${p.ticker}`).join(' + ')})
             </span>
           </a>
@@ -203,17 +183,9 @@ export function InvestmentCalculator({
 
           <a
             href="#step-3-results"
-            className={`inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition ${
-              isLight
-                ? 'border-[#2d8a61]/35 bg-[#2d8a61]/10 text-[#1f6e4b] hover:bg-[#2d8a61]/15'
-                : 'border-[#3b9b72]/40 bg-[#2d8a61]/15 text-[#86d6b0] hover:bg-[#2d8a61]/25'
-            }`}
+            className="ui-soft-pill inline-flex items-center gap-1.5 rounded-xl border px-2.5 py-1 font-semibold transition"
           >
-            <span
-              className={`inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold ${
-                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-              }`}
-            >
+            <span className="ui-step-badge inline-flex h-4 w-4 items-center justify-center rounded-full text-[10px] font-bold">
               3
             </span>
             <span>{tr(lang, '3Y / 5Y Returns & Forecast', 'Доход 3Y / 5Y и Прогноз')}</span>
@@ -241,18 +213,10 @@ export function InvestmentCalculator({
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span
-                  className={`rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                    isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-                  }`}
-                >
+                <span className="ui-step-badge rounded-full px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                   {tr(lang, 'Step 1', 'Шаг 1')}
                 </span>
-                <h2
-                  className={`text-base font-bold tracking-tight sm:text-lg ${
-                    isLight ? 'text-slate-900' : 'text-slate-100'
-                  }`}
-                >
+                <h2 className="text-base font-bold tracking-tight sm:text-lg ui-text-primary">
                   {tr(
                     lang,
                     'Budget, Monthly Plan & Tax Residence',
@@ -260,7 +224,7 @@ export function InvestmentCalculator({
                   )}
                 </h2>
               </div>
-              <p className={`text-xs ${isLight ? 'text-slate-600' : 'text-slate-400'}`}>
+              <p className="text-xs ui-text-muted">
                 {tr(
                   lang,
                   'Set your starting capital (€), regular monthly savings (DCA / Sparplan), and European tax country.',
@@ -329,12 +293,8 @@ export function InvestmentCalculator({
                     onClick={() => setInitialBudgetEur(amt)}
                     className={`rounded-lg px-2 py-0.5 font-mono text-[11px] font-semibold transition ${
                       active
-                        ? isLight
-                          ? 'bg-[#2d8a61] text-white'
-                          : 'bg-[#3b9b72] text-slate-950'
-                        : isLight
-                          ? 'border border-slate-300 bg-white text-slate-700 hover:border-[#2d8a61]/60'
-                          : 'border border-slate-700/80 bg-slate-900 text-slate-300 hover:border-[#3b9b72]/60'
+                        ? 'ui-selected-pill'
+                        : 'border ui-border-default ui-surface-card ui-text-body hover:border-emerald-500/60'
                     }`}
                   >
                     {formatEur(amt)}
@@ -487,18 +447,10 @@ export function InvestmentCalculator({
       <section id="step-2-portfolio" className="scroll-mt-6 space-y-2.5">
         <div className="flex flex-col gap-1.5 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex flex-wrap items-center gap-2">
-            <span
-              className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${
-                isLight ? 'bg-[#2d8a61] text-white' : 'bg-[#3b9b72] text-slate-950'
-              }`}
-            >
+            <span className="ui-step-badge rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider">
               {tr(lang, 'Step 2', 'Шаг 2')}
             </span>
-            <h3
-              className={`text-base font-bold tracking-tight sm:text-lg ${
-                isLight ? 'text-slate-900' : 'text-slate-100'
-              }`}
-            >
+            <h3 className="text-base font-bold tracking-tight sm:text-lg ui-text-primary">
               {tr(
                 lang,
                 'What Are You Investing In? — Choose ETFs & Top Stocks',
