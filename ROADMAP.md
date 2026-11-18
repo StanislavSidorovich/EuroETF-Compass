@@ -75,3 +75,17 @@
 - [x] **Compact Beginner-Friendly Portfolio Builder:** Grouped `<select>` category dropdown + active holding chips + collapsible 35-asset showcase drawer (closed by default) so 3Y/5Y earnings cards appear on the first screen without scrolling.
 - [x] **4 Distinct Numbered Feature-Card Navigation Tabs (`1`–`4`)**, custom SVG Favicon (`public/favicon.svg`), Header Mariner's Crest, and collapsible `InvestorWisdomBanner`.
 - [x] **Windows Non-Hanging Build Rule (`ADR-013`):** Documented `$null | node ...` pattern in `GEMINI.md` and `MEMORY.md`.
+
+---
+
+## Phase 7 (V3.1 Review Pass, 2026-11-18): Calm Palette & Data Honesty (Completed) — details in `REVIEW-v3.1.md`
+- [x] Calmer palette: one steel-blue accent instead of cyan/sky/violet/purple/indigo, sand instead of amber.
+- [x] Header no longer sticky; shorter tab titles; removed redundant "active" badge.
+- [x] Unknown tickers no longer get fabricated price history (error instead); dictionary tickers labelled approximate.
+
+## Phase 8 (Planned — recommended next, by priority)
+- [ ] **Real prices on GitHub Pages:** scheduled GitHub Action fetches Yahoo quotes server-side -> `public/data/quotes.json`; app reads it first. Optional Cloudflare Worker proxy for arbitrary tickers. (All 4 CORS gateways are dead on static hosting as of 2026-11-18.)
+- [ ] **Shorter first screen:** collapse the quote banner and "Power of Time" block by default so the calculator is visible immediately.
+- [ ] **Replace `!important` light-theme overrides** (~400 lines in `index.css`) with CSS variables.
+- [ ] **Verify tax data** (PT holding-period discounts, Anexo J, DE Vorabpauschale, NL Box 3) against official sources (AT, BZSt, Belastingdienst) before presenting as guidance.
+- [ ] Split 60-70 KB components (`EtfSelector`, `InvestmentCalculator`, `TaxFilingToolkit`); `React.lazy` tabs to cut the >500 KB bundle.
