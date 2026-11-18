@@ -404,7 +404,7 @@ export function PerformanceChart({
   const hoveredX = hoveredPoint ? xScale(hoveredPoint.yearOffset) : 0;
   const flipTooltipLeft = hoveredX > SVG_WIDTH * 0.56;
 
-  const todayBadgeX = Math.max(PAD_LEFT + 72, Math.min(SVG_WIDTH - PAD_RIGHT - 72, todayX));
+  const todayBadgeX = Math.max(PAD_LEFT + 98, Math.min(SVG_WIDTH - PAD_RIGHT - 98, todayX));
 
   const etfById = useMemo(() => new Map(etfs.map((e) => [e.id, e])), [etfs]);
 
@@ -1062,7 +1062,7 @@ export function PerformanceChart({
           <g>
             <line
               x1={todayX}
-              y1={28}
+              y1={38}
               x2={todayX}
               y2={baselineY}
               stroke={todayLineStroke}
@@ -1071,25 +1071,38 @@ export function PerformanceChart({
               opacity={0.8}
             />
             <rect
-              x={todayBadgeX - 68}
-              y={8}
-              width={136}
-              height={20}
-              rx={999}
+              x={todayBadgeX - 96}
+              y={4}
+              width={192}
+              height={34}
+              rx={10}
               fill={dotInnerFill}
               stroke={forecastColor}
               strokeWidth={1.2}
             />
             <text
               x={todayBadgeX}
-              y={21.5}
+              y={17}
               textAnchor="middle"
-              fill="var(--ui-chart-text-primary)"
-              fontSize="10"
+              fill={axisMutedColor}
+              fontSize="9.5"
               fontWeight="700"
               letterSpacing="0.03em"
             >
               {tr(lang, 'TODAY (Snapshot)', 'СЕГОДНЯ (Снимок)')}
+            </text>
+            <text
+              x={todayBadgeX}
+              y={31}
+              textAnchor="middle"
+              fill={histLabelColor}
+              fontSize="11"
+              fontWeight="700"
+              fontFamily="var(--font-mono)"
+            >
+              {todayPoint && typeof todayPoint.historicalValueEur === 'number'
+                ? `${tr(lang, 'Acc Gross:', 'Накопл. Gross:')} €${Math.round(todayPoint.historicalValueEur).toLocaleString('en-IE')}`
+                : tr(lang, 'Acc Gross: —', 'Накопл. Gross: —')}
             </text>
             {todayPoint && (
               <circle
