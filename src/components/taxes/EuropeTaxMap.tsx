@@ -159,7 +159,7 @@ function getRegimeColors(archetype: TaxArchetype, lang: LanguageMode): {
       return {
         fill: 'rgba(59, 130, 246, 0.24)',
         fillSelected: 'rgba(37, 99, 235, 0.54)',
-        stroke: '#3b82f6',
+        stroke: '#5a7790',
         badgeBg: 'border-blue-500/40 bg-blue-500/15',
         badgeText: 'text-blue-300',
         label: tr(
@@ -167,7 +167,7 @@ function getRegimeColors(archetype: TaxArchetype, lang: LanguageMode): {
           'Annual Imputed / Hybrid (DE, AT, CH, GB)',
           'Ежегодный учёт / гибрид (DE, AT, CH, GB)'
         ),
-        dotColor: '#3b82f6',
+        dotColor: '#5a7790',
       };
     case 'WEALTH_OR_DEEMED_DISPOSAL':
       return {

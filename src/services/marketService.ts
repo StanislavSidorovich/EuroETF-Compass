@@ -1005,38 +1005,17 @@ function synthesizePlausibleInstrument(cleanTicker: string): {
   const isEuropean = /\.(DE|AS|PA|LS|L|CO|SW|MI)$/i.test(cleanTicker);
   const seed = hashTicker(cleanTicker);
 
-  let profile: PopularFallbackProfile;
-  if (known) {
-    profile = known;
-  } else {
-    const inferredIsEtf = /(ETF|UCITS|IWDA|VWCE|VUAA|VUSA|CSPX|SXR8|EQQQ|SPY|VOO|QQQ)/i.test(
-      cleanTicker
+  // Never fabricate price history for a symbol we know nothing about: a made-up curve
+  // would feed fake returns into the backtest. Only the hand-checked dictionary is allowed.
+  if (!known) {
+    throw new Error(
+      `Не удалось получить данные по «${cleanTicker}»: сервис котировок недоступен с этого сайта, а тикера нет во встроенном справочнике. Выберите актив из списка (ETF и 20 акций) — для них данные есть всегда.`
     );
-    const basePrice = 35 + (seed % 180);
-    const growth5y = 1.25 + ((seed % 70) / 100); // +25% to +95% over 5y
-    const dip2022 = basePrice * (0.76 + ((seed % 12) / 100));
-    const p3y = basePrice * (1.02 + ((seed % 25) / 100));
-    const pNow = basePrice * growth5y;
-    const p1y = pNow * (0.91 + ((seed % 7) / 100));
-
-    profile = {
-      name: `${cleanTicker} (${inferredIsEtf ? 'ETF / Fund' : 'Listed Equity'})`,
-      shortName: cleanTicker,
-      isin: 'Offline Baseline',
-      instrumentType: inferredIsEtf ? 'ETF' : 'Stock',
-      distributionPolicy: inferredIsEtf ? 'Acc' : 'Dist',
-      dividendYieldEst: inferredIsEtf ? 1.6 : 1.1,
-      volatilityAnnualPct: inferredIsEtf ? 16.0 : 28.0,
-      ter: inferredIsEtf ? 0.2 : 0,
-      p5y: Number(basePrice.toFixed(2)),
-      p2022: Number(dip2022.toFixed(2)),
-      p3y: Number(p3y.toFixed(2)),
-      p1y: Number(p1y.toFixed(2)),
-      pNow: Number(pNow.toFixed(2)),
-      notes:
-        'Live Yahoo gateway was unreachable or rate-limited in this browser session, so a calibrated 5-year reference curve was generated for simulation.',
-    };
   }
+  const profile: PopularFallbackProfile = {
+    ...known,
+    notes: `⚠ Ориентировочные данные из встроенного справочника, не живая котировка. ${known.notes}`,
+  };
 
   const history = buildSynthesizedHistory5Y(
     profile.p5y,

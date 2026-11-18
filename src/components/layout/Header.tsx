@@ -96,7 +96,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'calculator',
       num: '1',
-      title: tr(lang, 'Portfolio & Calculator', 'Калькулятор и Портфель'),
+      title: tr(lang, 'Portfolio & Calculator', 'Калькулятор'),
       subtitle: tr(
         lang,
         'Budget, ETFs & Stocks, 3Y/5Y Returns',
@@ -107,7 +107,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'taxes',
       num: '2',
-      title: tr(lang, 'EU Taxes, Map & Forms', `Налоги ${countries.length} стран и Карта`),
+      title: tr(lang, 'Taxes & Map','Налоги и Карта'),
       subtitle: tr(
         lang,
         'Tax Rates, EU Map & Anexo J Form',
@@ -118,7 +118,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'ecosystem',
       num: '3',
-      title: tr(lang, 'Brokers, Portals & News', 'Брокеры, Сайты и Новости'),
+      title: tr(lang, 'Brokers, Portals & News', 'Брокеры и Новости'),
       subtitle: tr(
         lang,
         'Broker Matrix, justETF & Live News',
@@ -129,7 +129,7 @@ export const Header: React.FC<HeaderProps> = ({
     {
       id: 'academy',
       num: '4',
-      title: tr(lang, 'Careful ETF Academy', 'Академия для новичков'),
+      title: tr(lang, 'Careful ETF Academy', 'Академия'),
       subtitle: tr(
         lang,
         '5 Lessons on Acc vs Dist & Checklist',
@@ -152,7 +152,7 @@ export const Header: React.FC<HeaderProps> = ({
   return (
     <>
       <header
-        className={`sticky top-0 z-40 border-b backdrop-blur-xl transition-colors ${
+        className={`relative z-40 border-b transition-colors ${
           isLight
             ? 'border-slate-200/90 bg-[#f7faf8]/95 text-slate-900 shadow-xs'
             : 'border-slate-700/80 bg-[#162231]/95 text-slate-100'
@@ -563,20 +563,6 @@ export const Header: React.FC<HeaderProps> = ({
                       </span>
                     </div>
 
-                    {isActive && (
-                      <span
-                        className={`inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[10px] font-bold ${
-                          isLight
-                            ? 'bg-[#2d8a61]/15 text-[#1b5e3f]'
-                            : 'bg-emerald-500/20 text-emerald-200'
-                        }`}
-                      >
-                        <span className="h-1.5 w-1.5 rounded-full bg-[#2d8a61]" />
-                        <span className="hidden sm:inline">
-                          {tr(lang, 'Active', 'Открыто')}
-                        </span>
-                      </span>
-                    )}
                   </div>
 
                   <p

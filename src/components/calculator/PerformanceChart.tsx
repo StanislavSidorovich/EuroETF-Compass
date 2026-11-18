@@ -112,10 +112,10 @@ export function PerformanceChart({
   const histLabelColor = isLight ? '#1f6e4b' : '#86d6b0';
   const histBadgeBg = isLight ? 'rgba(45, 138, 97, 0.11)' : 'rgba(59, 155, 114, 0.16)';
   const histBadgeStroke = isLight ? 'rgba(45, 138, 97, 0.42)' : 'rgba(59, 155, 114, 0.45)';
-  const forecastColor = isLight ? '#0284c7' : '#38bdf8';
-  const forecastLabelColor = isLight ? '#0369a1' : '#7dd3fc';
-  const postTaxColor = isLight ? '#7c3aed' : '#a78bfa';
-  const distColor = isLight ? '#d97706' : '#f59e0b';
+  const forecastColor = isLight ? '#486178' : '#7792ab';
+  const forecastLabelColor = isLight ? '#3b4f63' : '#9fb3c6';
+  const postTaxColor = isLight ? '#8a6d3b' : '#c8a04e';
+  const distColor = isLight ? '#94702e' : '#b3893a';
   const investedColor = isLight ? '#64748b' : '#94a3b8';
   const axisTextColor = isLight ? '#334155' : '#cbd5e1';
   const axisMutedColor = isLight ? '#475569' : '#94a3b8';

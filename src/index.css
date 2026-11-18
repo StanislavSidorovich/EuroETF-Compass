@@ -16,6 +16,86 @@
   --color-emerald-800: #174e38;
   --color-emerald-900: #14402f;
   --color-emerald-950: #0a251b;
+
+  /* Calm professional palette: ONE cool accent (steel blue) replaces cyan/sky/blue/violet/purple/indigo;
+     amber is muted to sand so warnings don't shout. */
+  --color-cyan-50: #f2f5f8;
+  --color-cyan-100: #e1e8ee;
+  --color-cyan-200: #c5d2de;
+  --color-cyan-300: #9fb3c6;
+  --color-cyan-400: #7792ab;
+  --color-cyan-500: #5a7790;
+  --color-cyan-600: #486178;
+  --color-cyan-700: #3b4f63;
+  --color-cyan-800: #2f3f4f;
+  --color-cyan-900: #263341;
+  --color-cyan-950: #161f29;
+  --color-sky-50: #f2f5f8;
+  --color-sky-100: #e1e8ee;
+  --color-sky-200: #c5d2de;
+  --color-sky-300: #9fb3c6;
+  --color-sky-400: #7792ab;
+  --color-sky-500: #5a7790;
+  --color-sky-600: #486178;
+  --color-sky-700: #3b4f63;
+  --color-sky-800: #2f3f4f;
+  --color-sky-900: #263341;
+  --color-sky-950: #161f29;
+  --color-blue-50: #f2f5f8;
+  --color-blue-100: #e1e8ee;
+  --color-blue-200: #c5d2de;
+  --color-blue-300: #9fb3c6;
+  --color-blue-400: #7792ab;
+  --color-blue-500: #5a7790;
+  --color-blue-600: #486178;
+  --color-blue-700: #3b4f63;
+  --color-blue-800: #2f3f4f;
+  --color-blue-900: #263341;
+  --color-blue-950: #161f29;
+  --color-indigo-50: #f2f5f8;
+  --color-indigo-100: #e1e8ee;
+  --color-indigo-200: #c5d2de;
+  --color-indigo-300: #9fb3c6;
+  --color-indigo-400: #7792ab;
+  --color-indigo-500: #5a7790;
+  --color-indigo-600: #486178;
+  --color-indigo-700: #3b4f63;
+  --color-indigo-800: #2f3f4f;
+  --color-indigo-900: #263341;
+  --color-indigo-950: #161f29;
+  --color-violet-50: #f2f5f8;
+  --color-violet-100: #e1e8ee;
+  --color-violet-200: #c5d2de;
+  --color-violet-300: #9fb3c6;
+  --color-violet-400: #7792ab;
+  --color-violet-500: #5a7790;
+  --color-violet-600: #486178;
+  --color-violet-700: #3b4f63;
+  --color-violet-800: #2f3f4f;
+  --color-violet-900: #263341;
+  --color-violet-950: #161f29;
+  --color-purple-50: #f2f5f8;
+  --color-purple-100: #e1e8ee;
+  --color-purple-200: #c5d2de;
+  --color-purple-300: #9fb3c6;
+  --color-purple-400: #7792ab;
+  --color-purple-500: #5a7790;
+  --color-purple-600: #486178;
+  --color-purple-700: #3b4f63;
+  --color-purple-800: #2f3f4f;
+  --color-purple-900: #263341;
+  --color-purple-950: #161f29;
+  --color-amber-50: #faf6ec;
+  --color-amber-100: #f3ead2;
+  --color-amber-200: #e8d6a6;
+  --color-amber-300: #d9bd76;
+  --color-amber-400: #c8a04e;
+  --color-amber-500: #b3893a;
+  --color-amber-600: #94702e;
+  --color-amber-700: #735626;
+  --color-amber-800: #5a4423;
+  --color-amber-900: #483720;
+  --color-amber-950: #271d0f;
 }
 
 @layer base {
@@ -255,7 +335,7 @@ html.theme-light .bg-cyan-950\/20,
 html.theme-light .bg-cyan-950\/30,
 [data-theme='light'] .bg-cyan-950\/20,
 [data-theme='light'] .bg-cyan-950\/30 {
-  background-color: #ecfeff !important;
+  background-color: #f2f5f8 !important;
 }
 
 html.theme-light .bg-amber-950\/10,
@@ -266,13 +346,13 @@ html.theme-light .bg-amber-950\/40,
 [data-theme='light'] .bg-amber-950\/20,
 [data-theme='light'] .bg-amber-950\/30,
 [data-theme='light'] .bg-amber-950\/40 {
-  background-color: #fffbeb !important;
+  background-color: #faf6ec !important;
 }
 
 html.theme-light .from-amber-950\/45,
 [data-theme='light'] .from-amber-950\/45 {
-  --tw-gradient-from: #fef3c7 !important;
-  --tw-gradient-via: #fffbeb !important;
+  --tw-gradient-from: #f3ead2 !important;
+  --tw-gradient-via: #faf6ec !important;
   --tw-gradient-to: #ffffff !important;
 }
 
@@ -355,7 +435,7 @@ html.theme-light .text-cyan-400,
 [data-theme='light'] .text-cyan-200,
 [data-theme='light'] .text-cyan-300,
 [data-theme='light'] .text-cyan-400 {
-  color: #0e7490 !important;
+  color: #3b4f63 !important;
 }
 
 html.theme-light .text-amber-100,
@@ -368,7 +448,7 @@ html.theme-light .text-amber-400,
 [data-theme='light'] .text-amber-200,
 [data-theme='light'] .text-amber-300,
 [data-theme='light'] .text-amber-400 {
-  color: #92400e !important;
+  color: #735626 !important;
 }
 
 html.theme-light .text-indigo-300,
@@ -377,7 +457,7 @@ html.theme-light .text-purple-400,
 [data-theme='light'] .text-indigo-300,
 [data-theme='light'] .text-purple-300,
 [data-theme='light'] .text-purple-400 {
-  color: #4338ca !important;
+  color: #3b4f63 !important;
 }
 
 html.theme-light .text-rose-300,
