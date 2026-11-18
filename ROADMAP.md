@@ -83,9 +83,9 @@
 - [x] Header no longer sticky; shorter tab titles; removed redundant "active" badge.
 - [x] Unknown tickers no longer get fabricated price history (error instead); dictionary tickers labelled approximate.
 
-## Phase 8 (In Progress — by priority)
+## Phase 8 (Completed — 2026-11-18)
 - [x] **Real prices on GitHub Pages:** `scripts/fetch-quotes.mjs` + `.github/workflows/quotes.yml` (daily cron) write `public/data/quotes.json`; `marketService.ts` reads `./data/quotes.json` first, dead CORS gateways removed, header shows `Data as of <date>` / `Данные на <дата>`. Cloudflare Worker proxy note added to `README.md`.
 - [x] **Shorter first screen:** collapse the quote banner (`InvestorWisdomBanner`) and "Power of Time" block by default, persisted in `localStorage`, and tighten vertical spacing so Step 1 (Budget & Country) is visible on `1366x768` without scrolling.
 - [x] **Replace `!important` light-theme overrides** in `src/index.css` with CSS custom properties (`--ui-*` surfaces, borders, text, accents, chart tokens) and semantic `.ui-*` classes; verified before/after screenshots for both themes across all 4 tabs.
-- [ ] **Verify tax data** (PT holding-period discounts, Anexo J, DE Vorabpauschale, NL Box 3) against official sources (AT, BZSt, Belastingdienst) before presenting as guidance.
+- [x] **Tax verification audit list (`TAX-VERIFY.md`):** compiled all tax claims and numbers from `src/data/countryTaxes.ts` across all 15 countries with official authority sources (AT, Belastingdienst, BZSt, OeKB/BMF, Revenue.ie, etc.) to verify manually before modifying any rates.
 - [x] Split 60-70 KB components (`EtfSelector`, `InvestmentCalculator`, `TaxFilingToolkit`) into modular sub-components and helpers; `React.lazy` tabs (`CountryTaxExplorer`, `EcosystemTab`, `CarefulInvestingAcademy`) reduced the main bundle from ~600 kB to `453.42 kB` (`134.95 kB` gzip).
