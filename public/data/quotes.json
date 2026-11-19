@@ -1,18 +1,18 @@
 {
-  "updatedAt": "2026-11-18T08:25:19.231Z",
-  "updatedDate": "2026-11-18",
+  "updatedAt": "2026-11-19T02:44:53.165Z",
+  "updatedDate": "2026-11-19",
   "source": "Yahoo Finance v8 Chart (range=5y, interval=1mo)",
   "instrumentCount": 35,
   "quotes": {
     "vwce": {
       "ticker": "VWCE.DE",
-      "currentPrice": 166.9,
-      "previousClose": 166.9,
+      "currentPrice": 165.32,
+      "previousClose": 165.32,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:10:02.000Z",
+      "lastUpdated": "2026-11-18T16:35:57.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -312,24 +312,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 169.08
+          "close": 165.28
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 166.9
+          "close": 165.32
         }
       ]
     },
     "vgwl": {
       "ticker": "VGWL.DE",
-      "currentPrice": 161.24,
-      "previousClose": 161.24,
+      "currentPrice": 159.74,
+      "previousClose": 159.74,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:02.000Z",
+      "lastUpdated": "2026-11-18T16:35:53.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -354,7 +354,7 @@
         {
           "date": "2022-03-31",
           "timestamp": 1648764000000,
-          "close": 96.0672
+          "close": 96.0671
         },
         {
           "date": "2022-04-30",
@@ -534,7 +534,7 @@
         {
           "date": "2025-03-31",
           "timestamp": 1743458400000,
-          "close": 117.0014
+          "close": 117.0015
         },
         {
           "date": "2025-04-30",
@@ -629,24 +629,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 163.36
+          "close": 159.74
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 161.24
+          "close": 159.74
         }
       ]
     },
     "iwda": {
       "ticker": "EUNL.DE",
-      "currentPrice": 128.3,
-      "previousClose": 128.3,
+      "currentPrice": 127.11,
+      "previousClose": 127.11,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:47.000Z",
+      "lastUpdated": "2026-11-18T16:35:47.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -946,24 +946,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 129.975
+          "close": 127.08
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 128.3
+          "close": 127.105
         }
       ]
     },
     "iqqw": {
       "ticker": "IQQW.DE",
-      "currentPrice": 91.9,
-      "previousClose": 91.9,
+      "currentPrice": 91.07,
+      "previousClose": 91.07,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:05:14.000Z",
+      "lastUpdated": "2026-11-18T16:35:55.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -1103,7 +1103,7 @@
         {
           "date": "2024-02-29",
           "timestamp": 1709247600000,
-          "close": 65.9607
+          "close": 65.9608
         },
         {
           "date": "2024-03-31",
@@ -1263,24 +1263,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 93.15
+          "close": 91.058
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 91.898
+          "close": 91.066
         }
       ]
     },
     "is3n": {
       "ticker": "IS3N.DE",
-      "currentPrice": 43.81,
-      "previousClose": 43.81,
+      "currentPrice": 43.24,
+      "previousClose": 43.24,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:58.000Z",
+      "lastUpdated": "2026-11-18T16:36:04.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -1580,24 +1580,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 44.322
+          "close": 43.206
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 43.815
+          "close": 43.237
         }
       ]
     },
     "sxr8": {
       "ticker": "SXR8.DE",
-      "currentPrice": 726,
-      "previousClose": 726,
+      "currentPrice": 719.86,
+      "previousClose": 719.86,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:10:02.000Z",
+      "lastUpdated": "2026-11-18T16:36:08.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -1897,24 +1897,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 734.48
+          "close": 717.54
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 726
+          "close": 719.86
         }
       ]
     },
     "vusa": {
       "ticker": "VUSA.DE",
-      "currentPrice": 127.5,
-      "previousClose": 127.5,
+      "currentPrice": 126.42,
+      "previousClose": 126.42,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:37.000Z",
+      "lastUpdated": "2026-11-18T16:35:57.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -1949,12 +1949,12 @@
         {
           "date": "2022-05-31",
           "timestamp": 1654034400000,
-          "close": 65.1923
+          "close": 65.1922
         },
         {
           "date": "2022-06-30",
           "timestamp": 1656626400000,
-          "close": 72.5071
+          "close": 72.5072
         },
         {
           "date": "2022-07-31",
@@ -1999,7 +1999,7 @@
         {
           "date": "2023-03-31",
           "timestamp": 1680300000000,
-          "close": 68.6195
+          "close": 68.6196
         },
         {
           "date": "2023-04-30",
@@ -2214,24 +2214,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 128.965
+          "close": 125.995
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 127.505
+          "close": 126.415
         }
       ]
     },
     "eqqb": {
       "ticker": "EQQB.DE",
-      "currentPrice": 416.5,
-      "previousClose": 416.5,
+      "currentPrice": 421.15,
+      "previousClose": 421.15,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-17T16:35:52.000Z",
+      "lastUpdated": "2026-11-18T16:35:46.000Z",
       "history5Y": [
         {
           "date": "2022-02-28",
@@ -2516,24 +2516,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 428.1
+          "close": 416.5
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 416.5
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 421.15
         }
       ]
     },
     "eqqq": {
       "ticker": "EQQQ.DE",
-      "currentPrice": 594.6,
-      "previousClose": 594.6,
+      "currentPrice": 601.7,
+      "previousClose": 601.7,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-17T16:35:53.000Z",
+      "lastUpdated": "2026-11-18T16:35:51.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -2573,12 +2573,12 @@
         {
           "date": "2022-06-30",
           "timestamp": 1656626400000,
-          "close": 302.0369
+          "close": 302.037
         },
         {
           "date": "2022-07-31",
           "timestamp": 1659304800000,
-          "close": 295.4956
+          "close": 295.4955
         },
         {
           "date": "2022-08-31",
@@ -2593,7 +2593,7 @@
         {
           "date": "2022-10-31",
           "timestamp": 1667257200000,
-          "close": 269.8495
+          "close": 269.8496
         },
         {
           "date": "2022-11-30",
@@ -2613,12 +2613,12 @@
         {
           "date": "2023-02-28",
           "timestamp": 1677625200000,
-          "close": 290.6894
+          "close": 290.6893
         },
         {
           "date": "2023-03-31",
           "timestamp": 1680300000000,
-          "close": 287.8747
+          "close": 287.8748
         },
         {
           "date": "2023-04-30",
@@ -2648,12 +2648,12 @@
         {
           "date": "2023-09-30",
           "timestamp": 1696111200000,
-          "close": 327.9068
+          "close": 327.9067
         },
         {
           "date": "2023-10-31",
           "timestamp": 1698793200000,
-          "close": 352.3006
+          "close": 352.3005
         },
         {
           "date": "2023-11-30",
@@ -2673,7 +2673,7 @@
         {
           "date": "2024-02-29",
           "timestamp": 1709247600000,
-          "close": 410.0098
+          "close": 410.0097
         },
         {
           "date": "2024-03-31",
@@ -2693,7 +2693,7 @@
         {
           "date": "2024-06-30",
           "timestamp": 1719784800000,
-          "close": 433.8498
+          "close": 433.8497
         },
         {
           "date": "2024-07-31",
@@ -2703,7 +2703,7 @@
         {
           "date": "2024-08-31",
           "timestamp": 1725141600000,
-          "close": 435.8599
+          "close": 435.8598
         },
         {
           "date": "2024-09-30",
@@ -2733,7 +2733,7 @@
         {
           "date": "2025-02-28",
           "timestamp": 1740783600000,
-          "close": 428.8749
+          "close": 428.875
         },
         {
           "date": "2025-03-31",
@@ -2743,7 +2743,7 @@
         {
           "date": "2025-04-30",
           "timestamp": 1746050400000,
-          "close": 456.8591
+          "close": 456.8592
         },
         {
           "date": "2025-05-31",
@@ -2773,12 +2773,12 @@
         {
           "date": "2025-10-31",
           "timestamp": 1761951600000,
-          "close": 533.4756
+          "close": 533.4755
         },
         {
           "date": "2025-11-30",
           "timestamp": 1764543600000,
-          "close": 529.6334
+          "close": 529.6333
         },
         {
           "date": "2025-12-31",
@@ -2833,24 +2833,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 610.8
+          "close": 594.6
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 594.6
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 601.7
         }
       ]
     },
     "qdve": {
       "ticker": "QDVE.DE",
-      "currentPrice": 40.96,
-      "previousClose": 40.96,
+      "currentPrice": 41.48,
+      "previousClose": 41.48,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-17T16:35:51.000Z",
+      "lastUpdated": "2026-11-18T16:35:45.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -3150,24 +3150,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 42.375
+          "close": 40.96
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 40.96
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 41.48
         }
       ]
     },
     "eunk": {
       "ticker": "EUNK.DE",
-      "currentPrice": 106.04,
-      "previousClose": 106.04,
+      "currentPrice": 104.86,
+      "previousClose": 104.86,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:56.000Z",
+      "lastUpdated": "2026-11-18T16:36:04.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -3467,24 +3467,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 107.96
+          "close": 106.02
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 106.04
+          "close": 104.86
         }
       ]
     },
     "meud": {
       "ticker": "MEUD.PA",
-      "currentPrice": 321.5,
-      "previousClose": 321.5,
+      "currentPrice": 318.5,
+      "previousClose": 318.5,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "Paris",
-      "lastUpdated": "2026-11-18T08:08:58.000Z",
+      "lastUpdated": "2026-11-18T16:35:21.000Z",
       "history5Y": [
         {
           "date": "2024-02-29",
@@ -3649,24 +3649,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 327.3
+          "close": 321.45
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 321.5
+          "close": 318.5
         }
       ]
     },
     "exsa": {
       "ticker": "EXSA.DE",
-      "currentPrice": 64.49,
-      "previousClose": 64.49,
+      "currentPrice": 63.82,
+      "previousClose": 63.82,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:04.000Z",
+      "lastUpdated": "2026-11-18T16:36:07.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -3691,7 +3691,7 @@
         {
           "date": "2022-03-31",
           "timestamp": 1648764000000,
-          "close": 39.3525
+          "close": 39.3524
         },
         {
           "date": "2022-04-30",
@@ -3851,7 +3851,7 @@
         {
           "date": "2024-11-30",
           "timestamp": 1733007600000,
-          "close": 47.5332
+          "close": 47.5331
         },
         {
           "date": "2024-12-31",
@@ -3966,12 +3966,12 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 65.68
+          "close": 64.49
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 64.49
+          "close": 63.82
         }
       ]
     },
@@ -3983,7 +3983,7 @@
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:09:17.000Z",
+      "lastUpdated": "2026-11-18T16:36:14.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -4283,12 +4283,12 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 150.799
+          "close": 150.805
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 150.81
+          "close": 150.813
         }
       ]
     },
@@ -4300,7 +4300,7 @@
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:07:52.000Z",
+      "lastUpdated": "2026-11-18T16:36:03.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -4600,24 +4600,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 4.8496
+          "close": 4.8568
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 4.859
+          "close": 4.8579
         }
       ]
     },
     "nvda": {
       "ticker": "NVDA",
-      "currentPrice": 155.46,
-      "previousClose": 155.46,
+      "currentPrice": 150.96,
+      "previousClose": 150.96,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:00.000Z",
+      "lastUpdated": "2026-11-18T21:00:00.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -4777,7 +4777,7 @@
         {
           "date": "2024-07-01",
           "timestamp": 1719806400000,
-          "close": 116.6968
+          "close": 116.6969
         },
         {
           "date": "2024-08-01",
@@ -4802,7 +4802,7 @@
         {
           "date": "2024-12-01",
           "timestamp": 1733029200000,
-          "close": 133.9399
+          "close": 133.9398
         },
         {
           "date": "2025-01-01",
@@ -4915,21 +4915,21 @@
           "close": 204.64
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 155.46
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 150.96
         }
       ]
     },
     "aapl": {
       "ticker": "AAPL",
-      "currentPrice": 351.91,
-      "previousClose": 351.91,
+      "currentPrice": 352.45,
+      "previousClose": 352.45,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -4939,7 +4939,7 @@
         {
           "date": "2022-01-01",
           "timestamp": 1641013200000,
-          "close": 170.5946
+          "close": 170.5945
         },
         {
           "date": "2022-02-01",
@@ -4999,7 +4999,7 @@
         {
           "date": "2023-01-01",
           "timestamp": 1672549200000,
-          "close": 141.6521
+          "close": 141.652
         },
         {
           "date": "2023-02-01",
@@ -5084,7 +5084,7 @@
         {
           "date": "2024-06-01",
           "timestamp": 1717214400000,
-          "close": 208.4729
+          "close": 208.4728
         },
         {
           "date": "2024-07-01",
@@ -5129,7 +5129,7 @@
         {
           "date": "2025-03-01",
           "timestamp": 1740805200000,
-          "close": 220.6044
+          "close": 220.6045
         },
         {
           "date": "2025-04-01",
@@ -5169,12 +5169,12 @@
         {
           "date": "2025-11-01",
           "timestamp": 1761969600000,
-          "close": 277.882
+          "close": 277.8819
         },
         {
           "date": "2025-12-01",
           "timestamp": 1764565200000,
-          "close": 270.9161
+          "close": 270.9162
         },
         {
           "date": "2026-01-01",
@@ -5189,7 +5189,7 @@
         {
           "date": "2026-03-01",
           "timestamp": 1772341200000,
-          "close": 253.1456
+          "close": 253.1455
         },
         {
           "date": "2026-04-01",
@@ -5227,21 +5227,21 @@
           "close": 344.3683
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 351.91
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 352.45
         }
       ]
     },
     "msft": {
       "ticker": "MSFT",
-      "currentPrice": 506.24,
-      "previousClose": 506.24,
+      "currentPrice": 508.29,
+      "previousClose": 508.29,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -5266,17 +5266,17 @@
         {
           "date": "2022-04-01",
           "timestamp": 1648785600000,
-          "close": 267.3825
+          "close": 267.3824
         },
         {
           "date": "2022-05-01",
           "timestamp": 1651377600000,
-          "close": 262.5491
+          "close": 262.549
         },
         {
           "date": "2022-06-01",
           "timestamp": 1654056000000,
-          "close": 248.0246
+          "close": 248.0247
         },
         {
           "date": "2022-07-01",
@@ -5321,7 +5321,7 @@
         {
           "date": "2023-03-01",
           "timestamp": 1677646800000,
-          "close": 280.4938
+          "close": 280.4937
         },
         {
           "date": "2023-04-01",
@@ -5351,7 +5351,7 @@
         {
           "date": "2023-09-01",
           "timestamp": 1693540800000,
-          "close": 308.5238
+          "close": 308.5239
         },
         {
           "date": "2023-10-01",
@@ -5366,7 +5366,7 @@
         {
           "date": "2023-12-01",
           "timestamp": 1701406800000,
-          "close": 368.1799
+          "close": 368.1798
         },
         {
           "date": "2024-01-01",
@@ -5411,17 +5411,17 @@
         {
           "date": "2024-09-01",
           "timestamp": 1725163200000,
-          "close": 423.6083
+          "close": 423.6082
         },
         {
           "date": "2024-10-01",
           "timestamp": 1727755200000,
-          "close": 400.0307
+          "close": 400.0308
         },
         {
           "date": "2024-11-01",
           "timestamp": 1730433600000,
-          "close": 417.709
+          "close": 417.7091
         },
         {
           "date": "2024-12-01",
@@ -5431,7 +5431,7 @@
         {
           "date": "2025-01-01",
           "timestamp": 1735707600000,
-          "close": 409.4231
+          "close": 409.4232
         },
         {
           "date": "2025-02-01",
@@ -5456,12 +5456,12 @@
         {
           "date": "2025-06-01",
           "timestamp": 1748750400000,
-          "close": 492.5411
+          "close": 492.5412
         },
         {
           "date": "2025-07-01",
           "timestamp": 1751342400000,
-          "close": 528.278
+          "close": 528.2778
         },
         {
           "date": "2025-08-01",
@@ -5539,21 +5539,21 @@
           "close": 521.91
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 506.24
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 508.29
         }
       ]
     },
     "googl": {
       "ticker": "GOOGL",
-      "currentPrice": 280.2,
-      "previousClose": 280.2,
+      "currentPrice": 282.44,
+      "previousClose": 282.44,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:00.000Z",
+      "lastUpdated": "2026-11-18T21:00:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -5563,12 +5563,12 @@
         {
           "date": "2022-01-01",
           "timestamp": 1641013200000,
-          "close": 134.0282
+          "close": 134.0281
         },
         {
           "date": "2022-02-01",
           "timestamp": 1643691600000,
-          "close": 133.7839
+          "close": 133.784
         },
         {
           "date": "2022-03-01",
@@ -5608,7 +5608,7 @@
         {
           "date": "2022-10-01",
           "timestamp": 1664596800000,
-          "close": 93.6192
+          "close": 93.6191
         },
         {
           "date": "2022-11-01",
@@ -5698,7 +5698,7 @@
         {
           "date": "2024-04-01",
           "timestamp": 1711944000000,
-          "close": 161.2456
+          "close": 161.2457
         },
         {
           "date": "2024-05-01",
@@ -5851,21 +5851,21 @@
           "close": 279.84
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 280.2
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 282.44
         }
       ]
     },
     "meta": {
       "ticker": "META",
-      "currentPrice": 618.87,
-      "previousClose": 618.87,
+      "currentPrice": 616.38,
+      "previousClose": 616.38,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -5875,7 +5875,7 @@
         {
           "date": "2022-01-01",
           "timestamp": 1641013200000,
-          "close": 310.2882
+          "close": 310.2881
         },
         {
           "date": "2022-02-01",
@@ -5905,7 +5905,7 @@
         {
           "date": "2022-07-01",
           "timestamp": 1656648000000,
-          "close": 157.5907
+          "close": 157.5906
         },
         {
           "date": "2022-08-01",
@@ -5935,7 +5935,7 @@
         {
           "date": "2023-01-01",
           "timestamp": 1672549200000,
-          "close": 147.5567
+          "close": 147.5568
         },
         {
           "date": "2023-02-01",
@@ -5970,7 +5970,7 @@
         {
           "date": "2023-08-01",
           "timestamp": 1690862400000,
-          "close": 293.083
+          "close": 293.0829
         },
         {
           "date": "2023-09-01",
@@ -5980,7 +5980,7 @@
         {
           "date": "2023-10-01",
           "timestamp": 1696132800000,
-          "close": 298.4119
+          "close": 298.4118
         },
         {
           "date": "2023-11-01",
@@ -6000,17 +6000,17 @@
         {
           "date": "2024-02-01",
           "timestamp": 1706763600000,
-          "close": 485.9953
+          "close": 485.9954
         },
         {
           "date": "2024-03-01",
           "timestamp": 1709269200000,
-          "close": 481.4837
+          "close": 481.4836
         },
         {
           "date": "2024-04-01",
           "timestamp": 1711944000000,
-          "close": 426.5412
+          "close": 426.5411
         },
         {
           "date": "2024-05-01",
@@ -6025,7 +6025,7 @@
         {
           "date": "2024-07-01",
           "timestamp": 1719806400000,
-          "close": 471.2919
+          "close": 471.2918
         },
         {
           "date": "2024-08-01",
@@ -6040,12 +6040,12 @@
         {
           "date": "2024-10-01",
           "timestamp": 1727755200000,
-          "close": 563.8881
+          "close": 563.8882
         },
         {
           "date": "2024-11-01",
           "timestamp": 1730433600000,
-          "close": 570.5843
+          "close": 570.5844
         },
         {
           "date": "2024-12-01",
@@ -6055,7 +6055,7 @@
         {
           "date": "2025-01-01",
           "timestamp": 1735707600000,
-          "close": 685.2495
+          "close": 685.2496
         },
         {
           "date": "2025-02-01",
@@ -6070,7 +6070,7 @@
         {
           "date": "2025-04-01",
           "timestamp": 1743480000000,
-          "close": 546.3547
+          "close": 546.3546
         },
         {
           "date": "2025-05-01",
@@ -6080,7 +6080,7 @@
         {
           "date": "2025-06-01",
           "timestamp": 1748750400000,
-          "close": 735.0988
+          "close": 735.0987
         },
         {
           "date": "2025-07-01",
@@ -6095,12 +6095,12 @@
         {
           "date": "2025-09-01",
           "timestamp": 1756699200000,
-          "close": 731.8974
+          "close": 731.8973
         },
         {
           "date": "2025-10-01",
           "timestamp": 1759291200000,
-          "close": 646.1582
+          "close": 646.1581
         },
         {
           "date": "2025-11-01",
@@ -6110,7 +6110,7 @@
         {
           "date": "2025-12-01",
           "timestamp": 1764565200000,
-          "close": 658.3951
+          "close": 658.395
         },
         {
           "date": "2026-01-01",
@@ -6120,7 +6120,7 @@
         {
           "date": "2026-02-01",
           "timestamp": 1769922000000,
-          "close": 646.5157
+          "close": 646.5156
         },
         {
           "date": "2026-03-01",
@@ -6163,21 +6163,21 @@
           "close": 614.99
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 618.87
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 616.38
         }
       ]
     },
     "amzn": {
       "ticker": "AMZN",
-      "currentPrice": 257.89,
-      "previousClose": 257.89,
+      "currentPrice": 267.74,
+      "previousClose": 267.74,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:00.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -6475,21 +6475,21 @@
           "close": 240.35
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 257.89
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 267.74
         }
       ]
     },
     "tsla": {
       "ticker": "TSLA",
-      "currentPrice": 380.11,
-      "previousClose": 380.11,
+      "currentPrice": 383.72,
+      "previousClose": 383.72,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:00.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -6787,21 +6787,21 @@
           "close": 399.81
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 380.11
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 383.72
         }
       ]
     },
     "avgo": {
       "ticker": "AVGO",
-      "currentPrice": 341.6,
-      "previousClose": 341.6,
+      "currentPrice": 354.05,
+      "previousClose": 354.05,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:01.000Z",
+      "lastUpdated": "2026-11-18T21:00:00.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -6941,7 +6941,7 @@
         {
           "date": "2024-03-01",
           "timestamp": 1709269200000,
-          "close": 129.4468
+          "close": 129.4469
         },
         {
           "date": "2024-04-01",
@@ -7041,7 +7041,7 @@
         {
           "date": "2025-11-01",
           "timestamp": 1761969600000,
-          "close": 399.9859
+          "close": 399.986
         },
         {
           "date": "2025-12-01",
@@ -7099,21 +7099,21 @@
           "close": 326.08
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 341.6
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 354.05
         }
       ]
     },
     "brkb": {
       "ticker": "BRK-B",
-      "currentPrice": 586.76,
-      "previousClose": 586.76,
+      "currentPrice": 574.62,
+      "previousClose": 574.62,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NYSE",
-      "lastUpdated": "2026-11-17T21:01:58.000Z",
+      "lastUpdated": "2026-11-18T21:00:02.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -7411,21 +7411,21 @@
           "close": 542.49
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 586.76
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 574.62
         }
       ]
     },
     "lly": {
       "ticker": "LLY",
-      "currentPrice": 1415.55,
-      "previousClose": 1415.55,
+      "currentPrice": 1382.75,
+      "previousClose": 1382.75,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NYSE",
-      "lastUpdated": "2026-11-17T21:01:03.000Z",
+      "lastUpdated": "2026-11-18T21:03:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -7460,7 +7460,7 @@
         {
           "date": "2022-06-01",
           "timestamp": 1654056000000,
-          "close": 312.8188
+          "close": 312.8187
         },
         {
           "date": "2022-07-01",
@@ -7485,7 +7485,7 @@
         {
           "date": "2022-11-01",
           "timestamp": 1667275200000,
-          "close": 360.1907
+          "close": 360.1906
         },
         {
           "date": "2022-12-01",
@@ -7495,7 +7495,7 @@
         {
           "date": "2023-01-01",
           "timestamp": 1672549200000,
-          "close": 334.0508
+          "close": 334.0509
         },
         {
           "date": "2023-02-01",
@@ -7520,7 +7520,7 @@
         {
           "date": "2023-06-01",
           "timestamp": 1685592000000,
-          "close": 457.8784
+          "close": 457.8785
         },
         {
           "date": "2023-07-01",
@@ -7545,22 +7545,22 @@
         {
           "date": "2023-11-01",
           "timestamp": 1698811200000,
-          "close": 579.3546
+          "close": 579.3545
         },
         {
           "date": "2023-12-01",
           "timestamp": 1701406800000,
-          "close": 571.395
+          "close": 571.3951
         },
         {
           "date": "2024-01-01",
           "timestamp": 1704085200000,
-          "close": 632.8456
+          "close": 632.8458
         },
         {
           "date": "2024-02-01",
           "timestamp": 1706763600000,
-          "close": 740.0739
+          "close": 740.074
         },
         {
           "date": "2024-03-01",
@@ -7590,7 +7590,7 @@
         {
           "date": "2024-08-01",
           "timestamp": 1722484800000,
-          "close": 945.6154
+          "close": 945.6152
         },
         {
           "date": "2024-09-01",
@@ -7605,7 +7605,7 @@
         {
           "date": "2024-11-01",
           "timestamp": 1730433600000,
-          "close": 784.7135
+          "close": 784.7134
         },
         {
           "date": "2024-12-01",
@@ -7723,26 +7723,26 @@
           "close": 1415.8218
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 1415.55
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 1382.75
         }
       ]
     },
     "jpm": {
       "ticker": "JPM",
-      "currentPrice": 329.96,
-      "previousClose": 329.96,
+      "currentPrice": 324.11,
+      "previousClose": 324.11,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NYSE",
-      "lastUpdated": "2026-11-17T21:00:02.000Z",
+      "lastUpdated": "2026-11-18T21:00:02.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
           "timestamp": 1638334800000,
-          "close": 139.8733
+          "close": 139.8732
         },
         {
           "date": "2022-01-01",
@@ -7757,7 +7757,7 @@
         {
           "date": "2022-03-01",
           "timestamp": 1646110800000,
-          "close": 121.1356
+          "close": 121.1355
         },
         {
           "date": "2022-04-01",
@@ -7807,12 +7807,12 @@
         {
           "date": "2023-01-01",
           "timestamp": 1672549200000,
-          "close": 128.4732
+          "close": 128.4731
         },
         {
           "date": "2023-02-01",
           "timestamp": 1675227600000,
-          "close": 131.585
+          "close": 131.5849
         },
         {
           "date": "2023-03-01",
@@ -7827,7 +7827,7 @@
         {
           "date": "2023-05-01",
           "timestamp": 1682913600000,
-          "close": 125.5497
+          "close": 125.5496
         },
         {
           "date": "2023-06-01",
@@ -7882,7 +7882,7 @@
         {
           "date": "2024-04-01",
           "timestamp": 1711944000000,
-          "close": 182.0863
+          "close": 182.0862
         },
         {
           "date": "2024-05-01",
@@ -8035,31 +8035,31 @@
           "close": 337.04
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 329.96
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 324.11
         }
       ]
     },
     "cost": {
       "ticker": "COST",
-      "currentPrice": 1110.08,
-      "previousClose": 1110.08,
+      "currentPrice": 1096.62,
+      "previousClose": 1096.62,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "USD",
       "exchangeName": "NasdaqGS",
-      "lastUpdated": "2026-11-17T21:00:00.000Z",
+      "lastUpdated": "2026-11-18T21:00:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
           "timestamp": 1638334800000,
-          "close": 538.069
+          "close": 538.0689
         },
         {
           "date": "2022-01-01",
           "timestamp": 1641013200000,
-          "close": 478.7648
+          "close": 478.7646
         },
         {
           "date": "2022-02-01",
@@ -8069,7 +8069,7 @@
         {
           "date": "2022-03-01",
           "timestamp": 1646110800000,
-          "close": 546.6208
+          "close": 546.6206
         },
         {
           "date": "2022-04-01",
@@ -8079,7 +8079,7 @@
         {
           "date": "2022-05-01",
           "timestamp": 1651377600000,
-          "close": 443.2754
+          "close": 443.2753
         },
         {
           "date": "2022-06-01",
@@ -8089,7 +8089,7 @@
         {
           "date": "2022-07-01",
           "timestamp": 1656648000000,
-          "close": 515.5486
+          "close": 515.5487
         },
         {
           "date": "2022-08-01",
@@ -8104,22 +8104,22 @@
         {
           "date": "2022-10-01",
           "timestamp": 1664596800000,
-          "close": 478.5044
+          "close": 478.5043
         },
         {
           "date": "2022-11-01",
           "timestamp": 1667275200000,
-          "close": 514.5234
+          "close": 514.5233
         },
         {
           "date": "2022-12-01",
           "timestamp": 1669870800000,
-          "close": 435.5678
+          "close": 435.5677
         },
         {
           "date": "2023-01-01",
           "timestamp": 1672549200000,
-          "close": 487.7024
+          "close": 487.7023
         },
         {
           "date": "2023-02-01",
@@ -8134,12 +8134,12 @@
         {
           "date": "2023-04-01",
           "timestamp": 1680321600000,
-          "close": 480.9813
+          "close": 480.9814
         },
         {
           "date": "2023-05-01",
           "timestamp": 1682913600000,
-          "close": 489.9726
+          "close": 489.9725
         },
         {
           "date": "2023-06-01",
@@ -8149,17 +8149,17 @@
         {
           "date": "2023-07-01",
           "timestamp": 1688184000000,
-          "close": 537.0102
+          "close": 537.0101
         },
         {
           "date": "2023-08-01",
           "timestamp": 1690862400000,
-          "close": 527.095
+          "close": 527.0948
         },
         {
           "date": "2023-09-01",
           "timestamp": 1693540800000,
-          "close": 542.1416
+          "close": 542.1415
         },
         {
           "date": "2023-10-01",
@@ -8169,7 +8169,7 @@
         {
           "date": "2023-11-01",
           "timestamp": 1698811200000,
-          "close": 569.8434
+          "close": 569.8433
         },
         {
           "date": "2023-12-01",
@@ -8179,7 +8179,7 @@
         {
           "date": "2024-01-01",
           "timestamp": 1704085200000,
-          "close": 683.2292
+          "close": 683.2294
         },
         {
           "date": "2024-02-01",
@@ -8189,7 +8189,7 @@
         {
           "date": "2024-03-01",
           "timestamp": 1709269200000,
-          "close": 721.4054
+          "close": 721.4053
         },
         {
           "date": "2024-04-01",
@@ -8204,12 +8204,12 @@
         {
           "date": "2024-06-01",
           "timestamp": 1717214400000,
-          "close": 838.3106
+          "close": 838.3107
         },
         {
           "date": "2024-07-01",
           "timestamp": 1719806400000,
-          "close": 811.8596
+          "close": 811.8594
         },
         {
           "date": "2024-08-01",
@@ -8234,7 +8234,7 @@
         {
           "date": "2024-12-01",
           "timestamp": 1733029200000,
-          "close": 906.169
+          "close": 906.1689
         },
         {
           "date": "2025-01-01",
@@ -8249,7 +8249,7 @@
         {
           "date": "2025-03-01",
           "timestamp": 1740805200000,
-          "close": 936.3871
+          "close": 936.3872
         },
         {
           "date": "2025-04-01",
@@ -8259,32 +8259,32 @@
         {
           "date": "2025-05-01",
           "timestamp": 1746072000000,
-          "close": 1031.1914
+          "close": 1031.1915
         },
         {
           "date": "2025-06-01",
           "timestamp": 1748750400000,
-          "close": 981.3855
+          "close": 981.3856
         },
         {
           "date": "2025-07-01",
           "timestamp": 1751342400000,
-          "close": 931.5202
+          "close": 931.5203
         },
         {
           "date": "2025-08-01",
           "timestamp": 1754020800000,
-          "close": 936.4639
+          "close": 936.464
         },
         {
           "date": "2025-09-01",
           "timestamp": 1756699200000,
-          "close": 918.9026
+          "close": 918.9025
         },
         {
           "date": "2025-10-01",
           "timestamp": 1759291200000,
-          "close": 906.1058
+          "close": 906.1057
         },
         {
           "date": "2025-11-01",
@@ -8294,7 +8294,7 @@
         {
           "date": "2025-12-01",
           "timestamp": 1764565200000,
-          "close": 857.2837
+          "close": 857.2836
         },
         {
           "date": "2026-01-01",
@@ -8347,36 +8347,36 @@
           "close": 1012.28
         },
         {
-          "date": "2026-11-17",
-          "timestamp": 1794873600000,
-          "close": 1110.08
+          "date": "2026-11-18",
+          "timestamp": 1794960000000,
+          "close": 1096.62
         }
       ]
     },
     "asml": {
       "ticker": "ASML.AS",
-      "currentPrice": 1258.4,
-      "previousClose": 1258.4,
+      "currentPrice": 1260.8,
+      "previousClose": 1260.8,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "Amsterdam",
-      "lastUpdated": "2026-11-18T08:10:15.000Z",
+      "lastUpdated": "2026-11-18T16:39:09.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
           "timestamp": 1638313200000,
-          "close": 674.9235
+          "close": 674.9234
         },
         {
           "date": "2021-12-31",
           "timestamp": 1640991600000,
-          "close": 567.4819
+          "close": 567.4818
         },
         {
           "date": "2022-01-31",
           "timestamp": 1643670000000,
-          "close": 571.9707
+          "close": 571.9705
         },
         {
           "date": "2022-02-28",
@@ -8391,7 +8391,7 @@
         {
           "date": "2022-04-30",
           "timestamp": 1651356000000,
-          "close": 515.4584
+          "close": 515.4583
         },
         {
           "date": "2022-05-31",
@@ -8401,12 +8401,12 @@
         {
           "date": "2022-06-30",
           "timestamp": 1656626400000,
-          "close": 534.1149
+          "close": 534.115
         },
         {
           "date": "2022-07-31",
           "timestamp": 1659304800000,
-          "close": 467.1981
+          "close": 467.198
         },
         {
           "date": "2022-08-31",
@@ -8426,12 +8426,12 @@
         {
           "date": "2022-11-30",
           "timestamp": 1669849200000,
-          "close": 487.0709
+          "close": 487.071
         },
         {
           "date": "2022-12-31",
           "timestamp": 1672527600000,
-          "close": 582.5903
+          "close": 582.5902
         },
         {
           "date": "2023-01-31",
@@ -8441,17 +8441,17 @@
         {
           "date": "2023-02-28",
           "timestamp": 1677625200000,
-          "close": 605.7374
+          "close": 605.7375
         },
         {
           "date": "2023-03-31",
           "timestamp": 1680300000000,
-          "close": 557.3163
+          "close": 557.3162
         },
         {
           "date": "2023-04-30",
           "timestamp": 1682892000000,
-          "close": 652.5509
+          "close": 652.5508
         },
         {
           "date": "2023-05-31",
@@ -8466,7 +8466,7 @@
         {
           "date": "2023-07-31",
           "timestamp": 1690840800000,
-          "close": 592.062
+          "close": 592.0619
         },
         {
           "date": "2023-08-31",
@@ -8476,27 +8476,27 @@
         {
           "date": "2023-09-30",
           "timestamp": 1696111200000,
-          "close": 550.5717
+          "close": 550.5718
         },
         {
           "date": "2023-10-31",
           "timestamp": 1698793200000,
-          "close": 608.3289
+          "close": 608.3288
         },
         {
           "date": "2023-11-30",
           "timestamp": 1701385200000,
-          "close": 665.6465
+          "close": 665.6464
         },
         {
           "date": "2023-12-31",
           "timestamp": 1704063600000,
-          "close": 779.4031
+          "close": 779.403
         },
         {
           "date": "2024-01-31",
           "timestamp": 1706742000000,
-          "close": 851.5084
+          "close": 851.5083
         },
         {
           "date": "2024-02-29",
@@ -8511,7 +8511,7 @@
         {
           "date": "2024-04-30",
           "timestamp": 1714514400000,
-          "close": 853.5935
+          "close": 853.5936
         },
         {
           "date": "2024-05-31",
@@ -8521,27 +8521,27 @@
         {
           "date": "2024-06-30",
           "timestamp": 1719784800000,
-          "close": 835.242
+          "close": 835.2421
         },
         {
           "date": "2024-07-31",
           "timestamp": 1722463200000,
-          "close": 797.4327
+          "close": 797.4326
         },
         {
           "date": "2024-08-31",
           "timestamp": 1725141600000,
-          "close": 732.2239
+          "close": 732.2238
         },
         {
           "date": "2024-09-30",
           "timestamp": 1727733600000,
-          "close": 611.4737
+          "close": 611.4736
         },
         {
           "date": "2024-10-31",
           "timestamp": 1730415600000,
-          "close": 648.0912
+          "close": 648.0911
         },
         {
           "date": "2024-11-30",
@@ -8561,7 +8561,7 @@
         {
           "date": "2025-02-28",
           "timestamp": 1740783600000,
-          "close": 597.804
+          "close": 597.8041
         },
         {
           "date": "2025-03-31",
@@ -8586,7 +8586,7 @@
         {
           "date": "2025-07-31",
           "timestamp": 1753999200000,
-          "close": 631.6199
+          "close": 631.6198
         },
         {
           "date": "2025-08-31",
@@ -8616,7 +8616,7 @@
         {
           "date": "2026-01-31",
           "timestamp": 1769900400000,
-          "close": 1227.5564
+          "close": 1227.5563
         },
         {
           "date": "2026-02-28",
@@ -8661,24 +8661,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 1306.6
+          "close": 1236.8
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 1258.4
+          "close": 1260.8
         }
       ]
     },
     "novo": {
       "ticker": "NOVO-B.CO",
-      "currentPrice": 276.2,
-      "previousClose": 276.2,
+      "currentPrice": 271.45,
+      "previousClose": 271.45,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "DKK",
       "exchangeName": "Copenhagen",
-      "lastUpdated": "2026-11-18T08:25:13.000Z",
+      "lastUpdated": "2026-11-18T15:59:45.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -8703,7 +8703,7 @@
         {
           "date": "2022-03-31",
           "timestamp": 1648764000000,
-          "close": 366.1021
+          "close": 366.102
         },
         {
           "date": "2022-04-30",
@@ -8718,17 +8718,17 @@
         {
           "date": "2022-06-30",
           "timestamp": 1656626400000,
-          "close": 384.8961
+          "close": 384.8962
         },
         {
           "date": "2022-07-31",
           "timestamp": 1659304800000,
-          "close": 359.1074
+          "close": 359.1075
         },
         {
           "date": "2022-08-31",
           "timestamp": 1661983200000,
-          "close": 345.0151
+          "close": 345.015
         },
         {
           "date": "2022-09-30",
@@ -8743,7 +8743,7 @@
         {
           "date": "2022-11-30",
           "timestamp": 1669849200000,
-          "close": 425.0382
+          "close": 425.0383
         },
         {
           "date": "2022-12-31",
@@ -8768,12 +8768,12 @@
         {
           "date": "2023-04-30",
           "timestamp": 1682892000000,
-          "close": 509.8015
+          "close": 509.8016
         },
         {
           "date": "2023-05-31",
           "timestamp": 1685570400000,
-          "close": 502.1286
+          "close": 502.1285
         },
         {
           "date": "2023-06-30",
@@ -8793,7 +8793,7 @@
         {
           "date": "2023-09-30",
           "timestamp": 1696111200000,
-          "close": 621.3363
+          "close": 621.3362
         },
         {
           "date": "2023-10-31",
@@ -8803,7 +8803,7 @@
         {
           "date": "2023-11-30",
           "timestamp": 1701385200000,
-          "close": 640.7015
+          "close": 640.7014
         },
         {
           "date": "2023-12-31",
@@ -8813,7 +8813,7 @@
         {
           "date": "2024-01-31",
           "timestamp": 1706742000000,
-          "close": 752.3033
+          "close": 752.3034
         },
         {
           "date": "2024-02-29",
@@ -8823,7 +8823,7 @@
         {
           "date": "2024-03-31",
           "timestamp": 1711922400000,
-          "close": 834.361
+          "close": 834.3609
         },
         {
           "date": "2024-04-30",
@@ -8838,27 +8838,27 @@
         {
           "date": "2024-06-30",
           "timestamp": 1719784800000,
-          "close": 843.0503
+          "close": 843.0502
         },
         {
           "date": "2024-07-31",
           "timestamp": 1722463200000,
-          "close": 870.5253
+          "close": 870.5252
         },
         {
           "date": "2024-08-31",
           "timestamp": 1725141600000,
-          "close": 730.1239
+          "close": 730.124
         },
         {
           "date": "2024-09-30",
           "timestamp": 1727733600000,
-          "close": 708.131
+          "close": 708.1311
         },
         {
           "date": "2024-10-31",
           "timestamp": 1730415600000,
-          "close": 702.749
+          "close": 702.7489
         },
         {
           "date": "2024-11-30",
@@ -8878,7 +8878,7 @@
         {
           "date": "2025-02-28",
           "timestamp": 1740783600000,
-          "close": 443.2446
+          "close": 443.2445
         },
         {
           "date": "2025-03-31",
@@ -8978,24 +8978,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 285.25
+          "close": 275.5
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 276.2
+          "close": 271.45
         }
       ]
     },
     "sap": {
       "ticker": "SAP.DE",
-      "currentPrice": 202.6,
-      "previousClose": 202.6,
+      "currentPrice": 193.92,
+      "previousClose": 193.92,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:10:09.000Z",
+      "lastUpdated": "2026-11-18T16:37:40.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -9055,7 +9055,7 @@
         {
           "date": "2022-10-31",
           "timestamp": 1667257200000,
-          "close": 98.8398
+          "close": 98.8399
         },
         {
           "date": "2022-11-30",
@@ -9295,24 +9295,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 213.4
+          "close": 201.5
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 202.6
+          "close": 193.92
         }
       ]
     },
     "lvmh": {
       "ticker": "MC.PA",
-      "currentPrice": 391.35,
-      "previousClose": 391.35,
+      "currentPrice": 388.1,
+      "previousClose": 388.1,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "Paris",
-      "lastUpdated": "2026-11-18T08:10:12.000Z",
+      "lastUpdated": "2026-11-18T16:35:29.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -9347,17 +9347,17 @@
         {
           "date": "2022-05-31",
           "timestamp": 1654034400000,
-          "close": 536.3599
+          "close": 536.3598
         },
         {
           "date": "2022-06-30",
           "timestamp": 1656626400000,
-          "close": 622.3877
+          "close": 622.3876
         },
         {
           "date": "2022-07-31",
           "timestamp": 1659304800000,
-          "close": 597.0311
+          "close": 597.0312
         },
         {
           "date": "2022-08-31",
@@ -9372,7 +9372,7 @@
         {
           "date": "2022-10-31",
           "timestamp": 1667257200000,
-          "close": 679.8318
+          "close": 679.8317
         },
         {
           "date": "2022-11-30",
@@ -9387,12 +9387,12 @@
         {
           "date": "2023-01-31",
           "timestamp": 1675206000000,
-          "close": 732.4693
+          "close": 732.4692
         },
         {
           "date": "2023-02-28",
           "timestamp": 1677625200000,
-          "close": 783.8999
+          "close": 783.9
         },
         {
           "date": "2023-03-31",
@@ -9407,7 +9407,7 @@
         {
           "date": "2023-05-31",
           "timestamp": 1685570400000,
-          "close": 807.4333
+          "close": 807.4334
         },
         {
           "date": "2023-06-30",
@@ -9422,12 +9422,12 @@
         {
           "date": "2023-08-31",
           "timestamp": 1693519200000,
-          "close": 670.2727
+          "close": 670.2726
         },
         {
           "date": "2023-09-30",
           "timestamp": 1696111200000,
-          "close": 631.0705
+          "close": 631.0704
         },
         {
           "date": "2023-10-31",
@@ -9437,7 +9437,7 @@
         {
           "date": "2023-11-30",
           "timestamp": 1701385200000,
-          "close": 691.8071
+          "close": 691.807
         },
         {
           "date": "2023-12-31",
@@ -9462,7 +9462,7 @@
         {
           "date": "2024-04-30",
           "timestamp": 1714514400000,
-          "close": 699.6183
+          "close": 699.6182
         },
         {
           "date": "2024-05-31",
@@ -9472,7 +9472,7 @@
         {
           "date": "2024-06-30",
           "timestamp": 1719784800000,
-          "close": 621.6502
+          "close": 621.6501
         },
         {
           "date": "2024-07-31",
@@ -9487,7 +9487,7 @@
         {
           "date": "2024-09-30",
           "timestamp": 1727733600000,
-          "close": 580.5242
+          "close": 580.5241
         },
         {
           "date": "2024-10-31",
@@ -9502,17 +9502,17 @@
         {
           "date": "2024-12-31",
           "timestamp": 1735686000000,
-          "close": 676.0009
+          "close": 676.0008
         },
         {
           "date": "2025-01-31",
           "timestamp": 1738364400000,
-          "close": 667.737
+          "close": 667.7371
         },
         {
           "date": "2025-02-28",
           "timestamp": 1740783600000,
-          "close": 549.3527
+          "close": 549.3528
         },
         {
           "date": "2025-03-31",
@@ -9542,7 +9542,7 @@
         {
           "date": "2025-08-31",
           "timestamp": 1756677600000,
-          "close": 507.7661
+          "close": 507.766
         },
         {
           "date": "2025-09-30",
@@ -9612,24 +9612,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 404
+          "close": 393
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 391.35
+          "close": 388.1
         }
       ]
     },
     "siemens": {
       "ticker": "SIE.DE",
-      "currentPrice": 269.35,
-      "previousClose": 269.35,
+      "currentPrice": 266,
+      "previousClose": 266,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "XETRA",
-      "lastUpdated": "2026-11-18T08:10:16.000Z",
+      "lastUpdated": "2026-11-18T16:38:55.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -9929,24 +9929,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 272.55
+          "close": 269.8
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 269.35
+          "close": 266
         }
       ]
     },
     "shell": {
       "ticker": "SHEL.L",
-      "currentPrice": 36.61,
-      "previousClose": 36.61,
+      "currentPrice": 35.95,
+      "previousClose": 35.95,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "GBP",
       "exchangeName": "LSE",
-      "lastUpdated": "2026-11-18T08:10:16.000Z",
+      "lastUpdated": "2026-11-18T17:25:48.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -10156,7 +10156,7 @@
         {
           "date": "2025-08-31",
           "timestamp": 1756681200000,
-          "close": 26.4525
+          "close": 26.4526
         },
         {
           "date": "2025-09-30",
@@ -10221,19 +10221,19 @@
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 36.61
+          "close": 35.955
         }
       ]
     },
     "nestle": {
       "ticker": "NESN.SW",
-      "currentPrice": 86.53,
-      "previousClose": 86.53,
+      "currentPrice": 86.03,
+      "previousClose": 86.03,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "CHF",
       "exchangeName": "Swiss",
-      "lastUpdated": "2026-11-18T08:10:16.000Z",
+      "lastUpdated": "2026-11-18T16:31:03.000Z",
       "history5Y": [
         {
           "date": "2021-11-30",
@@ -10533,24 +10533,24 @@
         {
           "date": "2026-10-31",
           "timestamp": 1793487600000,
-          "close": 88.12
+          "close": 86.03
         },
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 86.53
+          "close": 86.03
         }
       ]
     },
     "edp": {
       "ticker": "EDP.LS",
-      "currentPrice": 4.96,
-      "previousClose": 4.96,
+      "currentPrice": 4.92,
+      "previousClose": 4.92,
       "dayChangeEur": 0,
       "dayChangePct": 0,
       "currency": "EUR",
       "exchangeName": "Lisbon",
-      "lastUpdated": "2026-11-18T08:10:06.000Z",
+      "lastUpdated": "2026-11-18T16:35:01.000Z",
       "history5Y": [
         {
           "date": "2021-12-01",
@@ -10825,7 +10825,7 @@
         {
           "date": "2026-11-18",
           "timestamp": 1794960000000,
-          "close": 4.957
+          "close": 4.923
         }
       ]
     }
